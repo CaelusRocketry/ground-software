@@ -1,1 +1,1 @@
-console.log("Started Ground Software");
+console.log("START: Ground Software");
