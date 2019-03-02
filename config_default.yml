@@ -5,3 +5,7 @@ main:
         #     - send
         server:
             - start
+
+modules:
+    server:
+        port: 5000

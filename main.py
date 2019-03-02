@@ -1,10 +1,9 @@
 import time
-
-import yaml
 import os
 import importlib
 from threading import Thread
 
+import yaml
 
 def load_config():
     """
