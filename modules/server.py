@@ -14,13 +14,8 @@ temp = 0
 @app.route("/")
 def path_home() -> None:
     return flask.render_template('index.html', temp=temp)
-
-def update_field(field: int) -> None:
-    global temp
-    temp = field
-    print(temp)
  
 def start():
-    Thread(target=lambda: app.run(port=config["modules"]["server"]["port"])).start()
-    time.sleep(10)
-    update_field(10)
+    serverThread = Thread(target=lambda: app.run(port=config["modules"]["server"]["port"]))
+    serverThread.start()
+    
