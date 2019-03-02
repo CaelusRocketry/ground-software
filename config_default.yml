@@ -1,0 +1,7 @@
+main:
+    startup:
+        # telemetry:
+        #     - listen
+        #     - send
+        server:
+            - start
