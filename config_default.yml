@@ -1,11 +1,16 @@
 main:
     startup:
-        # telemetry:
-        #     - listen
-        #     - send
+        telemetry:
+            - listen
+            - send
         server:
             - start
 
 modules:
     server:
         port: 5000
+    telemetry:
+        ip: '127.0.0.1' #Need to change this for actual test
+        port: 5005
+        send_delay: 0.1
+        buffer: 1024

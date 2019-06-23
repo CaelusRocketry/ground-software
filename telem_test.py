@@ -1,7 +1,7 @@
 import socket
 import threading
 
-IP = '127.0.0.1'
+IP = "192.168.1.84" # Needed for local development
 PORT = 8081
 
 def start():
