@@ -1,59 +1,42 @@
-import time
-from threading import Thread
-import socket
-import yaml
-from collections import deque
-import json
+import socket, threading, time, json
+import heapq
+import Crypto
+from Crypto.PublicKey import RSA
+from Crypto import Random
+import multiprocessing
+from packet import Packet
 
-from main import load_config
+GS_IP = '127.0.0.1'
+GS_PORT = 5005
+BYTE_SIZE = 1024
 
-config = load_config()
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-QUEUE = deque([])
-PASSWORD = 'abc'
+DELAY = .05
 
-def ingest(data_dict):
-    if 'header' not in data_dict or 'message' not in data_dict or 'timestamp' not in data_dict:
-        print('Bad message format')
-        return
-    header = data_dict['header']
-    message = data_dict['message']
-    timestamp = data_dict['timestamp']
-    if header != PASSWORD:
-        print('Unknown source')
-        return
-    print(message)
-    return
+def create_socket():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((GS_IP, GS_PORT))
+    return sock
 
-def listen():
-    BUFFER = config["modules"]["server"]["buffer"]
+def send(sock):
     while True:
-        data = sock.recv(BUFFER)
-        data = data.decode()
-        data_dict = json.loads(data)
-        ingest_thread = Thread(target=ingest, args=(data_dict,))
+        if queue_send and SEND_ALLOWED:
+            encoded = heapq.heappop(queue_send)[1]
+            sock.send(encoded)
+        time.sleep(DELAY_SEND)
+
+def listen(sock):
+    while True:
+        data = sock.recv(BYTE_SIZE)
+        ingest_thread = threading.Thread(target=ingest, args=(data,))
         ingest_thread.start()
+        time.sleep(DELAY_LISTEN)
 
-def send():
-    send_delay = config["modules"]["server"]["send_delay"]
-    while True:
-        if len(QUEUE) > 0:
-            pack = QUEUE.popleft()
-            pack_str = json.dumps(pack)
-            pack_bytes = pack_str.encode()
-            sock.send(pack)
-            time.sleep(send_delay)
+def enqueue(packet = Packet()):
+    packet_string = packet.to_str()
+    encoded = encode(packet_string)
+    heapq.heappush(queue_send, (packet.level, encoded))
 
-def enqueue(header, message):
-    pack = {}
-    pack['header'] = header
-    pack['message'] = message
-    pack['timestamp'] = time.time()
-    QUEUE.append(pack)
-
-def start():
-    IP = config["modules"]["server"]["ip"]
-    port = config["modules"]["server"]["port"]
-    sock.bind((IP, port))
-    listen_thread = 
-    
+def ingest(encoded):
+    packet_str = decode(encoded)
+    packet = Packet.from_str(packet_str)
+    print(packet)
