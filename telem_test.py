@@ -1,8 +1,8 @@
 import socket
 import threading
 
-IP = "192.168.1.84" # Needed for local development
-PORT = 8081
+IP = "127.0.0.1" # Needed for local development
+PORT = 5005
 
 def start():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
