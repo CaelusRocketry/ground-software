@@ -109,3 +109,6 @@ venv.bak/
 # Code editors and IDEs
 .vscode/
 .idea/
+
+
+private.pem
