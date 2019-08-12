@@ -29,8 +29,6 @@ def create_socket():
 
 def send(sock):
     while True:
-        if(input('')=="AT"):
-            enqueue(Packet(message="AT"))
         if queue_send and SEND_ALLOWED:
             encoded = heapq.heappop(queue_send)[1]
             sock.send(encoded)
@@ -51,7 +49,7 @@ def enqueue(packet = Packet()):
 def ingest(encoded):
     packet_str = decode(encoded)
     packet = Packet.from_string(Packet.from_string(packet_str))
-    print(packet.message)
+    print("Incoming: "+packet.message)
 
 def encode(packet):
     with open("public.pem", "rb") as publickey:
@@ -73,4 +71,5 @@ if __name__ == "__main__":
     send_thread.start()
     listen_thread.start()
     print("Listening and sending")
-
+    while(True):
+        enqueue(Packet(message=input("")))
