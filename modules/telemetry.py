@@ -8,8 +8,8 @@ from packet import Packet
 from Crypto.Cipher import PKCS1_OAEP
 import ast
 
-GS_IP = '192.168.1.26'
-GS_PORT = 5005
+FLIGHT_IP = '192.168.1.26'
+FLIGHT_PORT = 5005
 BYTE_SIZE = 1024
 
 DELAY = .05
@@ -22,13 +22,15 @@ queue_send=[]
 
 def create_socket():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind((GS_IP, GS_PORT))
+    sock.bind((FLIGHT_IP, FLIGHT_PORT))
     sock.listen(1)
     conn, addr = sock.accept()
     return conn
 
 def send(sock):
     while True:
+        if(input('')=="AT"):
+            enqueue(Packet(message="AT"))
         if queue_send and SEND_ALLOWED:
             encoded = heapq.heappop(queue_send)[1]
             sock.send(encoded)
@@ -49,7 +51,7 @@ def enqueue(packet = Packet()):
 def ingest(encoded):
     packet_str = decode(encoded)
     packet = Packet.from_string(Packet.from_string(packet_str))
-    print(packet.to_string())
+    print(packet.message)
 
 def encode(packet):
     with open("public.pem", "rb") as publickey:
@@ -67,6 +69,7 @@ if __name__ == "__main__":
     sock = create_socket()
     send_thread = threading.Thread(target=send, args=(sock,))
     listen_thread = threading.Thread(target=listen, args=(sock,))
+    listen_thread.daemon = True
     send_thread.start()
     listen_thread.start()
     print("Listening and sending")
