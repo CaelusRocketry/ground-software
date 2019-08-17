@@ -8,9 +8,9 @@ from packet import Packet
 from Crypto.Cipher import PKCS1_OAEP
 import ast
 
-FLIGHT_IP = '192.168.1.26'
+FLIGHT_IP = '127.0.0.1'
 FLIGHT_PORT = 5005
-BYTE_SIZE = 1024
+BYTE_SIZE = 8192
 
 DELAY = .05
 DELAY_LISTEN=.05
@@ -22,6 +22,7 @@ queue_send=[]
 
 def create_socket():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind((FLIGHT_IP, FLIGHT_PORT))
     sock.listen(1)
     conn, addr = sock.accept()
@@ -37,6 +38,9 @@ def send(sock):
 def listen(sock):
     while True:
         data = sock.recv(BYTE_SIZE)
+        print(data)
+        print(type(data))
+        print(len(data))
         ingest_thread = threading.Thread(target=ingest, args=(data,))
         ingest_thread.start()
         time.sleep(DELAY_LISTEN)
