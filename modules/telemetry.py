@@ -38,9 +38,6 @@ def send(sock):
 def listen(sock):
     while True:
         data = sock.recv(BYTE_SIZE)
-        print(data)
-        print(type(data))
-        print(len(data))
         ingest_thread = threading.Thread(target=ingest, args=(data,))
         ingest_thread.start()
         time.sleep(DELAY_LISTEN)
