@@ -1,14 +1,13 @@
 import socket, threading, time, json
 import heapq
-import Crypto
-from Crypto.PublicKey import RSA
-from Crypto import Random
 import multiprocessing
 from packet import Packet
-from Crypto.Cipher import PKCS1_OAEP
+from Crypto.Cipher import AES
 import ast
+import base64
+from Crypto.Util.Padding import pad, unpad
 
-GS_IP = '127.0.0.1'
+GS_IP = '192.168.1.198'
 GS_PORT = 5005
 BYTE_SIZE = 8192
 
@@ -19,7 +18,10 @@ DELAY_HEARTBEAT=.5
 
 SEND_ALLOWED=True
 
+key = b'getmeoutgetmeout'
 queue_send=[]
+
+BLOCK_SIZE = 32
 
 def create_socket():
     print("Creating socket")
@@ -57,16 +59,12 @@ def ingest(encoded):
     print("Incoming: "+packet.message)
 
 def encode(packet):
-    with open("public.pem", "rb") as publickey:
-        key = RSA.import_key(publickey.read())
-    cipher = PKCS1_OAEP.new(key)
-    return cipher.encrypt(str.encode(packet))
+    cipher = AES.new(key, AES.MODE_ECB)
+    return cipher.encrypt(pad(packet.encode(), BLOCK_SIZE))
 
 def decode(message):
-    with open("private.pem", "rb") as privatekey:
-        key = RSA.import_key(privatekey.read())
-    cipher = PKCS1_OAEP.new(key)
-    return cipher.decrypt(ast.literal_eval(str(message))).decode("utf-8")
+    cipher = AES.new(key, AES.MODE_ECB)
+    return unpad(cipher.decrypt(message), BLOCK_SIZE).decode()
 
 def heartbeat():
     while True:
