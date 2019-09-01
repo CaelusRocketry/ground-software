@@ -1,4 +1,7 @@
-import socket, threading, time, json
+import socket
+import threading
+import time
+import json
 import heapq
 import multiprocessing
 from packet import Packet
@@ -12,16 +15,17 @@ GS_PORT = 5005
 BYTE_SIZE = 8192
 
 DELAY = .05
-DELAY_LISTEN=.05
-DELAY_SEND=.05
-DELAY_HEARTBEAT=.5
+DELAY_LISTEN = .05
+DELAY_SEND = .05
+DELAY_HEARTBEAT = 5
 
-SEND_ALLOWED=True
+SEND_ALLOWED = True
 
 key = b'getmeoutgetmeout'
-queue_send=[]
+queue_send = []
 
 BLOCK_SIZE = 32
+
 
 def create_socket():
     print("Creating socket")
@@ -31,7 +35,9 @@ def create_socket():
     sock.listen(1)
     conn, addr = sock.accept()
     print("Created socket")
-    return conn
+#    return conn
+    return sock
+
 
 def send(sock):
     while True:
@@ -39,6 +45,7 @@ def send(sock):
             encoded = heapq.heappop(queue_send)[1]
             sock.send(encoded)
         time.sleep(DELAY_SEND)
+
 
 def listen(sock):
     while True:
@@ -48,28 +55,34 @@ def listen(sock):
         ingest_thread.start()
         time.sleep(DELAY_LISTEN)
 
-def enqueue(packet = Packet()):
+
+def enqueue(packet=Packet()):
     packet_string = packet.to_string()
     encoded = encode(packet_string)
     heapq.heappush(queue_send, (packet.level, encoded))
 
+
 def ingest(encoded):
     packet_str = decode(encoded)
     packet = Packet.from_string(packet_str)
-    print("Incoming: "+str(packet.message))
+    print("Incoming: "+ str(packet.message))
+
 
 def encode(packet):
     cipher = AES.new(key, AES.MODE_ECB)
     return cipher.encrypt(pad(packet.encode(), BLOCK_SIZE))
 
+
 def decode(message):
     cipher = AES.new(key, AES.MODE_ECB)
     return unpad(cipher.decrypt(message), BLOCK_SIZE).decode()
 
+
 def heartbeat():
     while True:
-        enqueue(Packet(header="HEARTBEAT", message="AT"))
+        enqueue(Packet(header="HEARTBEAT", message="At"))
         time.sleep(DELAY_HEARTBEAT)
+
 
 if __name__ == "__main__":
     sock = create_socket()
@@ -83,6 +96,6 @@ if __name__ == "__main__":
     heartbeat_thread = threading.Thread(target=heartbeat)
     heartbeat_thread.daemon = True
     heartbeat_thread.start()
-    while(True):
+    while True:
         temp = input("").split(" ")
         enqueue(Packet(header=temp[0], message=temp[1]))
