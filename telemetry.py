@@ -35,8 +35,8 @@ def create_socket():
     sock.listen(1)
     conn, addr = sock.accept()
     print("Created socket")
-#    return conn
-    return sock
+    return conn
+#    return sock
 
 
 def send(sock):
@@ -65,17 +65,19 @@ def enqueue(packet=Packet()):
 def ingest(encoded):
     packet_str = decode(encoded)
     packet = Packet.from_string(packet_str)
-    print("Incoming: "+ str(packet.message))
+#    print("Incoming: "+ str(packet.message))
 
 
 def encode(packet):
     cipher = AES.new(key, AES.MODE_ECB)
     return cipher.encrypt(pad(packet.encode(), BLOCK_SIZE))
+#    return packet.encode()
 
 
 def decode(message):
     cipher = AES.new(key, AES.MODE_ECB)
     return unpad(cipher.decrypt(message), BLOCK_SIZE).decode()
+#    return message.decode()
 
 
 def heartbeat():
@@ -97,5 +99,8 @@ if __name__ == "__main__":
     heartbeat_thread.daemon = True
     heartbeat_thread.start()
     while True:
-        temp = input("").split(" ")
-        enqueue(Packet(header=temp[0], message=temp[1]))
+        temp = input("")
+        header = temp[:temp.index(" ")]
+        message = temp[temp.index(" ") + 1:]
+#        enqueue(Packet(header=temp[0], message=temp[1]))
+        enqueue(Packet(header=header, message=message))
