@@ -10,7 +10,7 @@ import ast
 import base64
 from Crypto.Util.Padding import pad, unpad
 
-GS_IP = '127.0.0.1'
+GS_IP = '192.168.1.198'
 GS_PORT = 5005
 BYTE_SIZE = 8192
 
@@ -65,8 +65,9 @@ def enqueue(packet=Packet()):
 def ingest(encoded):
     packet_str = decode(encoded)
     packet = Packet.from_string(packet_str)
-#    print("Incoming: "+ str(packet.message))
-
+    print("Incoming: "+ str(packet.message))
+    with open("incoming.txt", "a+") as coming:
+        coming.write("Incoming: "+ str(packet.message)+ "\n")
 
 def encode(packet):
     cipher = AES.new(key, AES.MODE_ECB)
