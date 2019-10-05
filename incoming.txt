@@ -1,0 +1,176 @@
+Incoming: {'internal': 24.78125, 'timestamp': 1568499308.4088933, 'temp': 23.953125}
+Incoming: {'internal': 24.78125, 'timestamp': 1568499309.9237604, 'temp': 23.9765625}
+Incoming: {'euler': [359.9375, 15.5, 16.0], 'linear_acceleration': [-0.01, 0.0, -0.01], 'timestamp': 1568499309.9182017, 'gravity': [2.62, -2.61, 9.08], 'accleration': [2.61, -2.61, 9.07], 'gyroscope': [0.0, 0.125, -0.0625]}
+Incoming: {'timestamp': 1568499309.8553412, 'weight': -0.0404808528512184}
+Incoming: {'internal': 24.78125, 'timestamp': 1568499311.4126608, 'temp': 23.9609375}
+Incoming: {'euler': [359.9375, 15.5, 16.0], 'linear_acceleration': [0.0, 0.0, -0.04], 'timestamp': 1568499311.4292827, 'gravity': [2.62, -2.61, 9.08], 'accleration': [2.6, -2.6, 9.06], 'gyroscope': [-0.0625, 0.0, -0.0625]}
+Incoming: {'timestamp': 1568499374.3887796, 'weight': -0.04072695864121207}
+Incoming: {'timestamp': 1568499374.6355212, 'linear_acceleration': [-0.01, 0.0, -0.01], 'gyroscope': [0.0, 0.25, 0.0625], 'accleration': [2.61, -2.6, 9.07], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499374.6181383, 'internal': 24.734375, 'temp': 23.90625}
+Incoming: {'timestamp': 1568499376.0567653, 'weight': -0.04045718883294978}
+Incoming: {'timestamp': 1568499376.1994073, 'linear_acceleration': [0.0, -0.01, -0.03], 'gyroscope': [0.0, -0.125, 0.0], 'accleration': [2.6, -2.61, 9.040000000000001], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499376.1940188, 'internal': 24.75, 'temp': 23.890625}
+Incoming: {'timestamp': 1568499377.6036963, 'weight': -0.040461921636603504}
+Incoming: {'timestamp': 1568499377.7266917, 'linear_acceleration': [-0.01, 0.0, -0.03], 'gyroscope': [-0.0625, 0.125, 0.0625], 'accleration': [2.62, -2.61, 9.03], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499377.7597468, 'internal': 24.75, 'temp': 23.9296875}
+Incoming: {'timestamp': 1568499379.1893013, 'weight': -0.04033531913886638}
+Incoming: {'timestamp': 1568499379.2967525, 'linear_acceleration': [-0.01, 0.03, 0.0], 'gyroscope': [0.0, 0.0, 0.125], 'accleration': [2.61, -2.63, 9.07], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499379.2492235, 'internal': 24.75, 'temp': 23.9140625}
+Incoming: {'timestamp': 1568499380.7255414, 'weight': -0.040718676234818056}
+Incoming: {'timestamp': 1568499380.8464565, 'linear_acceleration': [-0.04, 0.0, -0.02], 'gyroscope': [0.0, 0.0625, 0.0], 'accleration': [2.6, -2.61, 9.02], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499380.8299253, 'internal': 24.78125, 'temp': 23.9609375}
+Incoming: {'timestamp': 1568499382.3267133, 'weight': -0.04054592890145711}
+Incoming: {'timestamp': 1568499382.357435, 'linear_acceleration': [-0.01, 0.0, -0.02], 'gyroscope': [0.0, 0.0, -0.0625], 'accleration': [2.58, -2.61, 9.06], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499382.3265538, 'internal': 24.75, 'temp': 23.9765625}
+Incoming: {'timestamp': 1568499384.2456822, 'weight': -0.04050096726674673}
+Incoming: {'timestamp': 1568499384.2349455, 'linear_acceleration': [-0.02, -0.01, 0.0], 'gyroscope': [0.0, -0.0625, 0.0], 'accleration': [2.59, -2.6, 9.040000000000001], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499384.2353578, 'internal': 24.734375, 'temp': 23.8828125}
+Incoming: {'timestamp': 1568499385.734877, 'weight': -0.04040512799275881}
+Incoming: {'timestamp': 1568499385.7859607, 'linear_acceleration': [-0.02, 0.02, -0.01], 'gyroscope': [0.0, 0.0625, 0.0], 'accleration': [2.62, -2.6, 9.09], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499385.740045, 'internal': 24.75, 'temp': 23.9921875}
+Incoming: {'timestamp': 1568499387.2946463, 'weight': -0.040428792011027434}
+Incoming: {'timestamp': 1568499387.3399446, 'linear_acceleration': [-0.01, 0.01, 0.0], 'gyroscope': [0.125, -0.0625, 0.125], 'accleration': [2.61, -2.6, 9.07], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499387.3291261, 'internal': 24.734375, 'temp': 23.9296875}
+Incoming: {'timestamp': 1568499388.8676448, 'weight': -0.04039092958179764}
+Incoming: {'timestamp': 1568499388.9238653, 'linear_acceleration': [0.0, 0.01, -0.02], 'gyroscope': [-0.0625, -0.0625, 0.0], 'accleration': [2.61, -2.59, 9.08], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499388.8506944, 'internal': 24.75, 'temp': 23.9921875}
+Incoming: {'timestamp': 1568499390.2878096, 'weight': -0.04067016499736738}
+Incoming: {'timestamp': 1568499390.4078953, 'linear_acceleration': [0.0, 0.0, 0.0], 'gyroscope': [0.0, 0.0625, 0.0], 'accleration': [2.6, -2.62, 9.09], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499390.4140284, 'internal': 24.734375, 'temp': 23.890625}
+Incoming: {'timestamp': 1568499391.883644, 'weight': -0.040492684860352714}
+Incoming: {'timestamp': 1568499391.9658291, 'linear_acceleration': [-0.01, 0.0, 0.01], 'gyroscope': [0.0, 0.0, 0.0], 'accleration': [2.6, -2.61, 9.06], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499391.8604105, 'internal': 24.75, 'temp': 23.9765625}
+Incoming: {'timestamp': 1568499393.4896927, 'weight': -0.040584974531600336}
+Incoming: {'timestamp': 1568499393.442245, 'linear_acceleration': [-0.01, 0.0, -0.01], 'gyroscope': [-0.0625, 0.0625, 0.0], 'accleration': [2.61, -2.62, 9.08], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499393.4685988, 'internal': 24.734375, 'temp': 23.9609375}
+Incoming: {'timestamp': 1568499394.9328008, 'weight': -0.04039092958179764}
+Incoming: {'timestamp': 1568499395.0741923, 'linear_acceleration': [-0.01, 0.0, -0.04], 'gyroscope': [-0.0625, 0.125, -0.0625], 'accleration': [2.62, -2.6, 9.05], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499395.0689359, 'internal': 24.734375, 'temp': 23.9296875}
+Incoming: {'timestamp': 1568499396.4511425, 'weight': -0.04047138724391095}
+Incoming: {'timestamp': 1568499396.5782337, 'linear_acceleration': [-0.02, 0.0, 0.0], 'gyroscope': [0.0625, 0.0, -0.0625], 'accleration': [2.61, -2.6, 9.06], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499396.549819, 'internal': 24.78125, 'temp': 23.9375}
+Incoming: {'timestamp': 1568499398.0310752, 'weight': -0.04024302946761875}
+Incoming: {'timestamp': 1568499398.103084, 'linear_acceleration': [0.0, 0.0, -0.04], 'gyroscope': [0.0, 0.0625, -0.0625], 'accleration': [2.6, -2.61, 9.05], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499398.0025415, 'internal': 24.75, 'temp': 23.9140625}
+Incoming: {'timestamp': 1568499399.4089339, 'weight': -0.04033886874160667}
+Incoming: {'timestamp': 1568499399.59949, 'linear_acceleration': [-0.02, 0.0, -0.02], 'gyroscope': [0.0, 0.0, -0.0625], 'accleration': [2.6, -2.59, 9.05], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499399.6326022, 'internal': 24.734375, 'temp': 23.9609375}
+Incoming: {'timestamp': 1568499401.063767, 'weight': -0.040618104157176406}
+Incoming: {'timestamp': 1568499401.164897, 'linear_acceleration': [0.0, 0.0, -0.01], 'gyroscope': [-0.0625, 0.1875, 0.0625], 'accleration': [2.62, -2.62, 9.06], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499401.176508, 'internal': 24.8125, 'temp': 23.9296875}
+Incoming: {'timestamp': 1568499402.6980925, 'weight': -0.04050215046766016}
+Incoming: {'timestamp': 1568499402.73352, 'linear_acceleration': [0.0, 0.01, 0.0], 'gyroscope': [-0.0625, -0.125, 0.0], 'accleration': [2.61, -2.59, 9.06], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499402.7083569, 'internal': 24.75, 'temp': 23.9765625}
+Incoming: {'timestamp': 1568499404.181601, 'weight': -0.04052463128501535}
+Incoming: {'timestamp': 1568499404.2827685, 'linear_acceleration': [0.0, 0.0, -0.01], 'gyroscope': [0.0, 0.0, -0.0625], 'accleration': [2.63, -2.6, 9.03], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499404.2996242, 'internal': 24.75, 'temp': 23.953125}
+Incoming: {'timestamp': 1568499405.676831, 'weight': -0.040674897801021105}
+Incoming: {'timestamp': 1568499405.829131, 'linear_acceleration': [0.0, 0.01, -0.02], 'gyroscope': [-0.0625, -0.125, 0.0], 'accleration': [2.61, -2.59, 9.07], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499405.8353145, 'internal': 24.75, 'temp': 23.953125}
+Incoming: {'timestamp': 1568499407.2550085, 'weight': -0.04075772186496128}
+Incoming: {'timestamp': 1568499407.3542733, 'linear_acceleration': [-0.01, 0.0, -0.02], 'gyroscope': [0.0, -0.125, 0.0], 'accleration': [2.6, -2.59, 9.07], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499407.3485432, 'internal': 24.75, 'temp': 23.9296875}
+Incoming: {'timestamp': 1568499408.721883, 'weight': -0.04069027941289571}
+Incoming: {'timestamp': 1568499408.8574052, 'linear_acceleration': [-0.02, 0.0, 0.0], 'gyroscope': [0.0, 0.0625, 0.0], 'accleration': [2.61, -2.62, 9.040000000000001], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499408.8858523, 'internal': 24.734375, 'temp': 23.9765625}
+Incoming: {'timestamp': 1568499409.9935756, 'weight': 0.01862831518105932}
+Incoming: {'timestamp': 1568499410.3926702, 'linear_acceleration': [-0.02, 0.01, 0.0], 'gyroscope': [0.0625, -0.0625, 0.125], 'accleration': [2.6, -2.61, 9.06], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499410.404733, 'internal': 24.734375, 'temp': 23.953125}
+Incoming: {'timestamp': 1568499411.9585307, 'linear_acceleration': [-0.01, 0.02, 0.0], 'gyroscope': [0.0, 0.125, 0.0], 'accleration': [2.61, -2.59, 9.07], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499411.9192393, 'weight': -0.04036134955896186}
+Incoming: {'timestamp': 1568499411.9703028, 'internal': 24.78125, 'temp': 23.9609375}
+Incoming: {'timestamp': 1568499413.6452353, 'weight': -0.040561310513331714}
+Incoming: {'timestamp': 1568499413.6046135, 'linear_acceleration': [-0.01, 0.01, 0.0], 'gyroscope': [-0.125, 0.0, 0.0], 'accleration': [2.61, -2.61, 9.040000000000001], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499413.5765388, 'internal': 24.703125, 'temp': 23.90625}
+Incoming: {'timestamp': 1568499414.9737597, 'weight': -0.040584974531600336}
+Incoming: {'timestamp': 1568499415.146464, 'linear_acceleration': [-0.02, -0.01, -0.03], 'gyroscope': [0.0, -0.125, 0.0], 'accleration': [2.61, -2.59, 9.03], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499415.1520379, 'internal': 24.78125, 'temp': 24.0}
+Incoming: {'timestamp': 1568499416.6631994, 'internal': 24.75, 'temp': 24.0}
+Incoming: {'timestamp': 1568499416.5553408, 'weight': -0.040528180887755644}
+Incoming: {'timestamp': 1568499416.662834, 'linear_acceleration': [0.0, 0.0, -0.02], 'gyroscope': [0.0625, 0.0625, -0.0625], 'accleration': [2.62, -2.63, 9.08], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499418.2491205, 'weight': -0.040487952056698986}
+Incoming: {'timestamp': 1568499418.2431452, 'linear_acceleration': [0.0, 0.0, -0.05], 'gyroscope': [0.0, -0.0625, -0.125], 'accleration': [2.6, -2.61, 9.06], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499418.2265422, 'internal': 24.703125, 'temp': 23.890625}
+Incoming: {'timestamp': 1568499419.7799578, 'weight': -0.04072695864121207}
+Incoming: {'timestamp': 1568499419.7564318, 'linear_acceleration': [-0.01, 0.01, -0.04], 'gyroscope': [-0.0625, 0.0625, 0.125], 'accleration': [2.61, -2.61, 9.03], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499419.7690444, 'internal': 24.75, 'temp': 24.0546875}
+Incoming: {'timestamp': 1568499421.0406904, 'weight': -7.353568829755137}
+Incoming: {'timestamp': 1568499421.328339, 'linear_acceleration': [0.0, 0.0, 0.0], 'gyroscope': [-0.125, 0.0, -0.0625], 'accleration': [2.6, -2.6, 9.08], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499421.316737, 'internal': 24.78125, 'temp': 23.9765625}
+Incoming: {'timestamp': 1568499422.7943661, 'weight': -0.040602722545301805}
+Incoming: {'timestamp': 1568499422.8618264, 'linear_acceleration': [-0.02, 0.0, -0.02], 'gyroscope': [-0.0625, -0.0625, 0.0625], 'accleration': [2.63, -2.59, 9.06], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499422.8323846, 'internal': 24.75, 'temp': 23.953125}
+Incoming: {'timestamp': 1568499424.4061522, 'weight': -0.04044062402016174}
+Incoming: {'timestamp': 1568499424.3767343, 'linear_acceleration': [-0.01, 0.03, 0.0], 'gyroscope': [-0.0625, 0.3125, 0.125], 'accleration': [2.61, -2.6, 9.07], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499424.406046, 'internal': 24.75, 'temp': 23.9921875}
+Incoming: {'timestamp': 1568499425.8994925, 'weight': -0.04038737997905734}
+Incoming: {'timestamp': 1568499425.9631853, 'linear_acceleration': [0.0, 0.02, 0.0], 'gyroscope': [0.0, 0.125, 0.0], 'accleration': [2.6, -2.59, 9.08], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499425.9047124, 'internal': 24.78125, 'temp': 23.9296875}
+Incoming: {'timestamp': 1568499427.4116256, 'weight': -0.04047375364573781}
+Incoming: {'timestamp': 1568499427.5327785, 'linear_acceleration': [-0.02, 0.0, 0.0], 'gyroscope': [-0.0625, -0.1875, 0.0625], 'accleration': [2.59, -2.59, 9.03], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499427.5141287, 'internal': 24.734375, 'temp': 23.9609375}
+Incoming: {'timestamp': 1568499428.9796536, 'weight': -0.04036844876444245}
+Incoming: {'timestamp': 1568499429.0376427, 'linear_acceleration': [-0.01, 0.0, 0.0], 'gyroscope': [0.0625, 0.0, 0.0625], 'accleration': [2.61, -2.6, 9.07], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499429.0602825, 'internal': 24.78125, 'temp': 23.9765625}
+Incoming: {'timestamp': 1568499430.5356984, 'weight': -0.040738790650346385}
+Incoming: {'timestamp': 1568499430.5973547, 'linear_acceleration': [-0.02, 0.01, 0.0], 'gyroscope': [0.0, -0.1875, 0.125], 'accleration': [2.62, -2.59, 9.06], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499430.5299702, 'internal': 24.78125, 'temp': 23.9765625}
+Incoming: {'timestamp': 1568499431.9594336, 'weight': -0.04055066170511084}
+Incoming: {'timestamp': 1568499432.1179783, 'linear_acceleration': [-0.02, 0.01, -0.03], 'gyroscope': [-0.0625, -0.0625, 0.0], 'accleration': [2.59, -2.61, 9.07], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499432.0703657, 'internal': 24.734375, 'temp': 23.9296875}
+Incoming: {'timestamp': 1568499433.5704727, 'weight': -0.04063940177361817}
+Incoming: {'timestamp': 1568499433.649409, 'linear_acceleration': [-0.01, 0.0, 0.0], 'gyroscope': [0.0, -0.0625, 0.125], 'accleration': [2.6, -2.59, 9.06], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499433.6322277, 'internal': 24.75, 'temp': 23.9140625}
+Incoming: {'timestamp': 1568499435.177306, 'weight': -0.040674897801021105}
+Incoming: {'timestamp': 1568499435.239145, 'linear_acceleration': [-0.01, 0.02, -0.03], 'gyroscope': [0.0625, 0.0, 0.0625], 'accleration': [2.62, -2.62, 9.05], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499435.1772246, 'internal': 24.78125, 'temp': 23.953125}
+Incoming: {'timestamp': 1568499436.654687, 'weight': -0.04082871391976715}
+Incoming: {'timestamp': 1568499436.8118875, 'linear_acceleration': [-0.02, 0.01, -0.01], 'gyroscope': [0.0625, -0.1875, 0.0], 'accleration': [2.61, -2.59, 9.040000000000001], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499436.7992895, 'internal': 24.75, 'temp': 23.9375}
+Incoming: {'timestamp': 1568499438.3103673, 'weight': -0.04089733957274615}
+Incoming: {'timestamp': 1568499438.3261461, 'linear_acceleration': [-0.02, 0.0, 0.0], 'gyroscope': [-0.0625, 0.0625, 0.0], 'accleration': [2.6, -2.6, 9.05], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499438.3157592, 'internal': 24.734375, 'temp': 24.0}
+Incoming: {'timestamp': 1568499439.8356078, 'weight': -0.04091627078736105}
+Incoming: {'timestamp': 1568499439.882517, 'linear_acceleration': [0.0, -0.01, 0.0], 'gyroscope': [0.0625, -0.0625, 0.0], 'accleration': [2.61, -2.59, 9.08], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499439.8988423, 'internal': 24.734375, 'temp': 23.890625}
+Incoming: {'timestamp': 1568499441.4395761, 'linear_acceleration': [0.0, 0.0, -0.02], 'gyroscope': [-0.0625, -0.125, -0.0625], 'accleration': [2.64, -2.6, 9.08], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499441.2244215, 'weight': -0.04073405784669266}
+Incoming: {'timestamp': 1568499441.4343495, 'internal': 24.8125, 'temp': 24.0390625}
+Incoming: {'timestamp': 1568499443.0080533, 'weight': -0.040853561138949196}
+Incoming: {'timestamp': 1568499443.0985823, 'linear_acceleration': [-0.01, 0.0, -0.01], 'gyroscope': [0.0, -0.125, 0.0], 'accleration': [2.6, -2.61, 9.05], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499443.0652637, 'internal': 24.734375, 'temp': 23.9609375}
+Incoming: {'timestamp': 1568499444.6433294, 'weight': -0.04101684286500269}
+Incoming: {'timestamp': 1568499444.6209903, 'linear_acceleration': [-0.01, 0.0, 0.01], 'gyroscope': [0.0, 0.0, 0.0], 'accleration': [2.59, -2.6, 9.02], 'euler': [359.9375, 15.5, 16.0], 'gravity': [2.62, -2.61, 9.08]}
+Incoming: {'timestamp': 1568499444.638069, 'internal': 24.75, 'temp': 23.9296875}
+Incoming: {'timestamp': 1568499446.1944199, 'internal': 24.75, 'temp': 24.0234375}
+Incoming: hi
+Incoming: hi
+Incoming: hi
+Incoming: hi
+Incoming: hi
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Actuated valve
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Ok
+Incoming: Actuated valve
+Incoming: Ok
