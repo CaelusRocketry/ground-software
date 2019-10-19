@@ -27,11 +27,11 @@ queue_send = []
 BLOCK_SIZE = 32
 
 
-def create_socket():
+def create_socket(ip, port):
     print("Creating socket")
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    sock.bind((GS_IP, GS_PORT))
+    sock.bind((ip, port))
     sock.listen(1)
     conn, addr = sock.accept()
     print("Created socket")
@@ -65,7 +65,7 @@ def enqueue(packet=Packet()):
 def ingest(encoded):
     packet_str = decode(encoded)
     packet = Packet.from_string(packet_str)
-    print("Incoming: "+ str(packet.message))
+   # print("Incoming: "+ str(packet.message))
     with open("incoming.txt", "a+") as coming:
         coming.write("Incoming: "+ str(packet.message)+ "\n")
 
@@ -88,7 +88,8 @@ def heartbeat():
 
 
 if __name__ == "__main__":
-    sock = create_socket()
+    sock = create_socket(GS_IP, GS_PORT)
+#    back_front = create_socket(FRONT_IP, FRONT_PORT)
     send_thread = threading.Thread(target=send, args=(sock,))
     send_thread.daemon = True
     listen_thread = threading.Thread(target=listen, args=(sock,))
