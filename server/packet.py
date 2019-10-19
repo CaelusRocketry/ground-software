@@ -2,17 +2,15 @@ import time
 import json
 from enum import IntEnum
 
-
 class Level(IntEnum):
     INFO = 4
     DEBUG = 3
     WARN = 2
     CRIT = 1
 
-
 class Packet:
 
-    def __init__(self, header='heartbeat', message="alive", level: Level = Level.INFO, timestamp: float = time.time(), sender="Ground station"):
+    def __init__(self, header = 'heartbeat' , message = "alive" , level: Level = Level.INFO, timestamp: float = time.time(), sender="Ground station"):
         self.header = header
         self.message = message
         self.level = level
