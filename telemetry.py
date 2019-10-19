@@ -4,7 +4,7 @@ import time
 import json
 import heapq
 import multiprocessing
-from packet import Packet
+from logging import Packet, Log
 from Crypto.Cipher import AES
 import ast
 import base64
@@ -56,7 +56,7 @@ def listen(sock):
         time.sleep(DELAY_LISTEN)
 
 
-def enqueue(packet=Packet()):
+def enqueue(packet):
     packet_string = packet.to_string()
     encoded = encode(packet_string)
     heapq.heappush(queue_send, (packet.level, encoded))
@@ -65,13 +65,10 @@ def enqueue(packet=Packet()):
 def ingest(encoded):
     packet_str = decode(encoded)
     packet = Packet.from_string(packet_str)
-<<<<<<< HEAD
    # print("Incoming: "+ str(packet.message))
-=======
-#    print("Incoming: "+ str(packet.message))
->>>>>>> 18cc188e5d3cdcbea33fa1340d8f885325124a26
     with open("incoming.txt", "a+") as coming:
-        coming.write("Incoming: "+ str(packet.message)+ "\n")
+        for log in packet.logs:
+            coming.write("Incoming: "+ str(log.message)+ "\n")
 
 def encode(packet):
     cipher = AES.new(key, AES.MODE_ECB)
@@ -87,7 +84,8 @@ def decode(message):
 
 def heartbeat():
     while True:
-        enqueue(Packet(header="HEARTBEAT", message="At"))
+        log = Log(header="HEARTBEAT", message="At")
+        enqueue(Packet(header="HEARTBEAT", logs=[log]))
         time.sleep(DELAY_HEARTBEAT)
 
 
@@ -108,5 +106,7 @@ if __name__ == "__main__":
         temp = input("")
         header = temp[:temp.index(" ")]
         message = temp[temp.index(" ") + 1:]
-#        enqueue(Packet(header=temp[0], message=temp[1]))
-        enqueue(Packet(header=header, message=message))
+        pack = Packet(header=header)
+        log = Log(header=header, message=message)
+        pack.add(log)
+        enqueue(pack)
