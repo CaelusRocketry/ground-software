@@ -5,7 +5,6 @@ from threading import Thread
 
 import yaml
 
-
 def load_config():
     """
     Loads a YAML file to be used as the ``config``.
@@ -29,18 +28,12 @@ def start():
     Runs the module's corresponding functions in their own threads.
     """
 
-    # Loop through all modules defined in the startup config
-    for module_name in config["main"]["startup"]:
-        module = importlib.import_module(
-            f'modules.{module_name}')  # Get the module as a module
-        # Loop through the function's modules listed in the startup config
-        for function_name in config["main"]["startup"][module_name]:
-            # Get the function as a function
-            function = getattr(module, function_name)
-            thread_name = module.__name__ + '.' + \
-                function.__name__  # Identifier for the thread
-            # Start the thread
-            Thread(target=function, name=thread_name).start()
+    for module_name in config["main"]["startup"]:  # Loop through all modules defined in the startup config
+        module = importlib.import_module(f'modules.{module_name}')  # Get the module as a module
+        for function_name in config["main"]["startup"][module_name]:  # Loop through the function's modules listed in the startup config
+            function = getattr(module, function_name)  # Get the function as a function
+            thread_name = module.__name__ + '.' + function.__name__  # Identifier for the thread
+            Thread(target=function, name=thread_name).start()  # Start the thread
 
 
 if __name__ == "__main__":

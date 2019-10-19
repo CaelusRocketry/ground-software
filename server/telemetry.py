@@ -10,14 +10,14 @@ import ast
 import base64
 from Crypto.Util.Padding import pad, unpad
 
-GS_IP = '192.168.1.75'
+GS_IP = '192.168.1.198'
 GS_PORT = 5005
 BYTE_SIZE = 8192
 
 DELAY = .05
 DELAY_LISTEN = .05
 DELAY_SEND = .05
-DELAY_HEARTBEAT = 3
+DELAY_HEARTBEAT = 5
 
 SEND_ALLOWED = True
 
@@ -27,11 +27,11 @@ queue_send = []
 BLOCK_SIZE = 32
 
 
-def create_socket(ip, port):
+def create_socket():
     print("Creating socket")
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    sock.bind((ip, port))
+    sock.bind((GS_IP, GS_PORT))
     sock.listen(1)
     conn, addr = sock.accept()
     print("Created socket")
@@ -65,11 +65,7 @@ def enqueue(packet=Packet()):
 def ingest(encoded):
     packet_str = decode(encoded)
     packet = Packet.from_string(packet_str)
-<<<<<<< HEAD
-   # print("Incoming: "+ str(packet.message))
-=======
-#    print("Incoming: "+ str(packet.message))
->>>>>>> 18cc188e5d3cdcbea33fa1340d8f885325124a26
+    print("Incoming: "+ str(packet.message))
     with open("incoming.txt", "a+") as coming:
         coming.write("Incoming: "+ str(packet.message)+ "\n")
 
@@ -92,8 +88,7 @@ def heartbeat():
 
 
 if __name__ == "__main__":
-    sock = create_socket(GS_IP, GS_PORT)
-#    back_front = create_socket(FRONT_IP, FRONT_PORT)
+    sock = create_socket()
     send_thread = threading.Thread(target=send, args=(sock,))
     send_thread.daemon = True
     listen_thread = threading.Thread(target=listen, args=(sock,))
