@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, emit
 app = Flask(__name__,
             static_folder="./dist/static",
             template_folder="./dist")
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="http://localhost:5005")
 
 
 @socketio.on('test')
