@@ -7,7 +7,8 @@
         "build": "vue-cli-service build"
     },
     "dependencies": {
-        "vue": "^2.6.10"
+        "vue": "^2.6.10",
+        "vue-socket.io": "^3.0.7"
     },
     "devDependencies": {
         "@vue/cli-service": "^4.0.0",
