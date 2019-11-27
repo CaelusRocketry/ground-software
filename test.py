@@ -101,9 +101,9 @@ if __name__ == "__main__":
     send_thread.start()
     listen_thread.start()
     Log("Listening and sending")
-    heartbeat_thread = threading.Thread(target=heartbeat)
-    heartbeat_thread.daemon = True
-    heartbeat_thread.start()
+#    heartbeat_thread = threading.Thread(target=heartbeat)
+#    heartbeat_thread.daemon = True
+#    heartbeat_thread.start()
     while True:
         temp = input("")
         header = temp[:temp.index(" ")]
