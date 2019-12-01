@@ -7,7 +7,8 @@
         </div>
         <div style="display: grid; grid-template-rows: 100px auto;">
             <PaneInfo />
-            <PaneButtons />
+            <PaneValves />
+            <PaneAbort />
         </div>
     </div>
 </template>
@@ -16,7 +17,8 @@
 import PaneMessages from "@/components/PaneMessages.vue";
 import PaneGraph from "@/components/PaneGraph.vue";
 import PaneInfo from "@/components/PaneInfo.vue";
-import PaneButtons from "@/components/PaneButtons.vue";
+import PaneValves from "@/components/PaneValves.vue";
+import PaneAbort from "@/components/PaneAbort.vue";
 
 export default {
     name: "app",
@@ -24,7 +26,8 @@ export default {
         PaneMessages,
         PaneGraph,
         PaneInfo,
-        PaneButtons
+        PaneValves,
+        PaneAbort
     }
 };
 </script>

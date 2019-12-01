@@ -69,8 +69,8 @@ def ingest(encoded):
     # Create a new packet from the previous packet so that everything gets logged
     for log in packet.logs:
         log.save()
-        if log.header == "ABORT":
-            print("ABORTING RIGHT NOW")
+#        if log.header == "ABORT":
+#            print("ABORTING RIGHT NOW")
 
 def encode(packet):
     cipher = AES.new(key, AES.MODE_ECB)
