@@ -1,19 +1,157 @@
-{"header": "Creating socket", "message": "alive", "level": 4, "timestamp": 1574885655.3316298, "sender": "Flight Pi"}
-{"header": "Created socket", "message": "alive", "level": 4, "timestamp": 1574885655.3316298, "sender": "Flight Pi"}
-{"header": "Listening and sending", "message": "alive", "level": 4, "timestamp": 1574885655.3316298, "sender": "Flight Pi"}
-{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574885655.3316298, "sender": "Flight Pi"}
+{"header": "Creating socket", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "Created socket", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "Listening and sending", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
 {"header": "heartbeat", "message": {"raw": {}, "normalized": {}}, "level": 3, "timestamp": null, "sender": "thermocouple"}
-{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574885655.3316298, "sender": "Flight Pi"}
-{"header": "heartbeat", "message": {"raw": {"internal": 20.84375, "temperature": 20.40625, "timestamp": 1574885661.0652106}, "normalized": {}}, "level": 2, "timestamp": 1574885661.0652127, "sender": "thermocouple"}
-{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574885655.3316298, "sender": "Flight Pi"}
-{"header": "heartbeat", "message": {"raw": {"internal": 20.8125, "temperature": 20.359375, "timestamp": 1574885662.5875993}, "normalized": {}}, "level": 2, "timestamp": 1574885662.5876024, "sender": "thermocouple"}
-{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574885655.3316298, "sender": "Flight Pi"}
-{"header": "heartbeat", "message": {"raw": {"internal": 20.84375, "temperature": 20.359375, "timestamp": 1574885664.1194568}, "normalized": {}}, "level": 2, "timestamp": 1574885664.1194592, "sender": "thermocouple"}
-{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574885655.3316298, "sender": "Flight Pi"}
-{"header": "heartbeat", "message": {"raw": {"internal": 20.859375, "temperature": 20.421875, "timestamp": 1574885665.693749}, "normalized": {}}, "level": 2, "timestamp": 1574885665.693751, "sender": "thermocouple"}
-{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574885655.3316298, "sender": "Flight Pi"}
-{"header": "heartbeat", "message": {"raw": {"internal": 20.8125, "temperature": 20.359375, "timestamp": 1574885667.216522}, "normalized": {}}, "level": 2, "timestamp": 1574885667.2165246, "sender": "thermocouple"}
-{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574885655.3316298, "sender": "Flight Pi"}
-{"header": "heartbeat", "message": {"raw": {"internal": 20.8125, "temperature": 20.40625, "timestamp": 1574885668.7610617}, "normalized": {}}, "level": 2, "timestamp": 1574885668.761064, "sender": "thermocouple"}
-{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574885655.3316298, "sender": "Flight Pi"}
-{"header": "heartbeat", "message": {"raw": {"internal": 20.84375, "temperature": 20.6015625, "timestamp": 1574885670.2757342}, "normalized": {}}, "level": 2, "timestamp": 1574885670.2757368, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.578125, "temperature": 21.8203125, "timestamp": 1574891729.8602955}, "normalized": {}}, "level": 2, "timestamp": 1574891729.8602974, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.609375, "temperature": 21.8671875, "timestamp": 1574891731.4238813}, "normalized": {}}, "level": 2, "timestamp": 1574891731.4238834, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.578125, "temperature": 21.7578125, "timestamp": 1574891732.929709}, "normalized": {}}, "level": 2, "timestamp": 1574891732.929711, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.578125, "temperature": 21.8046875, "timestamp": 1574891734.4960809}, "normalized": {}}, "level": 2, "timestamp": 1574891734.4960833, "sender": "thermocouple"}
+{"header": "valve", "message": "actuate int:0 int:90 int:5", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.5625, "temperature": 21.71875, "timestamp": 1574891735.9961193}, "normalized": {}}, "level": 2, "timestamp": 1574891735.9961216, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.5625, "temperature": 21.671875, "timestamp": 1574891737.5924137}, "normalized": {}}, "level": 2, "timestamp": 1574891737.5924158, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.609375, "temperature": 21.625, "timestamp": 1574891739.086443}, "normalized": {}}, "level": 2, "timestamp": 1574891739.0864456, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.53125, "temperature": 21.5859375, "timestamp": 1574891740.6518695}, "normalized": {}}, "level": 2, "timestamp": 1574891740.6518714, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "INFO", "message": "Actuated valve", "level": 4, "timestamp": 1574891728.1709776, "sender": "supervisor"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.578125, "temperature": 21.671875, "timestamp": 1574891742.1761808}, "normalized": {}}, "level": 2, "timestamp": 1574891742.176183, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.5625, "temperature": 21.6953125, "timestamp": 1574891743.7174113}, "normalized": {}}, "level": 2, "timestamp": 1574891743.7174134, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.5625, "temperature": 21.6484375, "timestamp": 1574891745.2605684}, "normalized": {}}, "level": 2, "timestamp": 1574891745.2605708, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.578125, "temperature": 21.625, "timestamp": 1574891746.8269854}, "normalized": {}}, "level": 2, "timestamp": 1574891746.826988, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.5625, "temperature": 21.78125, "timestamp": 1574891748.3345194}, "normalized": {}}, "level": 2, "timestamp": 1574891748.3345215, "sender": "thermocouple"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.578125, "temperature": 28.9375, "timestamp": 1574891749.868173}, "normalized": {}}, "level": 1, "timestamp": 1574891749.8681746, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Aborting because thermocouple has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.5625, "temperature": 30.3671875, "timestamp": 1574891751.4881527}, "normalized": {}}, "level": 1, "timestamp": 1574891751.4881556, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.578125, "temperature": 30.8125, "timestamp": 1574891753.0608535}, "normalized": {}}, "level": 1, "timestamp": 1574891753.0608568, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.5625, "temperature": 31.125, "timestamp": 1574891754.6611047}, "normalized": {}}, "level": 1, "timestamp": 1574891754.6611068, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.609375, "temperature": 30.8671875, "timestamp": 1574891756.2340627}, "normalized": {}}, "level": 1, "timestamp": 1574891756.2340646, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.609375, "temperature": 30.0078125, "timestamp": 1574891757.8243747}, "normalized": {}}, "level": 1, "timestamp": 1574891757.8243768, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.609375, "temperature": 29.25, "timestamp": 1574891759.378676}, "normalized": {}}, "level": 1, "timestamp": 1574891759.378678, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.609375, "temperature": 28.5390625, "timestamp": 1574891760.9482806}, "normalized": {}}, "level": 1, "timestamp": 1574891760.9482827, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "valve", "message": "actuate int:0 int:90 int:5", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.625, "temperature": 27.9375, "timestamp": 1574891762.5071836}, "normalized": {}}, "level": 1, "timestamp": 1574891762.5071857, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "INFO", "message": "Actuated valve", "level": 4, "timestamp": 1574891728.1709776, "sender": "supervisor"}
+{"header": "INFO", "message": "Could not actuate valve since abort has been called", "level": 4, "timestamp": 1574891728.1709776, "sender": "supervisor"}
+{"header": "INFO", "message": "Could not actuate valve since abort has been called", "level": 4, "timestamp": 1574891728.1709776, "sender": "supervisor"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.578125, "temperature": 27.3203125, "timestamp": 1574891764.0571878}, "normalized": {}}, "level": 1, "timestamp": 1574891764.057191, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.625, "temperature": 26.890625, "timestamp": 1574891765.616934}, "normalized": {}}, "level": 1, "timestamp": 1574891765.6169362, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.5625, "temperature": 26.4765625, "timestamp": 1574891767.2014573}, "normalized": {}}, "level": 1, "timestamp": 1574891767.201459, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.625, "temperature": 26.046875, "timestamp": 1574891768.7862928}, "normalized": {}}, "level": 1, "timestamp": 1574891768.786295, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.609375, "temperature": 25.7109375, "timestamp": 1574891770.3261216}, "normalized": {}}, "level": 1, "timestamp": 1574891770.3261235, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.609375, "temperature": 25.4296875, "timestamp": 1574891771.866666}, "normalized": {}}, "level": 1, "timestamp": 1574891771.866668, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.609375, "temperature": 25.078125, "timestamp": 1574891773.4570367}, "normalized": {}}, "level": 1, "timestamp": 1574891773.4570386, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.578125, "temperature": 24.765625, "timestamp": 1574891775.0551379}, "normalized": {}}, "level": 1, "timestamp": 1574891775.05514, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.609375, "temperature": 24.546875, "timestamp": 1574891776.5895097}, "normalized": {}}, "level": 1, "timestamp": 1574891776.5895114, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.578125, "temperature": 24.4140625, "timestamp": 1574891778.197221}, "normalized": {}}, "level": 1, "timestamp": 1574891778.1972232, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.65625, "temperature": 24.1875, "timestamp": 1574891779.725926}, "normalized": {}}, "level": 1, "timestamp": 1574891779.7259278, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.6875, "temperature": 23.9921875, "timestamp": 1574891781.2991767}, "normalized": {}}, "level": 1, "timestamp": 1574891781.2991788, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.625, "temperature": 23.828125, "timestamp": 1574891782.8688028}, "normalized": {}}, "level": 1, "timestamp": 1574891782.8688052, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.625, "temperature": 23.65625, "timestamp": 1574891784.438943}, "normalized": {}}, "level": 1, "timestamp": 1574891784.4389448, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.65625, "temperature": 23.578125, "timestamp": 1574891786.007897}, "normalized": {}}, "level": 1, "timestamp": 1574891786.007899, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.703125, "temperature": 23.515625, "timestamp": 1574891787.5712388}, "normalized": {}}, "level": 1, "timestamp": 1574891787.571241, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.609375, "temperature": 23.3203125, "timestamp": 1574891789.1300194}, "normalized": {}}, "level": 1, "timestamp": 1574891789.1300216, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.625, "temperature": 23.1875, "timestamp": 1574891790.6791496}, "normalized": {}}, "level": 1, "timestamp": 1574891790.6791515, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.6875, "temperature": 23.1875, "timestamp": 1574891792.2890184}, "normalized": {}}, "level": 1, "timestamp": 1574891792.289021, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1574891726.7357986, "sender": "Flight Pi"}
+{"header": "heartbeat", "message": {"raw": {"internal": 21.65625, "temperature": 23.03125, "timestamp": 1574891793.8579261}, "normalized": {}}, "level": 1, "timestamp": 1574891793.8579285, "sender": "thermocouple"}
+{"header": "ABORT", "message": "Already aborted, but thermocouple still has a critical value", "level": 1, "timestamp": 1574891728.1709776, "sender": "Flight Pi"}
