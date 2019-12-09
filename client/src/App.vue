@@ -1,10 +1,7 @@
 <template>
     <div id="app">
         <PaneMessages />
-        <div style="display: grid; grid-template-rows: 1fr 1fr;">
-            <PaneGraph />
-            <PaneGraph />
-        </div>
+        <PaneSystemInfo />
         <div style="display: grid; grid-template-rows: 100px auto;">
             <PaneInfo />
             <PaneValves />
@@ -15,8 +12,8 @@
 
 <script>
 import PaneMessages from "@/components/PaneMessages.vue";
-import PaneGraph from "@/components/PaneGraph.vue";
 import PaneInfo from "@/components/PaneInfo.vue";
+import PaneSystemInfo from "@/components/PaneSystemInfo.vue"
 import PaneValves from "@/components/PaneValves.vue";
 import PaneAbort from "@/components/PaneAbort.vue";
 
@@ -24,8 +21,8 @@ export default {
     name: "app",
     components: {
         PaneMessages,
-        PaneGraph,
         PaneInfo,
+        PaneSystemInfo,
         PaneValves,
         PaneAbort
     }
@@ -80,4 +77,6 @@ code,
 pre {
     font-family: "Space Mono";
 }
+
+
 </style>
