@@ -1,5 +1,5 @@
 <template>
-    <div class="pane pane-message">Messages</div>
+    <div class="pane pane-message">Messages<hr/></div>
 </template>
 
 <script>

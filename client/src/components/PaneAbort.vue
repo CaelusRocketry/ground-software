@@ -1,7 +1,8 @@
 <template>
-    <div class="pane pane-abort" style="display: grid; grid-template-rows: 100px auto;">Abort
-        <button v-on:click=hard_abort>Hard Abort</button>
-        <button v-on:click=soft_abort>Soft Abort</button>
+    <div class="pane pane-abort" style="display: grid; grid-template-rows: 100px auto;">
+        Abort
+        <b-button variant="warning" v-on:click=soft_abort>Soft Abort</b-button>
+        <b-button variant="danger" v-on:click=hard_abort>Hard Abort</b-button>
     </div>
 </template>
 
