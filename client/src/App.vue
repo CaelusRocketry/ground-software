@@ -16,6 +16,8 @@ import PaneInfo from "@/components/PaneInfo.vue";
 import PaneSystemInfo from "@/components/PaneSystemInfo.vue"
 import PaneValves from "@/components/PaneValves.vue";
 import PaneAbort from "@/components/PaneAbort.vue";
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 export default {
     name: "app",
@@ -70,13 +72,14 @@ body * {
 }
 
 .pane {
-    border: 1px solid #0d1321;
+    border: 1px solid #d3d7d0;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 code,
 pre {
     font-family: "Space Mono";
 }
-
 
 </style>

@@ -3,9 +3,9 @@
         <div>
         </div>
         <div style="display: grid; grid-template-rows: 25px auto;">
-            <div id="valve_actuate_options" style="margin-left: 15px;">
+            <div id="valve_actuate_options">
                 Valve:
-                <select id="valve_select" style="margin-right: 10px;">
+                <select class="selectpicker" id="valve_select">
                     <option value=1>Oxidizer Pressure Relief Valve</option>
                     <option value=2>Fuel Pressure Relief Valve</option>
                     <option value=3>Fuel to Engine Valve</option>
@@ -14,7 +14,7 @@
                     <option value=6>Oxidizer Outflow Valve</option>
                 </select>
                 Priority:
-                <select id="priority_select">
+                <select class="selectpicker" id="priority_select">
                     <option value=1>1</option>
                     <option value=2>2</option>
                     <option value=3>3</option>
@@ -23,7 +23,7 @@
                     <option value=6>6</option>
                 </select>
             </div>
-            <button v-on:click=actuate_valve id="valve_actuate_button">Actuate valve</button>
+            <b-button variant="primary" v-on:click=actuate_valve id="valve_actuate_button">Actuate valve</b-button>
         </div>
     </div>
 </template>
