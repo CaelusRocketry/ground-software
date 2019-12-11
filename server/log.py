@@ -15,7 +15,7 @@ class Log:
     """ Packet class stores messages to be sent to and from ground and flight station """
 
     def __init__(self, header='heartbeat', message="alive", level: Level = Level.INFO,
-                 timestamp: float = time.time(), sender="Flight Pi"):
+                 timestamp: float = time.time(), sender="Ground Station"):
         self.header = header
         self.message = message
         self.level = level

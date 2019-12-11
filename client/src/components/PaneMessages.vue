@@ -3,7 +3,15 @@
 </template>
 
 <script>
-export default {};
+export default {
+    name: "message",
+    methods: {
+        send_socket (event){
+            this.$emit('send_socket', this.send_data)
+        }
+
+    }
+};
 </script>
 
 <style scoped>
