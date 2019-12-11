@@ -1,11 +1,11 @@
 <template>
     <div id="app">
-        <PaneMessages />
-        <PaneSystemInfo />
+        <PaneMessages v-on:make_packet=make_packet></PaneMessages>
+        <PaneSystemInfo v-on:make_packet=make_packet></PaneSystemInfo>
         <div style="display: grid; grid-template-rows: 100px auto;">
-            <PaneInfo />
-            <PaneValves />
-            <PaneAbort />
+            <PaneInfo v-on:make_packet=make_packet></PaneInfo>
+            <PaneValves v-on:make_packet=make_packet></PaneValves>
+            <PaneAbort v-on:make_packet=make_packet></PaneAbort>
         </div>
     </div>
 </template>
@@ -27,6 +27,18 @@ export default {
         PaneSystemInfo,
         PaneValves,
         PaneAbort
+    },
+    sockets: {
+        connect: function() {
+            console.log('socket connected');
+        },
+    },
+    methods: {
+        make_packet (header, message) {
+            this.$socket.emit('test', header);
+            console.log("Header: " + header);
+            console.log("Message: " + message);
+        },
     }
 };
 </script>

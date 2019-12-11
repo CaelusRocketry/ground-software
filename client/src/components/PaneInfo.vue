@@ -9,7 +9,14 @@
 </template>
 
 <script>
-export default {};
+export default {
+    name: "info",
+    methods: {
+        make_packet (header, message) {
+            this.$emit('make_packet', header, message)
+        },
+    }
+};
 </script>
 
 <style scoped>

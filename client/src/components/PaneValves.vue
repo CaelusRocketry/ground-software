@@ -35,9 +35,15 @@ export default {
         actuate_valve: function(event){
             let valve_num = document.getElementById("valve_select").value;
             let priority = document.getElementById("priority_select").value;
+            let degrees = 45;
             alert('Actuating valve ' + valve_num + ' with priority ' + priority);
+            this.$socket.emit('test', 'hello');
+            this.$socket.emit('actuate_valve', valve_num, degrees, priority);
+//            let header = "valve";
+//            let message = "actuate_valve int:" + valve_num + " int:" + degrees + " int:" + priority;
+//            this.make_packet(header, message);
             // TODO: Send valve actuation function to backend, which should then send that over telem to the Pi
-        }
+        },
     }
 };
 </script>

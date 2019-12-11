@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
+from log import Log, Packet, Level
 #import socket
 
 # Initialize Flask
@@ -11,7 +12,19 @@ socketio = SocketIO(app, cors_allowed_origins="http://localhost:5005")
 
 @socketio.on('test')
 def handle_test(data):
-    print("server: recv 'test'")
+    print("server: recv 'test'", data)
+
+@socketio.on("actuate_valve")
+def actuate_valve(id: int, degree: int, priority: int):
+    header = "Valve"
+    message = "actuate_valve int:" + str(id) + " int:" + str(degree) + " int:" + str(priority)
+    print(header, message)
+    forward_message(header, message, level=1)
+
+@socketio.on("forward")
+def forward_message(header, message, level=Level.INFO):
+    log = Log(header=header, message=message, level=level)
+    
 
 
 @app.route("/")
@@ -21,9 +34,7 @@ def handle_root():
     """
     return render_template("index.html")
 
-#def actuate_valve(id: int, degree: int, priority: int):
-#    pass
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=False)

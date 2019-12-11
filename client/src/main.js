@@ -17,9 +17,4 @@ new Vue({
     render: function(h) {
         return h(App);
     },
-    sockets: {
-        connect: function() {
-            console.log('socket connected');
-        }
-    }
 }).$mount('#app');
