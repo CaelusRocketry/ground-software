@@ -5,13 +5,12 @@ import json
 import heapq
 import multiprocessing
 from logging import Packet, Log
-from Crypto.Cipher import AES
 import ast
 import base64
-from Crypto.Util.Padding import pad, unpad
 
-GS_IP = '192.168.1.29'
-GS_PORT = 5005
+config = json.loads(open("config.json").read())
+GS_IP = config["GS_IP"]
+GS_PORT = config["GS_PORT"]
 BYTE_SIZE = 8192
 
 DELAY = .05
@@ -21,7 +20,6 @@ DELAY_HEARTBEAT = 3
 
 SEND_ALLOWED = True
 
-key = b'getmeoutgetmeout'
 queue_send = []
 
 BLOCK_SIZE = 32
@@ -37,8 +35,6 @@ def create_socket(ip, port):
     conn, addr = sock.accept()
     Log("Created socket")
     return conn
-#    return sock
-
 
 def send(sock):
     while True:
@@ -46,7 +42,6 @@ def send(sock):
             encoded = heapq.heappop(queue_send)[1]
             sock.send(encoded)
         time.sleep(DELAY_SEND)
-
 
 def listen(sock):
     while True:
@@ -56,54 +51,35 @@ def listen(sock):
         ingest_thread.start()
         time.sleep(DELAY_LISTEN)
 
-
 def enqueue(packet):
-    packet_string = packet.to_string()
-    encoded = encode(packet_string)
-    heapq.heappush(queue_send, (packet.level, encoded))
+    packet_str = packet.to_string().encode()
+    heapq.heappush(queue_send, (packet.level, packet_str))
 
-
-def ingest(encoded):
-    packet_str = decode(encoded)
+def ingest(packet_str):
     packet = Packet.from_string(packet_str)
-    # Create a new packet from the previous packet so that everything gets logged
     for log in packet.logs:
+        print(log.to_string())
         log.save()
-#        if log.header == "ABORT":
-#            print("ABORTING RIGHT NOW")
-
-def encode(packet):
-    cipher = AES.new(key, AES.MODE_ECB)
-    return cipher.encrypt(pad(packet.encode(), BLOCK_SIZE))
-#    return packet.encode()
-
-
-def decode(message):
-    cipher = AES.new(key, AES.MODE_ECB)
-    return unpad(cipher.decrypt(message), BLOCK_SIZE).decode()
-#    return message.decode()
-
 
 def heartbeat():
     while True:
-        log = Log(header="HEARTBEAT", message="At")
+        log = Log(header="HEARTBEAT", message="AT")
         enqueue(Packet(header="HEARTBEAT", logs=[log]))
+        print("Sent heartbeat")
         time.sleep(DELAY_HEARTBEAT)
-
 
 if __name__ == "__main__":
     sock = create_socket(GS_IP, GS_PORT)
-#    back_front = create_socket(FRONT_IP, FRONT_PORT)
     send_thread = threading.Thread(target=send, args=(sock,))
     send_thread.daemon = True
     listen_thread = threading.Thread(target=listen, args=(sock,))
     listen_thread.daemon = True
+    heartbeat_thread = threading.Thread(target=heartbeat)
+    heartbeat_thread.daemon = True
     send_thread.start()
     listen_thread.start()
+    heartbeat_thread.start()
     Log("Listening and sending")
-#    heartbeat_thread = threading.Thread(target=heartbeat)
-#    heartbeat_thread.daemon = True
-#    heartbeat_thread.start()
     while True:
         temp = input("")
         header = temp[:temp.index(" ")]
@@ -111,4 +87,3 @@ if __name__ == "__main__":
         pack = Packet(header=header)
         log = Log(header=header, message=message)
         pack.add(log)
-        enqueue(pack)

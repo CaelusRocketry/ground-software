@@ -32,6 +32,7 @@ class Log:
 #        print(self.__dict__)
         return json.dumps(self.__dict__)
 
+    @staticmethod
     def from_string(input_string):
         input_dict = json.loads(input_string)
         packet = Log()
@@ -42,7 +43,7 @@ class Log:
 class Packet:
     """ Packet class stores messages to be sent to and from ground and flight station """
 
-    def __init__(self, header='heartbeat', logs: list = [], level: Level = Level.INFO, timestamp: float = time.time()):
+    def __init__(self, header='HEARTBEAT', logs: list = [], level: Level = Level.INFO, timestamp: float = time.time()):
         self.header = header
         self.logs = logs
         self.timestamp = timestamp
@@ -57,9 +58,9 @@ class Packet:
         output_dict["logs"] = [log.to_string() for log in output_dict["logs"]]
         return json.dumps(self.__dict__)
 
+    @staticmethod
     def from_string(input_string):
         input_dict = json.loads(input_string)
-#        print(input_dict)
         input_dict["logs"] = [Log.from_string(log_str) for log_str in input_dict["logs"]]
         packet = Packet()
         packet.__dict__ = input_dict
