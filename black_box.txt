@@ -1,12 +1,12 @@
-{"header": "Creating socket", "message": "alive", "level": 4, "timestamp": 1582582766.730667, "sender": "Flight Pi"}
-{"header": "Created socket", "message": "alive", "level": 4, "timestamp": 1582582766.730667, "sender": "Flight Pi"}
-{"header": "HEARTBEAT", "message": "AT", "level": 4, "timestamp": 1582582766.730667, "sender": "Flight Pi"}
-{"header": "Listening and sending", "message": "alive", "level": 4, "timestamp": 1582582766.730667, "sender": "Flight Pi"}
-{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1582582766.730667, "sender": "Flight Pi"}
-{"header": "HEARTBEAT", "message": "OK", "level": 4, "timestamp": 1582582766.209706, "sender": "Flight Pi"}
-{"header": "HEARTBEAT", "message": "AT", "level": 4, "timestamp": 1582582766.730667, "sender": "Flight Pi"}
-{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1582582766.730667, "sender": "Flight Pi"}
-{"header": "HEARTBEAT", "message": "OK", "level": 4, "timestamp": 1582582766.209706, "sender": "Flight Pi"}
-{"header": "HEARTBEAT", "message": "AT", "level": 4, "timestamp": 1582582766.730667, "sender": "Flight Pi"}
-{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1582582766.730667, "sender": "Flight Pi"}
-{"header": "HEARTBEAT", "message": "OK", "level": 4, "timestamp": 1582582766.209706, "sender": "Flight Pi"}
+{"header": "Creating socket", "message": "alive", "level": 4, "timestamp": 1583015694.334101, "sender": "Ground Station"}
+{"header": "Created socket", "message": "alive", "level": 4, "timestamp": 1583015694.334101, "sender": "Ground Station"}
+{"header": "HEARTBEAT", "message": "AT", "level": 4, "timestamp": 1583015694.334101, "sender": "Ground Station"}
+{"header": "Listening and sending", "message": "alive", "level": 4, "timestamp": 1583015694.334101, "sender": "Ground Station"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1583015694.334101, "sender": "Ground Station"}
+{"header": "HEARTBEAT", "message": "OK", "level": 4, "timestamp": 1583015695.0800972, "sender": "Flight Pi"}
+{"header": "HEARTBEAT", "message": "AT", "level": 4, "timestamp": 1583015694.334101, "sender": "Ground Station"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1583015694.334101, "sender": "Ground Station"}
+{"header": "HEARTBEAT", "message": "OK", "level": 4, "timestamp": 1583015695.0800972, "sender": "Flight Pi"}
+{"header": "HEARTBEAT", "message": "AT", "level": 4, "timestamp": 1583015694.334101, "sender": "Ground Station"}
+{"header": "heartbeat", "message": "alive", "level": 4, "timestamp": 1583015694.334101, "sender": "Ground Station"}
+{"header": "HEARTBEAT", "message": "OK", "level": 4, "timestamp": 1583015695.0800972, "sender": "Flight Pi"}
