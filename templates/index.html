@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	{% block head %}
+	<meta charset="UTF-8">
+	<title>Synchronized Slider</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+	{% endblock %}
+</head> 
+
+<body>
+	{% block body %}
+
+		<div class="container text-center">
+			<h1 >Slider Demo</h1>
+			<form class="mt-5">
+			<div class="form-group">
+				<label for="formControlRange">Demo Slider 1</label>
+				<input type="range" class="form-control-range sync" id="3" min="0" max="50" value="{{slider1}}">
+			</div>
+			<div class="form-group">
+				<label for="formControlRange">Demo Slider 2</label>
+				<input type="range" class="form-control-range sync" id="slider2" min="0" max="50" value="{{slider2}}">
+			</div>
+			</form>	
+			<button id="button">Click to send msg to back</button>
+			{% block javascript %}
+
+			<script type="text/javascript">
+				{% include "jquery.js" %}
+				{% include "socketio.js" %}
+				{% include "script.js" %}
+			  </script>
+		
+			{% endblock %}
+
+		{% endblock %}
+	</div>
+	
+</body>
+</html>
