@@ -125,7 +125,7 @@ class Comms(Namespace):
 
 
 socketio.on_namespace(Comms('/'))
-     
+
 if __name__ == "__main__":
     global telem
     telem = Telemetry(GS_IP, GS_PORT)
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     Log("Listening and Sending")
     print("listening and sending")
 
-    socketio.run(app, host='127.0. 0.1.', port=3000)
+    socketio.run(app, host='127.0.0.1', port=5000)
 
 
     # while True:
