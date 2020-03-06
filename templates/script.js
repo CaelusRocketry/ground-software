@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
 
     // sending a connect request to the server

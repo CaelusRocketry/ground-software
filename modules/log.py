@@ -27,6 +27,7 @@ class Log:
         f = open("black_box.txt", "a+")
         f.write(self.to_string() + "\n")
         f.close()
+        print(self.to_string())
 
     def to_string(self):
 #        print(self.__dict__)
