@@ -112,3 +112,5 @@ venv.bak/
 
 
 private.pem
+black_box.txt
+incoming.txt
