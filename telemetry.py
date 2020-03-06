@@ -1,30 +1,12 @@
 import socket
 import threading
 import time
-import json
 import heapq
 import multiprocessing
 from packet import Packet, Log
 import ast
 import base64
 
-from flask import Flask, render_template
-from flask_cors import CORS
-from flask_socketio import SocketIO, emit, Namespace
-import threading, time
-
-app = Flask(__name__, static_folder="templates")
-CORS(app)
-socketio = SocketIO(app)
-
-values = {
-    'slider1': 25,
-    'slider2': 0,
-}
-
-config = json.loads(open("config.json").read())
-GS_IP = config["GS_IP"]
-GS_PORT = config["GS_PORT"]
 BYTE_SIZE = 8192
 
 DELAY = .05
@@ -38,7 +20,6 @@ BLOCK_SIZE = 32
 f = open("black_box.txt", "w+")
 f.close()
 
-global telem
 
 class Telemetry:
     """ Telemetry Class handles all communication """
@@ -104,44 +85,3 @@ class Telemetry:
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
 
-
-@app.route('/')
-def index():
-    return render_template('index.html',**values)
-
-class Comms(Namespace):
-    def on_connect(self):
-        emit('after connect',  {'data':'Lets dance'})
-
-    def on_slider_value_changed(self, message):
-        values[message['who']] = message['data']
-        print('\nnew val:', message['data'], '\n')
-
-    def on_button_pressed(self, message):
-        global telem
-        log = Log(header="BUTTON PRESS", message=message)
-        telem.enqueue(Packet(header="BUTTON PRESS", logs=[log]))
-        print("button pressed!", message)
-
-
-socketio.on_namespace(Comms('/'))
-
-if __name__ == "__main__":
-    global telem
-    telem = Telemetry(GS_IP, GS_PORT)
-    telem.begin()
-
-    Log("Listening and Sending")
-    print("listening and sending")
-
-    socketio.run(app, host='127.0.0.1', port=5000)
-
-
-    # while True:
-    #     temp = input("")
-    #     header = temp[:temp.index(" ")]
-    #     message = temp[temp.index(" ") + 1:]
-    #     pack = Packet(header=header)
-    #     log = Log(header=header, message=message)
-    #     pack.add(log)
-    #     enqueue(Packet(header="MESSAGE", logs=[log]))
