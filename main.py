@@ -20,6 +20,10 @@ values = {
     'slider2': 0,
 }
 
+@app.route('/')
+def index():
+    return render_template('index.html',**values)
+
 
 if __name__ == "__main__":
     telem = Telemetry(GS_IP, GS_PORT)
@@ -28,9 +32,11 @@ if __name__ == "__main__":
     print("listening and sending")
 
     b = Backend('/')
-    b.initTelem(telem)
-    socketio.on_namespace(b)
+    b.init_telem(app, socketio, telem)
+    telem.init_backend(b)
 
+
+    socketio.on_namespace(b)
     socketio.run(app, host='127.0.0.1', port=5000)
 
 

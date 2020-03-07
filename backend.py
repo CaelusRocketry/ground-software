@@ -7,8 +7,15 @@ from packet import Packet, Log
 
 class Backend(Namespace):
 
-    def initTelem(self, telem):
+    def init_telem(self, app, socketio, telem):
+        self.app = app
         self.telem = telem
+        self.socketio = socketio
+
+    def update_text(self, message):
+        print(message)
+        # with self.app.test_request_context():
+        self.socketio.emit('update text',  {'data':message})
 
     def on_connect(self):
         emit('after connect',  {'data':'Lets dance'})

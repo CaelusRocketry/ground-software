@@ -16,13 +16,13 @@ $(document).ready(function(){
         console.log('The button has been pressed');
     });
 
-    socket.on('after connect', function(msg){
-        console.log('After connect', msg);
+    socket.on('update text', function(msg){
+        // $('#p1').val(msg.data)
+        console.log('Message from FS:', msg);
     });
 
-    socket.on('slider_value_changed', function(msg) {
-        console.log('Slider value updated :)');
-        $('#'+msg.who).val(msg.data);
+    socket.on('after connect', function(msg){
+        console.log('After connect', msg);
     });
     
 });
