@@ -33,7 +33,10 @@ class Telemetry:
         self.sock.bind((ip, port))
         self.sock.listen(1)
         self.conn, self.addr = self.sock.accept()
-        Log("Created socket")
+        Log("Creasted socket")
+
+    def init_backend(self, b):
+        self.backend = b
     
     def begin(self):
         """ Starts the send and listen threads """
@@ -75,6 +78,8 @@ class Telemetry:
         packet = Packet.from_string(packet_str)
         for log in packet.logs:
             print(log.to_string())
+            if(log.header == "FOR_FRONTEND"):
+                self.backend.update_text(log.message)
             log.save()
 
     def heartbeat(self):

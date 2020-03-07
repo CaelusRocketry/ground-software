@@ -54,7 +54,7 @@ class Telemetry:
 
 
     def send(self):
-        """ Constantly sends next packet from queue to ground station """
+        """ Constantly sends next packet from queue to flight """
         while True:
             if self.queue_send and SEND_ALLOWED:
                 encoded = heapq.heappop(self.queue_send)[1]
@@ -63,7 +63,7 @@ class Telemetry:
 
 
     def listen(self):
-        """ Constantly listens for any from ground station """
+        """ Constantly listens for any from flight """
         while True:
             data = self.conn.recv(BYTE_SIZE)
             self.queue_ingest.append(data)
