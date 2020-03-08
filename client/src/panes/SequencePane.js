@@ -1,11 +1,19 @@
 import React from 'react';
 
-import Header from './PaneHeader';
+import { Timeline, Event } from '../components/Timeline';
+import Header from '../components/Header';
 
 const SequencePane = () => (
     <div className="pane">
         <Header title="Sequence" />
-        <div>Content</div>
+        <Timeline>
+            <Event interval="Pending" title={<h1 className="text-xl">Title</h1>}>
+                This is an event.
+            </Event>
+            <Event interval="Pending" title={<h1 className="text-xl">Title</h1>}>
+                This is an event.
+            </Event>
+        </Timeline>
     </div>
 );
 
