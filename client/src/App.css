@@ -3,6 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Typography */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Karla:wght@400;700&display=swap');
+
 /* react-split-pane */
 .Resizer {
     background: #000;

@@ -150,7 +150,7 @@ export const Event = ({
     <StyledItem>
         <StyledIntervalContainer>
             <StyledIcon lineColor={iconOutline === null ? null : iconOutline || lineColor} iconFill={iconFill} />
-            <StyledInterval color={intervalColor} background={intervalBackground}>
+            <StyledInterval className="font-mono" color={intervalColor} background={intervalBackground}>
                 <Interval interval={interval} separator={intervalSeparator} />
             </StyledInterval>
         </StyledIntervalContainer>
