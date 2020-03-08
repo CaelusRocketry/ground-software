@@ -53,3 +53,8 @@
 .view {
     @apply p-2;
 }
+
+/* Pane */
+.pane {
+    @apply p-2;
+}
