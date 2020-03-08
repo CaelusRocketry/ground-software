@@ -1,41 +1,33 @@
-import socket
-import threading
-import time
 import heapq
-import multiprocessing
-from packet import Packet, Log
-import ast
-import base64
-
-BYTE_SIZE = 8192
-
-DELAY = .05
-DELAY_LISTEN = .05
-DELAY_SEND = .05
-DELAY_HEARTBEAT = 3
-
-SEND_ALLOWED = True
-
-BLOCK_SIZE = 32
-f = open("black_box.txt", "w+")
-f.close()
+import socket
+from modules.log import Packet, Log
 
 
 class Telemetry:
     """ Telemetry Class handles all communication """
 
-    def __init__(self, ip, port):
+    def __init__(self, config):
         """ Based on given IP and port, create and connect a socket """
+        # Read in config
+        self.ip = config["GS_IP"]
+        self.port = config["GS_PORT"]
+        self.byte_size = 8192
+        self.send_allowed
+
+        # Initialize constants
+        self.delay_listen = .05
+        self.delay_send = .05
+        self.delay_heartbeat = 3
+
+        # Socket variables
         self.queue_send = []
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.sock.bind((ip, port))
+        self.sock.bind((self.ip, self.port))
         self.sock.listen(1)
         self.conn, self.addr = self.sock.accept()
-        Log("Creasted socket")
 
-    def init_backend(self, b):
-        self.backend = b
+        Log("Created socket")
 
     def begin(self):
         """ Starts the send and listen threads """
@@ -52,20 +44,20 @@ class Telemetry:
     def send(self):
         """ Constantly sends next packet from queue to ground station """
         while True:
-            if self.queue_send and SEND_ALLOWED:
+            if self.queue_send and self.send_allowed:
                 encoded = heapq.heappop(self.queue_send)[1]
                 self.conn.send(encoded)
-            time.sleep(DELAY_SEND)
+            time.sleep(self.delay_send)
 
     def listen(self):
         """ Constantly listens for any from ground station """
         while True:
-            data = self.conn.recv(BYTE_SIZE)
+            data = self.conn.recv(self.byte_size)
             self.ingest_thread = threading.Thread(
                 target=self.ingest, args=(data,))
             self.ingest_thread.daemon = True
             self.ingest_thread.start()
-            time.sleep(DELAY_LISTEN)
+            time.sleep(self.delay_listen)
 
     def enqueue(self, packet):
         """ Encripts and enqueues the given Packet """
@@ -77,8 +69,6 @@ class Telemetry:
         packet = Packet.from_string(packet_str)
         for log in packet.logs:
             print(log.to_string())
-            if(log.header == "FOR_FRONTEND"):
-                self.backend.update_text(log.message)
             log.save()
 
     def heartbeat(self):
@@ -87,4 +77,4 @@ class Telemetry:
             log = Log(header="HEARTBEAT", message="AT")
             self.enqueue(Packet(header="HEARTBEAT", logs=[log]))
             print("Sent heartbeat")
-            time.sleep(DELAY_HEARTBEAT)
+            time.sleep(self.delay_heartbeat)
