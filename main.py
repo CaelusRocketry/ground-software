@@ -5,7 +5,8 @@ from backend import Backend
 from flask import Flask, render_template
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, Namespace
-import threading, time
+import threading
+import time
 
 config = json.loads(open("config.json").read())
 GS_IP = config["GS_IP"]
@@ -20,9 +21,10 @@ values = {
     'slider2': 0,
 }
 
+
 @app.route('/')
 def index():
-    return render_template('index.html',**values)
+    return render_template('index.html', **values)
 
 
 if __name__ == "__main__":
@@ -35,10 +37,8 @@ if __name__ == "__main__":
     b.init_telem(app, socketio, telem)
     telem.init_backend(b)
 
-
     socketio.on_namespace(b)
     socketio.run(app, host='127.0.0.1', port=5000)
-
 
     # while True:
     #     temp = input("")

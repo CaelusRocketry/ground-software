@@ -22,14 +22,15 @@ class Log:
         self.timestamp = timestamp
         self.sender = sender
         self.save()
-    
-    def save(self, filename = "blackbox.txt"):
+
+    def save(self, filename="blackbox.txt"):
         f = open("black_box.txt", "a+")
         f.write(self.to_string() + "\n")
         f.close()
+        print(self.to_string())
 
     def to_string(self):
-#        print(self.__dict__)
+        #        print(self.__dict__)
         return json.dumps(self.__dict__)
 
     def from_string(input_string):
@@ -59,8 +60,8 @@ class Packet:
 
     def from_string(input_string):
         input_dict = json.loads(input_string)
-#        print(input_dict)
-        input_dict["logs"] = [Log.from_string(log_str) for log_str in input_dict["logs"]]
+        input_dict["logs"] = [Log.from_string(
+            log_str) for log_str in input_dict["logs"]]
         packet = Packet()
         packet.__dict__ = input_dict
         return packet

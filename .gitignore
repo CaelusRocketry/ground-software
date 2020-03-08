@@ -110,5 +110,7 @@ venv.bak/
 .vscode/
 .idea/
 
-
+# Other files
 private.pem
+black_box.txt
+incoming.txt

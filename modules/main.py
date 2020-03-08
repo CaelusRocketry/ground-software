@@ -10,21 +10,24 @@ app = Flask(__name__,
             template_folder="./dist")
 socketio = SocketIO(app, cors_allowed_origins="http://localhost:5005")
 
+
 @socketio.on('test')
 def handle_test(data):
     print("server: recv 'test'", data)
 
+
 @socketio.on("actuate_valve")
 def actuate_valve(id: int, degree: int, priority: int):
     header = "Valve"
-    message = "actuate_valve int:" + str(id) + " int:" + str(degree) + " int:" + str(priority)
+    message = "actuate_valve int:" + \
+        str(id) + " int:" + str(degree) + " int:" + str(priority)
     print(header, message)
     forward_message(header, message, level=1)
+
 
 @socketio.on("forward")
 def forward_message(header, message, level=Level.INFO):
     log = Log(header=header, message=message, level=level)
-    
 
 
 @app.route("/")
@@ -33,7 +36,6 @@ def handle_root():
     Render the built Vue site.
     """
     return render_template("index.html")
-
 
 
 if __name__ == '__main__':
