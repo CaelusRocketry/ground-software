@@ -48,3 +48,8 @@
 .Resizer.disabled:hover {
     border-color: transparent;
 }
+
+/* View */
+.view {
+    @apply p-2;
+}

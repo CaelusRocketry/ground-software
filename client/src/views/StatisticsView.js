@@ -4,7 +4,7 @@ import SplitPane from 'react-split-pane';
 import SequencePane from '../panes/SequencePane';
 
 const StatisticsView = () => (
-    <SplitPane split="vertical" defaultSize="33%">
+    <SplitPane className="view" split="vertical" defaultSize="33%">
         <SequencePane />
     </SplitPane>
 );
