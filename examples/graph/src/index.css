@@ -1,0 +1,61 @@
+body {
+    font: 14px "Century Gothic", Futura, sans-serif;
+    margin: 20px;
+  }
+  
+ol, ul {
+    padding-left: 30px;
+  }
+  
+.x-axis {
+    background: #000000;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border: 1px solid #000;
+    height: 1px;
+    width: 1024px;
+  }
+
+.y-axis {
+    background: #000000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border: 1px solid #000;
+    height: 768px;
+    width: 1px;
+  }
+
+.buttons {
+  position: relative;
+}
+
+.start {
+  background: green;
+  border: 3px solid green;
+}
+
+.stop {
+  background: #be0000;
+  border: 3px solid #be0000;
+}
+
+.input {
+  background: lightseagreen;
+  border: 3px solid lightseagreen;
+}
+
+.currentData {
+  background: white;
+  border: 3px solid black;
+  width: 159px;
+  height: 25px;
+}
+
+.point {
+  background: #ff0000;
+  position: absolute;
+  width: 3px;
+  height: 3px;
+}
