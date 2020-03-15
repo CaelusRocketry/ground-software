@@ -1,2 +1,0 @@
-react-plotly.js
-plotly.js@1.45.3
