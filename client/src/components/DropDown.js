@@ -1,5 +1,4 @@
 import React from 'react';
-import Graph from './Graph'
 
 class DropDown extends React.Component {
     constructor(props) {
@@ -23,7 +22,6 @@ class DropDown extends React.Component {
   
     render() {
       return (
-        <div>
           <form onSubmit={this.handleSubmit}>
             <label>
               Pick your graph: 
@@ -33,10 +31,6 @@ class DropDown extends React.Component {
               </select>
             </label>
           </form>
-          <Graph 
-            dataType = {this.state.value}
-          />
-        </div>
       );
     }
   }
