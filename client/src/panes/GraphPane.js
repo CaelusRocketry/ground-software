@@ -9,7 +9,7 @@ import '../index.css';
 const GraphPane = () => (
   <div className="pane">
     <DropDown></DropDown>
-    <Graph></Graph>
+    <Graph dataType="temperature"></Graph>
   </div>
 )
 
