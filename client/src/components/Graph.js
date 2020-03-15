@@ -112,7 +112,7 @@ class Graph extends React.Component {
             },
             //{type: 'bar', x: this.state.times, y: this.state.currentData},
           ]}
-          layout={ {width: 1500, height: 500, title: 'PSI vs. Time'} }
+          layout={ {width: "100%", height: "100%", title: 'PSI vs. Time'} }
         />
         </div>
       );
