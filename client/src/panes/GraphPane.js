@@ -13,12 +13,5 @@ const GraphPane = () => (
   </div>
 )
 
-/*
-ReactDOM.render(
-  <DropDown />,
-  document.getElementById('root')
-);
-*/
-
 export default GraphPane;
   
