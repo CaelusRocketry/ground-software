@@ -93,12 +93,14 @@ const StyledInterval = styled.p`
     color: ${props => props.color};
     border-radius: 5px;
 `;
+
 const StyledTitle = styled(({ tag, children, ...props }) => e(tag, props, children))`
     margin-top: 0;
 `;
 StyledTitle.defaultProps = {
-    tag: 'h3'
+    tag: 'h1'
 };
+
 const StyledDescription = styled.div``;
 const StyledSubtitle = styled(({ tag, children, ...props }) => e(tag, props, children))``;
 StyledSubtitle.defaultProps = {
@@ -124,7 +126,7 @@ export const Timeline = ({ lineColor, intervalSeparator, children }) => {
     );
 };
 Timeline.propTypes = {
-    lineColor: PropTypes.string.isRequired,
+    lineColor: PropTypes.string,
     intervalSeparator: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     children: PropTypes.node
 };
@@ -155,7 +157,7 @@ export const Event = ({
             </StyledInterval>
         </StyledIntervalContainer>
         <StyledContent lineColor={lineColor}>
-            <StyledTitle tag={titleTag}>{title}</StyledTitle>
+            <StyledTitle tag={titleTag} className="text-xl">{title}</StyledTitle>
             {subtitle && <StyledSubtitle tag={subtitleTag}>{subtitle}</StyledSubtitle>}
             <StyledDescription>{children}</StyledDescription>
         </StyledContent>
@@ -181,7 +183,7 @@ Event.defaultProps = {
     subtitle: '',
     interval: 'Pending',
     children: null,
-    titleTag: 'h3',
+    titleTag: 'h1',
     subtitleTag: 'h4',
     intervalBackground: '#cccccc',
     intervalColor: '#000000',
