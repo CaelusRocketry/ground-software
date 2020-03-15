@@ -13,10 +13,10 @@ const SequencePane = () => (
                     <li>2. Ensure all solenoid valves are closed.</li>
                     <li>3. Load ethanol into ethanol tank via manual ball valve</li>
                     <li>4. Monitor ethanol level</li>
-                        <ol>
-                            <li>a. Provide warning when approaching proper amount.</li>
-                            <li>b. Provide secondary warning when proper amount his reached.</li>
-                        </ol>
+                    <ol>
+                        <li>a. Provide warning when approaching proper amount.</li>
+                        <li>b. Provide secondary warning when proper amount his reached.</li>
+                    </ol>
                     <li>5. Close ethanol manual ball valve</li>
                     <li>6. Ensure all ball manual valves are closed</li>
                 </ol>
