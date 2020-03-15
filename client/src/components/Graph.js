@@ -13,10 +13,15 @@ class Graph extends React.Component {
         tempData: [],
         pressureData: []
       };
+      console.log(props);
+      console.log(this.props);
     }
   
     // Updates the time and plots the last piece of data inputted by the user
     update() {
+      console.log("Updating");
+      console.log(this.state);
+      console.log(this.props);
       // CREATES COPIES OF DATA AND TIMES
       var newTempData = this.state.tempData.slice();
       var newPressureData = this.state.pressureData.slice();
@@ -64,6 +69,7 @@ class Graph extends React.Component {
   
     // Allows user to add data
     addData() {
+      console.log(this.state);
       var newData = prompt("What value do you want to put in?");
       var copy;
   
