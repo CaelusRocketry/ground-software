@@ -1,10 +1,11 @@
 import React from 'react';
+import Graph from './Graph';
 
 class DropDown extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        value: 'temperature'
+        value: 'temperature',
       };
   
       this.handleChange = this.handleChange.bind(this);
@@ -21,7 +22,21 @@ class DropDown extends React.Component {
     }
   
     render() {
+      const graphProperties = {
+        temperature: {
+          xAxis: "Time (ms)",
+          yAxis: "Temperature (C)",
+          title: "Temperature vs. Time"
+        },
+        pressure: {
+          xAxis: "Time (ms)",
+          yAxis: "Pressure (PSI)",
+          title: "Pressure vs. Time"
+        }
+      };
+  
       return (
+        <div>
           <form onSubmit={this.handleSubmit}>
             <label>
               Pick your graph: 
@@ -31,8 +46,15 @@ class DropDown extends React.Component {
               </select>
             </label>
           </form>
+          <Graph 
+            dataType = {this.state.value}
+            title = {graphProperties[this.state.value].title}
+            xaxis = {graphProperties[this.state.value].xAxis}
+            yaxis = {graphProperties[this.state.value].yAxis}
+          />
+        </div>
       );
     }
   }
-  
-  export default DropDown;
+
+export default DropDown;
