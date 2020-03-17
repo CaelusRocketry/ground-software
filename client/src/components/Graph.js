@@ -93,7 +93,7 @@ class Graph extends React.Component {
       return (
         <div>
           <div className="buttons">
-            <button className="start" onClick={() => this.interval = setInterval(() => this.update(), 100)}>Start</button>
+            <button id="hi" className="start" onClick={() => this.interval = setInterval(() => this.update(), 100)}>Start</button>
             <button className="stop" onClick={() => clearInterval(this.interval)}>Stop</button>
             <button className="input" onClick={() => this.addData()}>Add Data</button>
           </div>
@@ -110,8 +110,8 @@ class Graph extends React.Component {
           ]}
           layout={ 
             {
-              width: 1500, 
-              height: 500, 
+              width: "100%", 
+              height: "100%", 
               title: this.props.title, 
               xaxis: {
                 title: this.props.xaxis
