@@ -46,12 +46,6 @@ class DropDown extends React.Component {
               </select>
             </label>
           </form>
-          <Graph 
-            dataType = {this.state.value}
-            title = {graphProperties[this.state.value].title}
-            xaxis = {graphProperties[this.state.value].xAxis}
-            yaxis = {graphProperties[this.state.value].yAxis}
-          />
         </div>
       );
     }
