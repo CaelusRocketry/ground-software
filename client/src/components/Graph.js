@@ -13,8 +13,22 @@ class Graph extends React.Component {
           "pressure": []
         }
       };
+      this.graphProperties = {
+        "temperature": {
+          xaxis: "Time (ms)",
+          yaxis: "Temperature (C)",
+          title: "Temperature vs. Time"
+        },
+        "pressure": {
+          xaxis: "Time (ms)",
+          yaxis: "Pressure (PSI)",
+          title: "Pressure vs. Time"
+        }
+      };
+
     }
   
+    
     // Updates the time and plots the last piece of data inputted by the user
     update() {
       let newTime = this.state.time + 100;
@@ -112,12 +126,12 @@ class Graph extends React.Component {
             {
               width: "100%", 
               height: "100%", 
-              title: this.props.title, 
+              title: this.graphProperties[this.props.dataType].title, 
               xaxis: {
-                title: this.props.xaxis
+                title: this.graphProperties[this.props.dataType].xaxis
               }, 
               yaxis: {
-                title: this.props.yaxis
+                title: this.graphProperties[this.props.dataType].yaxis
               }
             } 
           }
