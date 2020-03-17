@@ -8,70 +8,112 @@ class Graph extends React.Component {
         time: 0,
         times: [0],
         currentData: [],
-        tempData: [],
-        pressureData: []
+        data: {
+          "temperature": [],
+          "pressure": []
+        }
       };
     }
   
     // Updates the time and plots the last piece of data inputted by the user
     update() {
+<<<<<<< HEAD
+=======
+      let newTime = this.state.time + 100;
+      console.log("Updating");
+      console.log(this.state);
+      console.log(this.props);
+>>>>>>> 97d461d65b26d3c51fbc46994e9092d8fa71574e
       // CREATES COPIES OF DATA AND TIMES
-      var newTempData = this.state.tempData.slice();
-      var newPressureData = this.state.pressureData.slice();
-      var newTimes = this.state.times.slice();
+      let newData = {};
+      for(let key in this.state.data){
+        newData[key] = this.state.data[key].slice();
+      }
+      let newTimes = this.state.times.slice();
   
       // UPDATES DATA AND TIMES - this.state.currentData[this.state.currentData.length - 1]
+<<<<<<< HEAD
       newTempData.push(Math.random() * 10);
       newPressureData.push(Math.random() * 100);
       newTimes.push(this.state.times[this.state.times.length - 1] + 100);
+=======
+      for(let key in newData){
+        newData[key].push(Math.random() * 10);
+      }
+      newTimes.push(newTime);
+>>>>>>> 97d461d65b26d3c51fbc46994e9092d8fa71574e
   
       this.setState({
-        time: this.state.time + 100,
+        time: newTime,
         times: newTimes,
-        tempData: newTempData,
-        pressureData: newPressureData
+        data: newData
       });
+<<<<<<< HEAD
   
       if (this.props.dataType === 'temperature') {
+=======
+
+      if(this.state.data[this.props.dataType] !== undefined){
+        console.log("We got " + this.props.dataType + "!");
+>>>>>>> 97d461d65b26d3c51fbc46994e9092d8fa71574e
         this.setState({
-          currentData: this.state.tempData
+          currentData: this.state.data[this.props.dataType]
         });
       }
+<<<<<<< HEAD
   
       else if (this.props.dataType === 'pressure') {
         this.setState({
           currentData: this.state.pressureData
         });
+=======
+      else{
+        console.log("Unknown datatype: " + this.props.dataType + "!");
+>>>>>>> 97d461d65b26d3c51fbc46994e9092d8fa71574e
       }
-  
+
+      
       // DELETES OLD DATA
       if (this.state.time > 1000) {
-        newTempData.shift();
-        newPressureData.shift();
+        for(let key in newData){
+          newData[key].shift();
+        }
         newTimes.shift();
   
         this.setState({
           times: newTimes,
-          tempData: newTempData,
-          pressureData: newPressureData
+          data: newData
         });
       }
     }
   
     // Allows user to add data
     addData() {
+<<<<<<< HEAD
       var newData = prompt("What value do you want to put in?");
       var copy;
   
       if (this.props.dataType === 'temperature') {
         copy = this.state.tempData.slice();
         copy.push(newData);
+=======
+      console.log(this.state);
+      let newValue = prompt("What value do you want to put in?");
+
+      if (this.state.data[this.props.dataType] !== undefined) {
+  
+        let newData = {};
+        for(let key in newData){
+          newData[key] = this.state.data[key];
+        }
+        newData[this.props.dataType].push(newValue);
+>>>>>>> 97d461d65b26d3c51fbc46994e9092d8fa71574e
   
         this.setState({
-          tempData: copy,
-          currentData: copy
+          data: newData
         });
       }
+<<<<<<< HEAD
   
       else if (this.props.dataType === 'pressure') {
         copy = this.state.pressureData.slice();
@@ -81,6 +123,10 @@ class Graph extends React.Component {
           pressureData: copy,
           currentData: copy
         });
+=======
+      else{
+        console.log("Unknown datatype: " + this.props.dataType + "!");
+>>>>>>> 97d461d65b26d3c51fbc46994e9092d8fa71574e
       }
     }
   
