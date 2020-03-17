@@ -1,5 +1,4 @@
 import React from 'react';
-import Graph from './Graph';
 
 class DropDown extends React.Component {
     constructor(props) {
@@ -21,20 +20,7 @@ class DropDown extends React.Component {
       event.preventDefault();
     }
   
-    render() {
-      const graphProperties = {
-        temperature: {
-          xAxis: "Time (ms)",
-          yAxis: "Temperature (C)",
-          title: "Temperature vs. Time"
-        },
-        pressure: {
-          xAxis: "Time (ms)",
-          yAxis: "Pressure (PSI)",
-          title: "Pressure vs. Time"
-        }
-      };
-  
+    render() {  
       return (
         <div>
           <form onSubmit={this.handleSubmit}>
