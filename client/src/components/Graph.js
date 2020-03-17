@@ -1,5 +1,3 @@
-// used https://openclassrooms.com/en/courses/4286486-build-web-apps-with-reactjs/4286711-build-a-ticking-clock-component
-//blog.cloudboost.io/for-loops-in-react-render-no-you-didnt-6c9f4aa73778
 import React from 'react';
 import Plot from 'react-plotly.js';
 
@@ -13,15 +11,10 @@ class Graph extends React.Component {
         tempData: [],
         pressureData: []
       };
-      console.log(props);
-      console.log(this.props);
     }
   
     // Updates the time and plots the last piece of data inputted by the user
     update() {
-      console.log("Updating");
-      console.log(this.state);
-      console.log(this.props);
       // CREATES COPIES OF DATA AND TIMES
       var newTempData = this.state.tempData.slice();
       var newPressureData = this.state.pressureData.slice();
@@ -29,7 +22,7 @@ class Graph extends React.Component {
   
       // UPDATES DATA AND TIMES - this.state.currentData[this.state.currentData.length - 1]
       newTempData.push(Math.random() * 10);
-      newPressureData.push(Math.random() * 10);
+      newPressureData.push(Math.random() * 100);
       newTimes.push(this.state.times[this.state.times.length - 1] + 100);
   
       this.setState({
@@ -40,14 +33,12 @@ class Graph extends React.Component {
       });
   
       if (this.props.dataType === 'temperature') {
-        console.log("We got temperature!");
         this.setState({
           currentData: this.state.tempData
         });
       }
   
       else if (this.props.dataType === 'pressure') {
-        console.log("We got pressure!");
         this.setState({
           currentData: this.state.pressureData
         });
@@ -69,12 +60,10 @@ class Graph extends React.Component {
   
     // Allows user to add data
     addData() {
-      console.log(this.state);
       var newData = prompt("What value do you want to put in?");
       var copy;
   
       if (this.props.dataType === 'temperature') {
-  
         copy = this.state.tempData.slice();
         copy.push(newData);
   
@@ -82,11 +71,9 @@ class Graph extends React.Component {
           tempData: copy,
           currentData: copy
         });
-  
       }
   
       else if (this.props.dataType === 'pressure') {
-  
         copy = this.state.pressureData.slice();
         copy.push(newData);
   
@@ -94,7 +81,6 @@ class Graph extends React.Component {
           pressureData: copy,
           currentData: copy
         });
-  
       }
     }
   
@@ -108,6 +94,7 @@ class Graph extends React.Component {
             <button className="stop" onClick={() => clearInterval(this.interval)}>Stop</button>
             <button className="input" onClick={() => this.addData()}>Add Data</button>
           </div>
+          
           <Plot
           data={[
             {
@@ -118,11 +105,24 @@ class Graph extends React.Component {
             },
             //{type: 'bar', x: this.state.times, y: this.state.currentData},
           ]}
-          layout={ {width: "100%", height: "100%", title: 'PSI vs. Time'} }
+          layout={ 
+            {
+              width: 1500, 
+              height: 500, 
+              title: this.props.title, 
+              xaxis: {
+                title: this.props.xaxis
+              }, 
+              yaxis: {
+                title: this.props.yaxis
+              }
+            } 
+          }
         />
         </div>
       );
     }
   }
+
+export default Graph;
   
-  export default Graph;
