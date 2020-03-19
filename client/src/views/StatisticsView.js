@@ -5,7 +5,7 @@ import SequencePane from '../panes/SequencePane';
 import GraphPane from '../panes/GraphPane'
 
 const StatisticsView = () => (
-    <SplitPane className="view" split="vertical" defaultSize="40%">
+    <SplitPane className="view" split="vertical" defaultSize="55%">
         <SequencePane />
         <GraphPane />
     </SplitPane>
