@@ -1,5 +1,13 @@
 import React from "react";
-import Plot from "react-plotly.js";
+
+import {
+  LineChart,
+  Line,
+  Label,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+} from "recharts";
 
 const properties = {
   temperature: {
@@ -19,12 +27,7 @@ class Graph extends React.Component {
     super(props);
     this.state = {
       time: 0,
-      times: [0],
-      currentData: [],
-      data: {
-        temperature: [],
-        pressure: [],
-      },
+      data: [],
     };
   }
 
@@ -34,81 +37,40 @@ class Graph extends React.Component {
 
   // Updates the time and plots the last piece of data inputted by the user
   update() {
-    let newTime = this.state.time + 100;
-    console.log("Updating");
-    console.log(this.state);
-    console.log(this.props);
-    // CREATES COPIES OF DATA AND TIMES
-    let newData = {};
-    for (let key in this.state.data) {
-      newData[key] = this.state.data[key].slice();
-    }
-    let newTimes = this.state.times.slice();
+    let newData = this.state.data.slice();
 
-    // UPDATES DATA AND TIMES - this.state.currentData[this.state.currentData.length - 1]
-    for (let key in newData) {
-      newData[key].push(Math.random() * 10);
+    let newX = this.state.time + 100;
+    let newY = Math.random() * 10;
+
+    newData.push({ x: newX, y: newY });
+
+    if (newData.length > 10) {
+      newData.shift();
     }
-    newTimes.push(newTime);
+
+    console.log(newData);
 
     this.setState({
-      time: newTime,
-      times: newTimes,
+      time: newX,
       data: newData,
     });
-
-    if (this.state.data[this.props.dataType] !== undefined) {
-      console.log("We got " + this.props.dataType + "!");
-      this.setState({
-        currentData: this.state.data[this.props.dataType],
-      });
-    } else {
-      console.log("Unknown datatype: " + this.props.dataType + "!");
-    }
-
-    // DELETES OLD DATA
-    if (this.state.time > 1000) {
-      for (let key in newData) {
-        newData[key].shift();
-      }
-      newTimes.shift();
-
-      this.setState({
-        times: newTimes,
-        data: newData,
-      });
-    }
   }
 
   // Generates graph axes, creates start, stop, and input data buttons, generates timer, and displays points
   // PlotDisplay takes in current time, current data, and current times that have occured
   render() {
     return (
-      <div>
-        <Plot
-          data={[
-            {
-              x: this.state.times,
-              y: this.state.currentData,
-              mode: "lines+markers",
-              marker: { color: "red" },
-            },
-            //{type: 'bar', x: this.state.times, y: this.state.currentData},
-          ]}
-          useResizeHandler
-          style={{ position: "relative", width: "100%", height: "100%" }}
-          layout={{
-            autosize: true,
-            title: properties[this.props.dataType].title,
-            xaxis: {
-              title: properties[this.props.dataType].xaxis,
-            },
-            yaxis: {
-              title: properties[this.props.dataType].yaxis,
-            },
-          }}
-        />
-      </div>
+      <ResponsiveContainer>
+        <LineChart width={400} height={400} data={this.state.data}>
+          <XAxis dataKey="x">
+            <Label value={properties[this.props.dataType].xaxis} />
+          </XAxis>
+          <YAxis dataKey="y">
+            <Label value={properties[this.props.dataType].yaxis} />
+          </YAxis>
+          <Line type="monotone" dataKey="y" stroke="#8884d8" />
+        </LineChart>
+      </ResponsiveContainer>
     );
   }
 }
