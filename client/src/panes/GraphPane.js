@@ -1,5 +1,4 @@
 import React from 'react';
-import DropDown from '../components/DropDown.js';
 import Graph from '../components/Graph.js';
 import '../index.css';
 
@@ -7,11 +6,9 @@ import '../index.css';
 //blog.cloudboost.io/for-loops-in-react-render-no-you-didnt-6c9f4aa73778
 
 const GraphPane = () => (
-  <div className="pane">
-    <DropDown></DropDown>
-    <Graph dataType="temperature"></Graph>
-  </div>
-)
+    <div className="pane">
+        <Graph dataType="temperature"></Graph>
+    </div>
+);
 
 export default GraphPane;
-  
