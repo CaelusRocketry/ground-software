@@ -1,6 +1,19 @@
 import React from "react";
 import Plot from "react-plotly.js";
 
+const properties = {
+  temperature: {
+    xaxis: "Time (ms)",
+    yaxis: "Temperature (C)",
+    title: "Temperature vs. Time",
+  },
+  pressure: {
+    xaxis: "Time (ms)",
+    yaxis: "Pressure (PSI)",
+    title: "Pressure vs. Time",
+  },
+};
+
 class Graph extends React.Component {
   constructor(props) {
     super(props);
@@ -13,18 +26,10 @@ class Graph extends React.Component {
         pressure: [],
       },
     };
-    this.graphProperties = {
-      temperature: {
-        xaxis: "Time (ms)",
-        yaxis: "Temperature (C)",
-        title: "Temperature vs. Time",
-      },
-      pressure: {
-        xaxis: "Time (ms)",
-        yaxis: "Pressure (PSI)",
-        title: "Pressure vs. Time",
-      },
-    };
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(() => this.update(), 100);
   }
 
   // Updates the time and plots the last piece of data inputted by the user
@@ -75,49 +80,11 @@ class Graph extends React.Component {
     }
   }
 
-  // Allows user to add data
-  addData() {
-    console.log(this.state);
-    let newValue = prompt("What value do you want to put in?");
-
-    if (this.state.data[this.props.dataType] !== undefined) {
-      let newData = {};
-      for (let key in newData) {
-        newData[key] = this.state.data[key];
-      }
-      newData[this.props.dataType].push(newValue);
-
-      this.setState({
-        data: newData,
-      });
-    } else {
-      console.log("Unknown datatype: " + this.props.dataType + "!");
-    }
-  }
-
   // Generates graph axes, creates start, stop, and input data buttons, generates timer, and displays points
   // PlotDisplay takes in current time, current data, and current times that have occured
   render() {
     return (
       <div>
-        <div className="buttons">
-          <button
-            id="hi"
-            className="start"
-            onClick={() =>
-              (this.interval = setInterval(() => this.update(), 100))
-            }
-          >
-            Start
-          </button>
-          <button className="stop" onClick={() => clearInterval(this.interval)}>
-            Stop
-          </button>
-          <button className="input" onClick={() => this.addData()}>
-            Add Data
-          </button>
-        </div>
-
         <Plot
           data={[
             {
@@ -131,12 +98,12 @@ class Graph extends React.Component {
           layout={{
             width: "100%",
             height: "100%",
-            title: this.graphProperties[this.props.dataType].title,
+            title: properties[this.props.dataType].title,
             xaxis: {
-              title: this.graphProperties[this.props.dataType].xaxis,
+              title: properties[this.props.dataType].xaxis,
             },
             yaxis: {
-              title: this.graphProperties[this.props.dataType].yaxis,
+              title: properties[this.props.dataType].yaxis,
             },
           }}
         />
