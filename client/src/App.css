@@ -58,6 +58,10 @@
 }
 
 /* Pane */
+.Pane {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 .pane {
     @apply p-2;
 }
