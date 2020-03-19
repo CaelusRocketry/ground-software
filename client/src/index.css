@@ -1,31 +1,32 @@
 body {
-    font: 14px "Century Gothic", Futura, sans-serif;
-    margin: 20px;
-  }
-  
-ol, ul {
-    padding-left: 30px;
-  }
-  
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
+
+ol,
+ul {
+  padding-left: 30px;
+}
+
 .x-axis {
-    background: #000000;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    border: 1px solid #000;
-    height: 1px;
-    width: 256px;
-  }
+  background: #000000;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  border: 1px solid #000;
+  height: 1px;
+  width: 256px;
+}
 
 .y-axis {
-    background: #000000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    border: 1px solid #000;
-    height: 192px;
-    width: 1px;
-  }
+  background: #000000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  border: 1px solid #000;
+  height: 192px;
+  width: 1px;
+}
 
 .buttons {
   position: relative;
