@@ -95,9 +95,10 @@ class Graph extends React.Component {
             },
             //{type: 'bar', x: this.state.times, y: this.state.currentData},
           ]}
+          useResizeHandler
+          style={{ position: "relative", width: "100%", height: "100%" }}
           layout={{
-            width: "100%",
-            height: "100%",
+            autosize: true,
             title: properties[this.props.dataType].title,
             xaxis: {
               title: properties[this.props.dataType].xaxis,
