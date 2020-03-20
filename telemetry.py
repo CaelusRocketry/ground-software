@@ -34,6 +34,9 @@ class Telemetry:
         self.conn, self.addr = self.sock.accept()
         Log("Creasted socket")
 
+    def init_backend(self, b):
+        self.backend = b
+
     def begin(self):
         """ Starts the send and listen threads """
         self.send_thread = threading.Thread(target=self.send)
@@ -74,27 +77,14 @@ class Telemetry:
         packet = Packet.from_string(packet_str)
         for log in packet.logs:
             print(log.to_string())
+            if(log.header == "FOR_FRONTEND"):
+                self.backend.update_text(log.message)
             log.save()
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while True:
-            log = Log(header="heartbeat", message="AT")
+            log = Log(header="HEARTBEAT", message="AT")
             self.enqueue(Packet(logs=[log], level=LogPriority.INFO))
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
-
-
-GS_IP, GS_PORT = '127.0.0.1', 5005
-telem = Telemetry(GS_IP, GS_PORT)
-telem.begin()
-while True:
-    inp = input().split()
-    header = inp[0]
-    message = {}
-    for i in range(len(inp[1:]) // 2):
-        a = inp[1 + i*2]
-        b = inp[2 + i*2]
-        message[a] = b
-    log = Log(header, message)
-    telem.enqueue(Packet(logs=[log], level=LogPriority.CRIT))
