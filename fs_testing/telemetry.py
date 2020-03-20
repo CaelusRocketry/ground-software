@@ -4,6 +4,7 @@ import time
 import heapq
 import multiprocessing
 from packet import Packet, Log, LogPriority
+from enums import ValveLocation, ActuationType
 import ast
 import base64
 
@@ -73,12 +74,13 @@ class Telemetry:
         """ Prints any packets received """
         packet = Packet.from_string(packet_str)
         for log in packet.logs:
-            print(log.to_string())
+#            print(log.to_string())
             log.save()
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while True:
+            continue
             log = Log(header="heartbeat", message="AT")
             self.enqueue(Packet(logs=[log], level=LogPriority.INFO))
             print("Sent heartbeat")
@@ -88,13 +90,19 @@ class Telemetry:
 GS_IP, GS_PORT = '127.0.0.1', 5005
 telem = Telemetry(GS_IP, GS_PORT)
 telem.begin()
-while True:
-    inp = input().split()
-    header = inp[0]
-    message = {}
-    for i in range(len(inp[1:]) // 2):
-        a = inp[1 + i*2]
-        b = inp[2 + i*2]
-        message[a] = b
+
+def send_actuation_command(loc, act_type, priority):
+    header = "solenoid_actuate"
+    message = {"valve_location": ValveLocation(loc), "actuation_type": ActuationType(act_type), "priority": int(priority)}
+    print(message)
     log = Log(header, message)
     telem.enqueue(Packet(logs=[log], level=LogPriority.CRIT))
+
+
+while True:
+    inp = input().split()
+    cmd = inp[0]
+    args = inp[1:]
+    print(args)
+    if cmd == "actuate":
+        send_actuation_command(*args)
