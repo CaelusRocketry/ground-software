@@ -14,18 +14,7 @@ GS_PORT = config["GS_PORT"]
 
 app = Flask(__name__, static_folder="templates")
 CORS(app)
-socketio = SocketIO(app)
-
-values = {
-    'slider1': 25,
-    'slider2': 0,
-}
-
-
-@app.route('/')
-def index():
-    return render_template('index.html', **values)
-
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 if __name__ == "__main__":
     telem = Telemetry(GS_IP, GS_PORT)

@@ -7,11 +7,12 @@ import { Provider } from "react-redux";
 import reducers from "./store/reducers";
 
 import io from 'socket.io-client';
+import {socketConnection} from './api';
 
 import * as serviceWorker from "./serviceWorker";
 
 const store = createStore(reducers);
-const socket = io('http://localhost');
+socketConnection();
 
 ReactDOM.render(
   <Provider store={store}>
@@ -23,3 +24,6 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+
+

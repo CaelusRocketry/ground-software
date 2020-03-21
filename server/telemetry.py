@@ -1,78 +1,121 @@
 import socket
 import threading
 import time
-import json
 import heapq
-from . import logging, encryption
-from .log import Packet, Log
-from collections import deque
+import multiprocessing
+from packet import Packet, Log, LogPriority
+from enums import ValveLocation, ActuationType
+import ast
+import base64
 
 BYTE_SIZE = 8192
 
 DELAY = .05
 DELAY_LISTEN = .05
-DELAY_SEND = .25
+DELAY_SEND = .05
+DELAY_HEARTBEAT = 3
 
 SEND_ALLOWED = True
+
+BLOCK_SIZE = 32
+f = open("black_box.txt", "w+")
+f.close()
 
 
 class Telemetry:
     """ Telemetry Class handles all communication """
 
-
-    def __init__(self, IP, PORT):
+    def __init__(self, ip, port):
         """ Based on given IP and port, create and connect a socket """
         self.queue_send = []
-        self.queue_ingest = deque([])
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.sock.bind((IP, PORT))
+        self.sock.bind((ip, port))
         self.sock.listen(1)
-        conn, addr = self.sock.accept()
-        self.conn = conn
-        print("Connected socket")
+        self.conn, self.addr = self.sock.accept()
+        Log("Creasted socket")
+
+    def init_backend(self, b):
+        self.backend = b
 
 
     def begin(self):
         """ Starts the send and listen threads """
-        send_thread = threading.Thread(target=self.send)
-        listen_thread = threading.Thread(target=self.listen)
-        listen_thread.daemon = True
-        send_thread.daemon = True
-        send_thread.start()
-        listen_thread.start()
-        # self.enqueue(Packet(message=input("")))  # Used for testing purposes
-
-
-    def end(self):
-        """ Kills socket connection """
-        # TODO: Test if a "connection" can be separately shutdown
-        self.conn.shutdown()
-        self.conn.close()
-        self.sock.shutdown()
-        self.sock.close()
-
+        self.send_thread = threading.Thread(target=self.send)
+        self.send_thread.daemon = True
+        self.listen_thread = threading.Thread(target=self.listen)
+        self.listen_thread.daemon = True
+        self.heartbeat_thread = threading.Thread(target=self.heartbeat)
+        self.heartbeat_thread.daemon = True
+        self.send_thread.start()
+        self.listen_thread.start()
+        self.heartbeat_thread.start()
 
     def send(self):
-        """ Constantly sends next packet from queue to flight """
+        """ Constantly sends next packet from queue to ground station """
         while True:
             if self.queue_send and SEND_ALLOWED:
                 encoded = heapq.heappop(self.queue_send)[1]
                 self.conn.send(encoded)
             time.sleep(DELAY_SEND)
 
-
     def listen(self):
-        """ Constantly listens for any from flight """
+        """ Constantly listens for any from ground station """
         while True:
             data = self.conn.recv(BYTE_SIZE)
-            self.queue_ingest.append(data)
+            self.ingest_thread = threading.Thread(
+                target=self.ingest, args=(data,))
+            self.ingest_thread.daemon = True
+            self.ingest_thread.start()
             time.sleep(DELAY_LISTEN)
-
 
     def enqueue(self, packet):
         """ Encripts and enqueues the given Packet """
-        packet_string = packet.to_string()  # Converts packet to string form
-        print("Enqueueing", packet_string)
-        encoded = encryption.encrypt(packet_string)
-        heapq.heappush(self.queue_send, (packet.level, encoded))
+        packet_str = packet.to_string().encode()
+        heapq.heappush(self.queue_send, (packet.level, packet_str))
+
+    def ingest(self, packet_str):
+        """ Prints any packets received """
+        packet = Packet.from_string(packet_str)
+        for log in packet.logs:
+            print(log.to_string())
+            if log.header == "heartbeat":
+                self.backend.update_heartbeat(log.message)
+
+            if log.header == "sensor_data":
+                self.backend.update_sensor_data(log.message)
+
+            if log.header == "valve_data":
+                self.backend.update_valve_data(log.message)
+            
+            log.save()
+
+    def heartbeat(self):
+        """ Constantly sends heartbeat message """
+        while True:
+#            continue
+            log = Log(header="heartbeat", message="AT")
+            self.enqueue(Packet(logs=[log], level=LogPriority.INFO))
+            print("Sent heartbeat")
+            time.sleep(DELAY_HEARTBEAT)
+
+
+# GS_IP, GS_PORT = '127.0.0.1', 5005
+# telem = Telemetry(GS_IP, GS_PORT)
+# telem.begin()
+
+# def send_actuation_command(loc, act_type, priority):
+#     header = "solenoid_actuate"
+#     message = {"valve_location": ValveLocation(loc), "actuation_type": ActuationType(act_type), "priority": int(priority)}
+#     print(message)
+#     log = Log(header, message)
+#     telem.enqueue(Packet(logs=[log], level=LogPriority.CRIT))
+
+
+# while True:
+#     inp = input().split()
+#     cmd = inp[0]
+#     args = inp[1:]
+#     print(args)
+#     if cmd == "actuate":
+#         send_actuation_command(*args)
