@@ -1,4 +1,5 @@
 import React from "react";
+import DropDown from "./DropDown";
 
 import {
   LineChart,
@@ -66,7 +67,7 @@ class Graph extends React.Component {
             <Label value={properties[this.props.dataType].xaxis} />
           </XAxis>
           <YAxis dataKey="y">
-            <Label value={properties[this.props.dataType].yaxis} />
+            <Label value={properties[this.props.dataType].yaxis} angle={270}/>
           </YAxis>
           <Line type="monotone" dataKey="y" stroke="#8884d8" />
         </LineChart>
