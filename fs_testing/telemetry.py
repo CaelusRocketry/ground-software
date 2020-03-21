@@ -80,10 +80,10 @@ class Telemetry:
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while True:
-            continue
+#            continue
             log = Log(header="heartbeat", message="AT")
             self.enqueue(Packet(logs=[log], level=LogPriority.INFO))
-            print("Sent heartbeat")
+#            print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
 
 
