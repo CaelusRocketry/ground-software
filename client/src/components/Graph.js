@@ -62,31 +62,31 @@ class Graph extends React.Component {
     event.preventDefault();
   }
 
+  getData(dataType){
+    if(dataType === 'thermo_chamber'){
+      return Math.random();
+    }
+    if(dataType === 'thermo_tank'){
+      return Math.random() * 10 + 10;
+    }
+    if(dataType === 'pressure_chamber'){
+      return Math.random() * 100 + 100;
+    }
+    if(dataType === 'pressure_tank'){
+      return Math.random() * 1000 + 1000;
+    }
+  }
+
   // Updates the time and plots the last piece of data inputted by the user
   update() {
-    const newData = Object.assign(this.state.data, this.state.data);
-
+    let newData = Object.assign(this.state.data, this.state.data);
     let newX = this.state.time + 100;
-
-    if (this.state.currentData == 'thermo_chamber') {
-      let newY = Math.random();
-      newData[this.state.currentData].push({ x: newX, y: newY });
-    }
-    else if (this.state.currentData == 'thermo_tank') {
-      let newY = Math.random() * 10;
-      newData[this.state.currentData].push({ x: newX, y: newY });
-    }
-    else if (this.state.currentData == 'pressure_chamber') {
-      let newY = Math.random() * 100;
-      newData[this.state.currentData].push({ x: newX, y: newY });
-    }
-    else if (this.state.currentData == 'pressure_tank') {
-      let newY = Math.random() * 1000;
-      newData[this.state.currentData].push({ x: newX, y: newY });
-    }
-
-    if (newData[this.state.currentData].length > 10) {
-      newData[this.state.currentData].shift();
+    for(let key in newData){
+      let newY = this.getData(key);
+      newData[key].push({x: newX, y: newY});   
+      if(newData[key].length > 10){
+        newData[key].shift();
+      }   
     }
 
     this.setState({
