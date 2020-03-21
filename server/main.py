@@ -29,7 +29,7 @@ def index():
 
 if __name__ == "__main__":
     telem = Telemetry(GS_IP, GS_PORT)
-    telem.begin()
+#    telem.begin()
 
     print("listening and sending")
 
