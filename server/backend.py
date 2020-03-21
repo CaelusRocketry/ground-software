@@ -12,19 +12,23 @@ class Backend(Namespace):
         self.telem = telem
         self.socketio = socketio
 
-    def update_text(self, message):
+    def update_heartbeat(self, message):
         print(message)
-        # with self.app.test_request_context():
-        self.socketio.emit('update text',  {'data':message})
+        self.socketio.emit('heartbeat',  {'data': message})
 
-    def on_connect(self):
-        emit('after connect',  {'data':'Lets dance'})
+    def update_sensor_data(self, message):
+        print(message)
+        self.socketio.emit('update sensor data',  {'data': message})
 
-    def on_slider_value_changed(self, message):
-        # values[message['who']] = message['data']
-        print('\nnew val:', message['data'], '\n')
+    def update_value_data(self, message):
+        print(message)
+        self.socketio.emit('update valve data',  {'data': message})
 
-    def on_button_pressed(self, message):
-        log = Log(header="BUTTON PRESS", message=message)
-        self.telem.enqueue(Packet(header="BUTTON PRESS", logs=[log]))
-        print("button pressed!", message)
+
+
+        
+
+
+
+
+
