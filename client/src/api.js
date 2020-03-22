@@ -4,7 +4,7 @@ import { updateLoadData } from './store/actions';
 const socket = io('http://localhost:5000');
 
 const socketConnection = (store) => {
-    socket.on('heartbeat', function(data){ console.log(data)});
+    socket.on('heartbeat', function(data){ console.log(data); });
     socket.on('update sensor data', function(data){ 
 
         // split here? - not in correct order
@@ -16,7 +16,7 @@ const socketConnection = (store) => {
 
 
         console.log(data)});
-    socket.on('update valve data', function(data){ console.log(data)});
+    socket.on('update valve data', function(data){ console.log(data); });
 }
 
 export {socketConnection}
