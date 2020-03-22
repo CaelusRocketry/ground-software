@@ -26,8 +26,13 @@ const Graph = props => {
   const [time, setTime] = useState(0);
   const [data, setData] = useState([]);
 
+  const [metadata, setMetadata] = useState({
+    type: props.type,
+    location: props.location,
+  });
+
   const getData = (type, location) => {
-    switch (props.type) {
+    switch (type) {
       case "temperature":
         if (location === "chamber") {
           return Math.random();
@@ -57,7 +62,7 @@ const Graph = props => {
     });
     setData(data => {
       let newData = [...data];
-      const newValue = getData(props.type, "chamber");
+      const newValue = getData(metadata.type, metadata.location);
       newData.push({ x: newTime, y: newValue });
       if (newData.length > 10) {
         newData.shift();
@@ -66,21 +71,40 @@ const Graph = props => {
     });
   };
 
+  const resetData = () => {
+    setTime(0); // FIXME: This should be replaced with the proper value
+    setData([]);
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       updateData();
     }, 1000);
+
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div>
+      <select
+        onChange={e => {
+          const [curLocation, curType] = e.target.value.split(".");
+          setMetadata({ type: curType, location: curLocation });
+          resetData();
+        }}
+        value={metadata.location + "." + metadata.type}
+      >
+        <option value="tank.temperature">Tank/Temperature</option>
+        <option value="tank.pressure">Tank/Pressure</option>
+        <option value="chamber.temperature">Chamber/Temperature</option>
+        <option value="chamber.pressure">Chamber/Pressure</option>
+      </select>
       <LineChart width={400} height={400} data={data}>
         <XAxis dataKey="x">
-          <Label value={properties[props.type].xaxis} />
+          <Label value={properties[metadata.type].xaxis} />
         </XAxis>
         <YAxis dataKey="y">
-          <Label value={properties[props.type].yaxis} angle={270} />
+          <Label value={properties[metadata.type].yaxis} angle={270} />
         </YAxis>
         <Line type="monotone" dataKey="y" stroke="#8884d8" />
       </LineChart>
