@@ -6,7 +6,6 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducers from "./store/reducers";
 
-import io from 'socket.io-client';
 import {socketConnection} from './api';
 
 import * as serviceWorker from "./serviceWorker";
