@@ -1,6 +1,13 @@
+from flask import Flask, render_template
+from flask_cors import CORS
+from flask_socketio import SocketIO, emit, Namespace
+import threading, time
+from packet import Packet, Log
+
+
 class Backend(Namespace):
 
-    def init(self, app, socketio):
+    def init_telem(self, app, socketio):
         self.app = app
         self.socketio = socketio
 
@@ -12,15 +19,6 @@ class Backend(Namespace):
         print(message)
         self.socketio.emit('update sensor data',  {'data': message})
 
-    def update_value_data(self, message):
+    def update_valve_data(self, message):
         print(message)
         self.socketio.emit('update valve data',  {'data': message})
-
-
-
-        
-
-
-
-
-

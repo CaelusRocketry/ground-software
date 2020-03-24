@@ -1,22 +1,20 @@
 const initialState = {
     Thermocouple: {
-        "chamber": 0.0, 
-        "tank": 0.0, 
-        "timestamp": 0.0,
-        "state": "SAFE"
+        chamber: 0.0, 
+        tank: 0.0, 
+        state: "SAFE"
     },
     Pressure: {
-        "chamber": 0.0, 
-        "tank": 0.0, 
-        "injector": 0.0,
-        "timestamp": 0.0,
-        "state": "SAFE"
+        chamber: 0.0, 
+        tank: 0.0, 
+        injector: 0.0,
+        state: "SAFE"
     },
     Load: {
-        "tank": 0.0, 
-        "timestamp": 0.0,
-        "state": "SAFE"
-    }
+        tank: 0.0, 
+        state: "SAFE"
+    },
+    Timestamp: 0.0
 }
 
 const updateSensorData = (state = initialState, action) => {
@@ -25,9 +23,8 @@ const updateSensorData = (state = initialState, action) => {
         return {
             ...state,
             Thermocouple: {
-                chamber: action.chamber,
-                tank: action.tank,
-                timestamp: action.timestamp, 
+                chamber: action.data.chamber,
+                tank: action.data.tank,
                 state: action.state
             }
         }
@@ -35,10 +32,9 @@ const updateSensorData = (state = initialState, action) => {
             return {
                 ...state,
                 Pressure: {
-                    chamber: action.chamber,
-                    tank: action.tank,
-                    injector: action.injector,
-                    timestamp: action.timestamp, 
+                    chamber: action.data.chamber,
+                    tank: action.data.tank,
+                    injector: action.data.injector,
                     state: action.state
                 }
             }
@@ -46,11 +42,16 @@ const updateSensorData = (state = initialState, action) => {
             return {
                 ...state,
                 Load: {
-                    tank: action.tank,
-                    timestamp: action.timestamp, 
+                    tank: action.data.tank,
                     state: action.state
                 }
-            }    
+            }   
+        case 'UPDATE_TIMESTAMP':
+            return {
+                ...state,
+                Timestamp: action.data.timestamp
+            } 
+            
       default:
         return state
     }
