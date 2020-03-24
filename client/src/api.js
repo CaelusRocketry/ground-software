@@ -1,21 +1,25 @@
 import io from 'socket.io-client';
-import { updateLoadData } from './store/actions';
+import { updateLoadData, updateThermocoupleData, updatePressureData, updateTimestamp } from './store/actions';
+
 
 const socket = io('http://localhost:5000');
 
 const socketConnection = (store) => {
     socket.on('heartbeat', function(data){ console.log(data); });
-    socket.on('update sensor data', function(data){ 
+    socket.on('update sensor data', function(info){ 
+        // console.log(info)
 
         // split here? - not in correct order
 
-        dispatchEvent(updateThermocoupleData(data.thermocouple));
-        dispatchEvent(updatePressureData(data.pressure));
-        dispatchEvent(updateLoadData(data.load));
 
+        store.dispatch(updateThermocoupleData(info.data.thermocouple));
+        store.dispatch(updatePressureData(info.data.pressure));
+        store.dispatch(updateLoadData(info.data.load));
+        // store.dispatch(updateTimestamp(info.data.timestamp));
 
-
-        console.log(data)});
+        
+        console.log(store.getState());
+    });
     socket.on('update valve data', function(data){ console.log(data); });
 }
 

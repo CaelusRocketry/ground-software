@@ -1,17 +1,25 @@
 
-export const updateTermocoupleData = (data) => ({
+export const updateThermocoupleData = (data) => ({
   type: "UPDATE_THERMOCOUPLE_DATA",
+  state: false,
   data
 })
 
 export const updatePressureData = (data) => ({
-  type: "UPDATE_PRESSURE_DATA", 
+  type: "UPDATE_PRESSURE_DATA",
+  state: false,
   data
 })
 
 export const updateLoadData = (data) => ({
   type: "UPDATE_LOAD_DATA", 
+  state: false,
   data
+})
+
+export const updateTimestamp = (time) => ({
+  type: "UPDATE_TIMESTAMP",
+  time
 })
 
 
