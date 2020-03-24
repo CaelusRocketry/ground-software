@@ -19,4 +19,4 @@ const socketConnection = (store) => {
     socket.on('update valve data', function(data){ console.log(data); });
 }
 
-export {socketConnection}
+export {socketConnection} 

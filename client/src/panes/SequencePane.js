@@ -3,6 +3,8 @@ import React from "react";
 import { Timeline, Event } from "../components/Timeline";
 import Header from "../components/Header";
 
+import Button from "./../components/Button"
+
 const SequencePane = () => (
   <div className="pane">
     <Header title="Sequence" />
@@ -62,6 +64,7 @@ const SequencePane = () => (
         </ol>
       </Event>
     </Timeline>
+    <Button />
   </div>
 );
 
