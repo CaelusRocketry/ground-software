@@ -14,7 +14,7 @@ function App() {
         <option value="actions">Actions</option>
       </select>
       {selected_view === "statistics" ? <StatisticsView /> : <ActionsView />}
-    </div>
+    </div> 
   );
 }
 
