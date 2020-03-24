@@ -74,7 +74,7 @@ class Telemetry:
         """ Prints any packets received """
         packet = Packet.from_string(packet_str)
         for log in packet.logs:
-#            print(log.to_string())
+            print(log.to_string())
             log.save()
 
     def heartbeat(self):
@@ -83,7 +83,7 @@ class Telemetry:
 #            continue
             log = Log(header="heartbeat", message="AT")
             self.enqueue(Packet(logs=[log], level=LogPriority.INFO))
-#            print("Sent heartbeat")
+            print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
 
 
