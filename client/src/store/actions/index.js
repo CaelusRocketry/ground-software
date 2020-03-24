@@ -1,16 +1,15 @@
+export const updateSensorData = (data) => ({
+    type: "UPDATE_SENSOR_DATA", 
+    data
+});
 
-export const updateTermocoupleData = (data) => ({
-  type: "UPDATE_THERMOCOUPLE_DATA",
+export const updateValveData = (data) => ({
+  type: "UPDATE_VALVE_DATA", 
   data
 });
 
-export const updatePressureData = (data) => ({
-  type: "UPDATE_PRESSURE_DATA", 
-  data
-});
-
-export const updateLoadData = (data) => ({
-  type: "UPDATE_LOAD_DATA", 
+export const updateHeartbeat = (data) => ({
+  type: "UPDATE_HEARTBEAT", 
   data
 });
 
@@ -18,20 +17,3 @@ export const buttonStatus = (status) => ({
   type: "BUTTON_PRESSED",
   status
 });
-
-
-// export const updateSensorData = (data) => ({
-//     type: "UPDATE_SENSOR_DATA", 
-//     data
-// })
-
-
-// export const increment = n => ({
-//   type: "INCREMENT",
-//   payload: n,
-// });
-
-// export const decrement = n => ({
-//   type: "DECREMENT",
-//   payload: n,
-// });
