@@ -80,13 +80,13 @@ class Telemetry:
         for log in packet.logs:
             print(log.to_string())
             if log.header == "heartbeat":
-                self.backend.update_heartbeat(log.message)
+                self.backend.update_heartbeat(log.__dict__)
 
             if log.header == "sensor_data":
-                self.backend.update_sensor_data(log.message)
+                self.backend.update_sensor_data(log.__dict__)
 
             if log.header == "valve_data":
-                self.backend.update_valve_data(log.message)
+                self.backend.update_valve_data(log.__dict__)
             
             log.save()
 

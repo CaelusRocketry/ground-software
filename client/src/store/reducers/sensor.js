@@ -19,38 +19,25 @@ const initialState = {
 
 const updateSensorData = (state = initialState, action) => {
     switch (action.type) {
-      case 'UPDATE_THERMOCOUPLE_DATA':
-        return {
-            ...state,
-            Thermocouple: {
-                chamber: action.data.chamber,
-                tank: action.data.tank,
-                state: action.state
-            }
-        }
-        case 'UPDATE_PRESSURE_DATA':
+        case 'UPDATE_SENSOR_DATA':
             return {
-                ...state,
+                Thermocouple: {
+                    chamber: action.data.message.thermocouple.chamber, 
+                    tank: action.data.message.thermocouple.tank, 
+                    state: false
+                },
                 Pressure: {
-                    chamber: action.data.chamber,
-                    tank: action.data.tank,
-                    injector: action.data.injector,
-                    state: action.state
-                }
-            }
-        case 'UPDATE_LOAD_DATA':
-            return {
-                ...state,
+                    chamber: action.data.message.pressure.chamber, 
+                    tank: action.data.message.pressure.tank, 
+                    injector: action.data.message.pressure.injector,
+                    state: false
+                },
                 Load: {
-                    tank: action.data.tank,
-                    state: action.state
-                }
-            }   
-        case 'UPDATE_TIMESTAMP':
-            return {
-                ...state,
+                    tank: action.data.message.load.tank, 
+                    state: false
+                },
                 Timestamp: action.data.timestamp
-            } 
+            }
             
       default:
         return state

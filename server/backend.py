@@ -13,12 +13,12 @@ class Backend(Namespace):
 
     def update_heartbeat(self, message):
         print(message)
-        self.socketio.emit('heartbeat',  {'data': message})
+        self.socketio.emit('heartbeat',  message)
 
     def update_sensor_data(self, message):
         print(message)
-        self.socketio.emit('update sensor data',  {'data': message})
+        self.socketio.emit('update sensor data',  message)
 
     def update_valve_data(self, message):
         print(message)
-        self.socketio.emit('update valve data',  {'data': message})
+        self.socketio.emit('update valve data',  message)
