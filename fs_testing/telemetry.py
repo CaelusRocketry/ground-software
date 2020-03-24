@@ -35,10 +35,6 @@ class Telemetry:
         self.conn, self.addr = self.sock.accept()
         Log("Creasted socket")
 
-    def init_backend(self, b):
-        self.backend = b
-
-
     def begin(self):
         """ Starts the send and listen threads """
         self.send_thread = threading.Thread(target=self.send)
@@ -79,15 +75,6 @@ class Telemetry:
         packet = Packet.from_string(packet_str)
         for log in packet.logs:
             print(log.to_string())
-            if log.header == "heartbeat":
-                self.backend.update_heartbeat(log.__dict__)
-
-            if log.header == "sensor_data":
-                self.backend.update_sensor_data(log.__dict__)
-
-            if log.header == "valve_data":
-                self.backend.update_valve_data(log.__dict__)
-            
             log.save()
 
     def heartbeat(self):
@@ -100,22 +87,22 @@ class Telemetry:
             time.sleep(DELAY_HEARTBEAT)
 
 
-# GS_IP, GS_PORT = '127.0.0.1', 5005
-# telem = Telemetry(GS_IP, GS_PORT)
-# telem.begin()
+GS_IP, GS_PORT = '127.0.0.1', 5005
+telem = Telemetry(GS_IP, GS_PORT)
+telem.begin()
 
-# def send_actuation_command(loc, act_type, priority):
-#     header = "solenoid_actuate"
-#     message = {"valve_location": ValveLocation(loc), "actuation_type": ActuationType(act_type), "priority": int(priority)}
-#     print(message)
-#     log = Log(header, message)
-#     telem.enqueue(Packet(logs=[log], level=LogPriority.CRIT))
+def send_actuation_command(loc, act_type, priority):
+    header = "solenoid_actuate"
+    message = {"valve_location": ValveLocation(loc), "actuation_type": ActuationType(act_type), "priority": int(priority)}
+    print(message)
+    log = Log(header, message)
+    telem.enqueue(Packet(logs=[log], level=LogPriority.CRIT))
 
 
-# while True:
-#     inp = input().split()
-#     cmd = inp[0]
-#     args = inp[1:]
-#     print(args)
-#     if cmd == "actuate":
-#         send_actuation_command(*args)
+while True:
+    inp = input().split()
+    cmd = inp[0]
+    args = inp[1:]
+    print(args)
+    if cmd == "actuate":
+        send_actuation_command(*args)
