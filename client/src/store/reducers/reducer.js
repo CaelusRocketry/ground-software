@@ -1,85 +1,76 @@
 const initialState = {
     sensorData: {
         thermocouple: {
-            chamber: 0.0, 
-            tank: 0.0, 
-            state: undefined
+            chamber: [], 
+            tank: [], 
         },
         pressure: {
-            chamber: 0.0, 
-            tank: 0.0, 
-            injector: 0.0,
-            state: undefined
+            chamber: [], 
+            tank: [], 
+            injector: [],
         },
         load: {
-            tank: 0.0, 
-            state: undefined
+            tank: [], 
         },
-        timestamp: 0.0
+        timestamp: []
     }, 
     valveData: {
         solenoid: {
-            pressure_relief: undefined, 
-            propellant_vent: undefined, 
+            pressure_relief: undefined,
+            propellant_vent: undefined,
             main_propellant_valve: undefined
         }, 
-        timestamp: 0.0
+        timestamp: undefined
     },
     heartbeat: {
-        timestamp: 0.0
+        timestamp: undefined
     }
 }
 
 const updateData = (state = initialState, action) => {
+    let [message, timestamp] = [undefined, undefined];
+    if(['UPDATE_SENSOR_DATA', 'UPDATE_VALVE_DATA', 'UPDATE_HEARTBEAT'].includes(action.type)){
+        message = action.data.message;
+        timestamp = action.data.timestamp;
+    }
     switch (action.type) {
         case 'UPDATE_SENSOR_DATA':
-            return {
-                ...state, 
-                    sensorData: {
-                        thermocouple: {
-                            chamber: action.data.message.thermocouple.chamber, 
-                            tank: action.data.message.thermocouple.tank, 
-                            state: false
-                        },
-                        pressure: {
-                            chamber: action.data.message.pressure.chamber, 
-                            tank: action.data.message.pressure.tank, 
-                            injector: action.data.message.pressure.injector,
-                            state: false
-                        },
-                        load: {
-                            tank: action.data.message.load.tank, 
-                            state: false
-                        },
-                        timestamp: action.data.timestamp
+            for(let type in message){
+                for(let loc in message[type]){
+                    let value = message[type][loc];
+                    state.sensorData[type][loc].push(value);
+                    if(state.sensorData[type][loc].length > 10){
+                        state.sensorData[type][loc].shift();
                     }
                 }
+            }
+            state.sensorData.timestamp.push(timestamp);
+            if(state.sensorData.timestamp.length > 10){
+                state.sensorData.timestamp.shift();
+            }
+            return state;
 
         case 'UPDATE_VALVE_DATA':
-            return {
-                ...state, 
-                valveData: {
-                    solenoid: {
-                        pressure_relief: action.data.message.solenoid.pressure_relief, 
-                        propellant_vent: action.data.message.solenoid.propellant_vent, 
-                        main_propellant_valve: action.data.message.solenoid.main_propellant_valve
-                    }, 
-                    timestamp: action.data.timestamp
+            for(let type in message){
+                for(let loc in message[type]){
+                    let value = message[type][loc];
+                    state.valveData[type][loc] = value;
                 }
             }
+            state.valveData.timestamp = timestamp;
+            return state;
 
         case 'UPDATE_HEARTBEAT':
             return {
                 ...state,
                 heartbeat: {
-                    timestamp: action.data.timestamp
+                    timestamp: timestamp
                 }
-
             }
         
       default:
         return state
     }
-  }
-  
-  export default updateData
+}
+
+export default updateData

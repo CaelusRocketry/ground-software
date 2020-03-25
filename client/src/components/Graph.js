@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 import {
   LineChart,
@@ -7,8 +8,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-
-import { connect } from 'react-redux'
 
 
 const properties = {
@@ -24,11 +23,33 @@ const properties = {
   },
 };
 
+const sensors = {
+  thermocouple: ["tank", "chamber"],
+  pressure: ["tank", "chamber"]
+}
+
 const Graph = props => {
   console.log(props);
   const [metadata, setMetadata] = useState({
     type: props.type,
     location: props.location
+  });
+
+  const count = useSelector((state) => {
+    return state.data.sensorData.timestamp
+  });
+  
+  const data = useSelector((state) => {
+    let data = [];
+    let x = state.data.sensorData.timestamp;
+    let y = state.data.sensorData[metadata.type][metadata.location];
+    if(x.length !== y.length){
+      console.log("X: " + x.length + ", Y: " + y.length);
+    }
+    for(let i = 0; i < x.length; i++){
+      data.push({x: x[i], y: y[i]});
+    }
+    return data;
   });
 
   return (
@@ -37,8 +58,6 @@ const Graph = props => {
         onChange={e => {
           const [curLocation, curType] = e.target.value.split(".");
           setMetadata({ type: curType, location: curLocation });
-          props.type = curType;
-          props.location = curLocation;
         }}
         value={metadata.location + "." + metadata.type}
       >
@@ -47,7 +66,7 @@ const Graph = props => {
         <option value="chamber.thermocouple">Chamber/Thermocouple</option>
         <option value="chamber.pressure">Chamber/Pressure</option>
       </select>
-      <LineChart width={400} height={400} data={props.data}>
+      <LineChart width={400} height={400} data={data}>
         <XAxis dataKey="x">
           <Label value={properties[metadata.type].xaxis} />
         </XAxis>
@@ -56,26 +75,13 @@ const Graph = props => {
         </YAxis>
         <Line type="monotone" dataKey="y" stroke="#8884d8" />
       </LineChart>
+      <div>
+        Data: {data.length}
+        <br></br>
+        Count: {count.length}
+      </div>
     </div>
   );
 };
 
-const stateToProps = (state, ownProps) => {
-  let data = ownProps.data || [];
-  data = data.slice();
-  let x = state.data.sensorData.timestamp;
-  let y = state.data.sensorData[ownProps.type][ownProps.location];
-  data.push({ x: x, y: y });
-  if(data.length > 10){
-    data.shift();
-  }
-  ownProps.data = data;
-
-  return ({
-    data: data
-  });
-}
-
-
-//export default Graph;
-export default connect(stateToProps)(Graph)
+export default Graph;
