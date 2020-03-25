@@ -12,6 +12,7 @@ import * as serviceWorker from "./serviceWorker";
 
 const store = createStore(reducers);
 socketConnection(store);
+setInterval(() => {console.log(store.getState());}, 1000);
 
 ReactDOM.render(
   <Provider store={store}>
