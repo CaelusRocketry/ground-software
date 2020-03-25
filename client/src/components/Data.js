@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector } from "react-redux";
 
 import './Data.css';
 
 
 const Data = (props) => {
+
     const data = useSelector((state) => {
         let data = Object();
         let sensorData = state.data.sensorData;

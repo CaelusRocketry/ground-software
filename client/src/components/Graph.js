@@ -21,6 +21,11 @@ const properties = {
     yaxis: "Pressure (PSI)",
     title: "Pressure vs. Time",
   },
+  load: {
+    xaxis: "Time (s)",
+    yaxis: "Force (N)",
+    title: "Load vs. Time"
+  }
 };
 
 const Graph = props => {
@@ -54,8 +59,10 @@ const Graph = props => {
       >
         <option value="tank.thermocouple">Tank/Thermocouple</option>
         <option value="tank.pressure">Tank/Pressure</option>
+        <option value="tank.load">Tank/Load</option>
         <option value="chamber.thermocouple">Chamber/Thermocouple</option>
         <option value="chamber.pressure">Chamber/Pressure</option>
+        <option value="injector.pressure">Injector/Pressure</option>
       </select>
       <LineChart width={400} height={400} data={data}>
         <XAxis dataKey="x">
