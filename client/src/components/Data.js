@@ -19,9 +19,6 @@ class Data extends React.Component {
                 tank: 0
             },
             time: 0,
-            r: Math.random() * 256,
-            g: Math.random() * 256,
-            b: Math.random() * 256
         }
     }
 
@@ -57,31 +54,28 @@ class Data extends React.Component {
             thermo: newThermo,
             load: newLoad,
             time: this.state.time + 100,
-            r: Math.random() * 256,
-            g: Math.random() * 256,
-            b: Math.random() * 256
         });
     }
 
     render() {
         return (
             <div class="flex-container">
-                <div classe="data" style={{backgroundColor: 'rgb(' + this.state.r + ',' + this.state.g + ',' + this.state.b + ')'}}>
+                <div class="data">
                     Pressure:<br/><br/> 
                     Chamber: {this.state.pressure.chamber.toFixed(3)}<br/>
                     Injector: {this.state.pressure.injector.toFixed(3)}<br/>
                     Tank: {this.state.pressure.tank.toFixed(3)}<br/><br/>
                     Time-stamp: {this.state.time} ms
                 </div>
-                <div class="data" style={{backgroundColor: 'rgb(' + this.state.r + ',' + this.state.g + ',' + this.state.b + ')'}}>
+                <div class="data" >
                     Thermo:<br/><br/>
                     Chamber: {this.state.thermo.chamber.toFixed(3)}<br/>
-                    Tank: {this.state.thermo.tank.toFixed(3)}<br/><br/>
+                    Tank: {this.state.thermo.tank.toFixed(3)}<br/><br/><br/><br/>
                     Time-stamp: {this.state.time} ms
                 </div>
-                <div class="data" style={{backgroundColor: 'rgb(' + this.state.r + ',' + this.state.g + ',' + this.state.b + ')'}}>
+                <div class="data" >
                     Load:<br/><br/>
-                    Tank: {this.state.load.tank.toFixed(3)}<br/><br/>
+                    Tank: {this.state.load.tank.toFixed(3)}<br/><br/><br/><br/><br/><br/>
                     Time-stamp: {this.state.time} ms
                 </div>
             </div>
