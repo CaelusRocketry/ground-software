@@ -3,25 +3,25 @@ const initialState = {
         thermocouple: {
             chamber: 0.0, 
             tank: 0.0, 
-            state: "unknown"
+            state: undefined
         },
         pressure: {
             chamber: 0.0, 
             tank: 0.0, 
             injector: 0.0,
-            state: "unknown"
+            state: undefined
         },
         load: {
             tank: 0.0, 
-            state: "unknown"
+            state: undefined
         },
         timestamp: 0.0
     }, 
     valveData: {
         solenoid: {
-            pressure_relief: "unknown", 
-            propellant_vent: "unknown", 
-            main_propellant_valve: "unknown"
+            pressure_relief: undefined, 
+            propellant_vent: undefined, 
+            main_propellant_valve: undefined
         }, 
         timestamp: 0.0
     },

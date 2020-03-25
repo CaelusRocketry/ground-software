@@ -14,7 +14,7 @@ const GraphPane = () => (
     <Header title="Graphs" />
     <div className="h-full border-2">
       <SplitPane className="view" split="horizontal" size="50%">
-        <Graph type="temperature" location="chamber" />
+        <Graph type="thermocouple" location="chamber" />
         <Graph type="pressure" location="tank" />
       </SplitPane>
     </div>

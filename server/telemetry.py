@@ -1,12 +1,9 @@
-import socket
-import threading
 import time
 import heapq
-import multiprocessing
+import socket
+import threading
 from packet import Packet, Log, LogPriority
 from enums import ValveLocation, ActuationType
-import ast
-import base64
 
 BYTE_SIZE = 8192
 
@@ -33,7 +30,9 @@ class Telemetry:
         self.sock.bind((ip, port))
         self.sock.listen(1)
         self.conn, self.addr = self.sock.accept()
-        Log("Creasted socket")
+        Log("Created socket")
+        self.start_time = time.time()
+
 
     def init_backend(self, b):
         self.backend = b
@@ -51,6 +50,7 @@ class Telemetry:
         self.listen_thread.start()
         self.heartbeat_thread.start()
 
+
     def send(self):
         """ Constantly sends next packet from queue to ground station """
         while True:
@@ -58,6 +58,7 @@ class Telemetry:
                 encoded = heapq.heappop(self.queue_send)[1]
                 self.conn.send(encoded)
             time.sleep(DELAY_SEND)
+
 
     def listen(self):
         """ Constantly listens for any from ground station """
@@ -69,15 +70,18 @@ class Telemetry:
             self.ingest_thread.start()
             time.sleep(DELAY_LISTEN)
 
+
     def enqueue(self, packet):
         """ Encripts and enqueues the given Packet """
         packet_str = packet.to_string().encode()
         heapq.heappush(self.queue_send, (packet.level, packet_str))
 
+
     def ingest(self, packet_str):
         """ Prints any packets received """
         packet = Packet.from_string(packet_str)
         for log in packet.logs:
+            log.timestamp = int(log.timestamp - self.start_time)
             print(log.to_string())
             if log.header == "heartbeat":
                 self.backend.update_heartbeat(log.__dict__)
@@ -90,32 +94,11 @@ class Telemetry:
             
             log.save()
 
+
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while True:
-#            continue
             log = Log(header="heartbeat", message="AT")
             self.enqueue(Packet(logs=[log], level=LogPriority.INFO))
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
-
-
-# GS_IP, GS_PORT = '127.0.0.1', 5005
-# telem = Telemetry(GS_IP, GS_PORT)
-# telem.begin()
-
-# def send_actuation_command(loc, act_type, priority):
-#     header = "solenoid_actuate"
-#     message = {"valve_location": ValveLocation(loc), "actuation_type": ActuationType(act_type), "priority": int(priority)}
-#     print(message)
-#     log = Log(header, message)
-#     telem.enqueue(Packet(logs=[log], level=LogPriority.CRIT))
-
-
-# while True:
-#     inp = input().split()
-#     cmd = inp[0]
-#     args = inp[1:]
-#     print(args)
-#     if cmd == "actuate":
-#         send_actuation_command(*args)

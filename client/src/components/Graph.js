@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import {
   LineChart,
@@ -6,83 +6,30 @@ import {
   Label,
   XAxis,
   YAxis,
-  ResponsiveContainer,
 } from "recharts";
 
+import { connect } from 'react-redux'
+
+
 const properties = {
-  temperature: {
-    xaxis: "Time (ms)",
+  thermocouple: {
+    xaxis: "Time (s)",
     yaxis: "Temperature (C)",
     title: "Temperature vs. Time",
   },
   pressure: {
-    xaxis: "Time (ms)",
+    xaxis: "Time (s)",
     yaxis: "Pressure (PSI)",
     title: "Pressure vs. Time",
   },
 };
 
 const Graph = props => {
-  const [time, setTime] = useState(0);
-  const [data, setData] = useState([]);
-
+  console.log(props);
   const [metadata, setMetadata] = useState({
     type: props.type,
-    location: props.location,
+    location: props.location
   });
-
-  const getData = (type, location) => {
-    switch (type) {
-      case "temperature":
-        if (location === "chamber") {
-          return Math.random();
-        }
-        if (location === "tank") {
-          return Math.random() * 10 + 10;
-        }
-        break;
-      case "pressure":
-        if (location === "chamber") {
-          return Math.random() * 100 + 100;
-        }
-        if (location === "tank") {
-          return Math.random() * 1000 + 1000;
-        }
-        break;
-      default:
-        break;
-    }
-  };
-
-  const updateData = () => {
-    let newTime = null;
-    setTime(time => {
-      newTime = time;
-      return time + 100;
-    });
-    setData(data => {
-      let newData = [...data];
-      const newValue = getData(metadata.type, metadata.location);
-      newData.push({ x: newTime, y: newValue });
-      if (newData.length > 10) {
-        newData.shift();
-      }
-      return newData;
-    });
-  };
-
-  const resetData = () => {
-    setTime(0); // FIXME: This should be replaced with the proper value
-    setData([]);
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      updateData();
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div>
@@ -90,16 +37,17 @@ const Graph = props => {
         onChange={e => {
           const [curLocation, curType] = e.target.value.split(".");
           setMetadata({ type: curType, location: curLocation });
-          resetData();
+          props.type = curType;
+          props.location = curLocation;
         }}
         value={metadata.location + "." + metadata.type}
       >
-        <option value="tank.temperature">Tank/Temperature</option>
+        <option value="tank.thermocouple">Tank/Thermocouple</option>
         <option value="tank.pressure">Tank/Pressure</option>
-        <option value="chamber.temperature">Chamber/Temperature</option>
+        <option value="chamber.thermocouple">Chamber/Thermocouple</option>
         <option value="chamber.pressure">Chamber/Pressure</option>
       </select>
-      <LineChart width={400} height={400} data={data}>
+      <LineChart width={400} height={400} data={props.data}>
         <XAxis dataKey="x">
           <Label value={properties[metadata.type].xaxis} />
         </XAxis>
@@ -112,4 +60,22 @@ const Graph = props => {
   );
 };
 
-export default Graph;
+const stateToProps = (state, ownProps) => {
+  let data = ownProps.data || [];
+  data = data.slice();
+  let x = state.data.sensorData.timestamp;
+  let y = state.data.sensorData[ownProps.type][ownProps.location];
+  data.push({ x: x, y: y });
+  if(data.length > 10){
+    data.shift();
+  }
+  ownProps.data = data;
+
+  return ({
+    data: data
+  });
+}
+
+
+//export default Graph;
+export default connect(stateToProps)(Graph)
