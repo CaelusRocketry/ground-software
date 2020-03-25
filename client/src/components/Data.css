@@ -1,0 +1,22 @@
+.flex-container {
+    display: flex;
+    flex-wrap: nowrap;
+    background-color: rgb(17, 156, 91);
+    border-radius: 25px;
+    padding: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
+    text-align: center;
+    align-items: stretch;
+    width: 50%;
+    vertical-align: center;
+    position: absolute;
+    left: 25%;
+  }
+.flex-container > data {
+    border-radius: 25px;
+    padding: 20px;
+    width: 350px;
+    height: 40px; 
+    margin: 10px;
+}
