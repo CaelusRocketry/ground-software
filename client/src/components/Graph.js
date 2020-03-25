@@ -23,20 +23,11 @@ const properties = {
   },
 };
 
-const sensors = {
-  thermocouple: ["tank", "chamber"],
-  pressure: ["tank", "chamber"]
-}
-
 const Graph = props => {
   console.log(props);
   const [metadata, setMetadata] = useState({
     type: props.type,
     location: props.location
-  });
-
-  const count = useSelector((state) => {
-    return state.data.sensorData.timestamp
   });
   
   const data = useSelector((state) => {
@@ -75,11 +66,6 @@ const Graph = props => {
         </YAxis>
         <Line type="monotone" dataKey="y" stroke="#8884d8" />
       </LineChart>
-      <div>
-        Data: {data.length}
-        <br></br>
-        Count: {count.length}
-      </div>
     </div>
   );
 };
