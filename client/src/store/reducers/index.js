@@ -1,7 +1,6 @@
 import { combineReducers } from "redux";
 
-// import counterReducer from "./counter";
-import sensorDataReducer from "./sensor";
+import dataReducer from "./reducer";
 
-export default combineReducers({ sensorData: sensorDataReducer });
+export default combineReducers({ data: dataReducer });
 

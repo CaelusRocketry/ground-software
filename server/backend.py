@@ -1,13 +1,11 @@
 from flask import Flask, render_template
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, Namespace
-import threading, time
-from packet import Packet, Log
 
 
 class Backend(Namespace):
 
-    def init_telem(self, app, socketio):
+    def init(self, app, socketio):
         self.app = app
         self.socketio = socketio
 
