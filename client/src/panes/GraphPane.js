@@ -13,7 +13,7 @@ const GraphPane = () => (
   <div>
     <Header title="Graphs" />
     <div className="h-full border-2">
-      <SplitPane className="view" split="horizontal" size="50%">
+      <SplitPane style={{marginTop:"32px"}} className="view" split="horizontal" size="50%">
         <Graph type="thermocouple" location="chamber" />
         <Graph type="pressure" location="tank" />
       </SplitPane>
