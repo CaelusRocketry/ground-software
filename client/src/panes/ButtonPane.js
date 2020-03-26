@@ -11,23 +11,29 @@ const ButtonPane = () => {
 
   const [abortView, setAbortView] = useState(false);
   const [valveView, setValveView] = useState(false);
-
-  const confirmation = (message) => {
-    alert(message);
-  }
   
   const soft_abort = () => {
-    confirmation("Are you sure you want to soft abort?");
-    dispatch(abortPressed({type: "soft", pressed: true}));
+    if (window.confirm("Are you sure you want to soft abort?")) {
+      dispatch(abortPressed({type: "soft", pressed: true}));
+      console.log("Soft abort completed");
+    }
+    else {
+      console.log("Soft abort aborted");
+    }
   }
   
   const hard_abort = () => {
-    confirmation("Are you sure you want to hard abort?");
-    dispatch(abortPressed({type: "hard", pressed: true}));
+    if (window.confirm("Are you sure you want to hard abort?")) {
+      dispatch(abortPressed({type: "hard", pressed: true}));
+      console.log("Hard abort completed");
+    }
+    else {
+      console.log("Hard abort aborted");
+    }
   }
   
   const override = () => {
-    confirmation("Are you sure you want to override?");
+    //confirmation("Are you sure you want to override?");
     dispatch(abortPressed({type: "hard", pressed: true}));
   }
   
