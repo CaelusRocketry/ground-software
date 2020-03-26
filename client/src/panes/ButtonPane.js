@@ -30,8 +30,8 @@ const ButtonPane = () => {
     alert("Add functionality")
   }
   
-  const sensor_data_request = () => {
-    alert("Add functionality")
+  const request = (type) => {
+    dispatch(requestPressed({type: type, pressed: true}));
   }
   
   const valve_state_request = () => {
@@ -41,6 +41,7 @@ const ButtonPane = () => {
   const progress = () => {
     // If the pi isn't 100% ready to progress to next stage, mention that here. Otherwise, progress (w/ confirmation).
     confirmation("Are you sure you want to progress to" + next_stage + "?");
+    dispatch(generalPressed({type: "progress", pressed: true}))
   }
 
 
@@ -83,8 +84,8 @@ const ButtonPane = () => {
       </div>
     </div>
 
-    <div><button onClick={sensor_data_request} class={btn_big}>Request Sensor Data</button></div>
-    <div><button onClick={valve_state_request} class={btn_big}>Request Valve State</button></div>
+    <div><button onClick={() => request("sensor")} class={btn_big}>Request Sensor Data</button></div>
+    <div><button onClick={() => request("valve")} class={btn_big}>Request Valve State</button></div>
     <div><button onClick={progress} class={btn_big}>Progress To {next_stage}</button></div>
   </div>
   );
