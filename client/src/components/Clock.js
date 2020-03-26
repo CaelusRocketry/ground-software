@@ -26,8 +26,8 @@ class Clock extends React.Component {
         return (
             <div>
                 <br/><br/><br/><br/><br/>
-                <div class="flex-container">
-                    <div class="time">
+                <div className="flex-container">
+                    <div className="time">
                         Welcome to Project Caelus Ground Station<br/><br/>
                         {this.state.time}.
                     </div>
