@@ -18,30 +18,28 @@ const Data = (props) => {
                 if(sensorData[type][loc].length > 0){
                     data[type][loc] = sensorData[type][loc][sensorData[type][loc].length - 1];
                 }
-                console.log(data[type][loc]);
             }
         }
-        console.log(data);
         return data;
     });
 
       
     return (
-        <div class="flex-container">
-        <div class="data">
+        <div className="flex-container">
+        <div className="data">
             Pressure:<br/><br/> 
             Chamber: {data.pressure.chamber.toFixed(3)}<br/>
             Injector: {data.pressure.injector.toFixed(3)}<br/>
             Tank: {data.pressure.tank.toFixed(3)}<br/><br/>
             Time-stamp: {data.time} s
         </div>
-        <div class="data">
+        <div className="data">
             Thermo:<br/><br/>
             Chamber: {data.thermocouple.chamber.toFixed(3)}<br/>
             Tank: {data.thermocouple.tank.toFixed(3)}<br/><br/><br/><br/>
             Time-stamp: {data.time} s
         </div>
-        <div class="data">
+        <div className="data">
             Load:<br/><br/>
             Tank: {data.load.tank.toFixed(3)}<br/><br/><br/><br/><br/><br/>
             Time-stamp: {data.time} s

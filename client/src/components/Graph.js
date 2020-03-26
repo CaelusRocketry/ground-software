@@ -29,7 +29,6 @@ const properties = {
 };
 
 const Graph = props => {
-  console.log(props);
   const [metadata, setMetadata] = useState({
     type: props.type,
     location: props.location

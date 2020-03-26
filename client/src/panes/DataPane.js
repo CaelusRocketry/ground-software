@@ -1,5 +1,4 @@
 import React from 'react';
-import SplitPane from "react-split-pane";
 import Data from "../components/Data";
 import Header from "../components/Header";
 import "../index.css";
