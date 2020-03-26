@@ -3,7 +3,6 @@ import React from "react";
 import { Timeline, Event } from "../components/Timeline";
 import Header from "../components/Header";
 
-import Button from "./../components/Button"
 
 const SequencePane = () => (
   <div className="pane">
@@ -16,7 +15,6 @@ const SequencePane = () => (
       <Event interval="Pending" title={"Pre-Ignition"}></Event>
       <Event interval="Pending" title={"Disconnection"}></Event>
     </Timeline>
-    <Button />
   </div>
 );
 

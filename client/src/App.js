@@ -12,14 +12,13 @@ const App = () => {
 
   const handleChange = (values) => {
     console.log(values);
-    setView(view => {
-      console.log("HI");
+    setView(() => {
       return values[0].value === "statistics" ? <StatisticsView /> : <ActionsView />
     });
   };
 
   const options = [{label: "Statistics", value: "statistics"}, {label: "Actions", value: "actions"}]
-  const select = <Select options={options} onChange={handleChange} />;
+  const select = <Select options={options} onChange={handleChange} placeholder="Statistics" />;
 
   return (
     <div className="App font-sans bg-light-1 text-dark-1">
