@@ -13,7 +13,22 @@ export const updateHeartbeat = (data) => ({
   data
 });
 
-export const buttonStatus = (status) => ({
-  type: "BUTTON_PRESSED",
-  status
+export const generalPressed = (data) => ({
+  type: "GENERAL_PRESSED",
+  data
+});
+
+export const abortPressed = (data) => ({
+  type: "ABORT_PRESSED",
+  data
+});
+
+export const requestPressed = (data) => ({
+  type: "REQUEST_PRESSED",
+  data
+});
+
+export const actuatePressed = (data) => ({
+  type: "ACTUATE_PRESSED",
+  data
 });

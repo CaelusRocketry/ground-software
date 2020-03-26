@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 
-import buttonPressed from "./buttonPressed";
-import dataReducer from "./reducer";
+import buttonReducer from "./buttons";
+import dataReducer from "./stats";
 
-export default combineReducers({ data: dataReducer, buttonPressed: buttonPressed });
+export default combineReducers({ data: dataReducer, buttonReducer: buttonReducer });
