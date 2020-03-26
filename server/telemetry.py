@@ -25,13 +25,17 @@ class Telemetry:
     def __init__(self, ip, port):
         """ Based on given IP and port, create and connect a socket """
         self.queue_send = []
+        self.connect(ip, port)
+        self.start_time = time.time()
+
+
+    def connect(self, ip, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((ip, port))
         self.sock.listen(1)
         self.conn, self.addr = self.sock.accept()
         Log("Created socket")
-        self.start_time = time.time()
 
 
     def init_backend(self, b):

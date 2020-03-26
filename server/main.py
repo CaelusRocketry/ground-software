@@ -23,7 +23,7 @@ if __name__ == "__main__":
     print("listening and sending")
 
     b = Backend('/')
-    b.init(app, socketio)
+    b.init(app, socketio, telem)
     telem.init_backend(b)
 
     socketio.on_namespace(b)
