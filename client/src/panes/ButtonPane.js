@@ -18,8 +18,9 @@ const ButtonPane = () => {
   const [valveView, setValveView] = useState(false);
   
   const abort = (type) => {
-    confirmation("Are you sure you want to " + type + " abort?");
-    dispatch(abortPressed({type: type, pressed: true}));
+    if (window.confirm("Are you sure you want to " + type + " abort?")) {
+      dispatch(abortPressed({type: type, pressed: true}));
+    }
   }
   
   const solenoid_actuation = () => {
@@ -36,8 +37,9 @@ const ButtonPane = () => {
   
   const progress = () => {
     // If the pi isn't 100% ready to progress to next stage, mention that here. Otherwise, progress (w/ confirmation).
-    confirmation("Are you sure you want to progress to" + next_stage + "?");
-    dispatch(generalPressed({type: "progress", pressed: true}))
+    if (window.confirm("Are you sure you want to progress to" + next_stage + "?")) {
+      dispatch(generalPressed({type: "progress", pressed: true}));
+    }
   }
 
 
