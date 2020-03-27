@@ -10,8 +10,8 @@ const initialState = {
         main_propellant_valve: [null, null]
     },
     request: {
-        valve: false,
-        sensor: false
+        valve: [null, null],
+        sensor: [null, null]
     },
     general: {
         progress: false
@@ -27,7 +27,7 @@ const buttonPressed = (state = initialState, action) => {
             state.abort[action.data.type] = action.data.pressed;
             return state;
         case 'REQUEST_PRESSED':
-            state.request[action.data.type] = action.data.pressed;
+            state.request[action.data.type] = [action.data.objectType, action.data.location];
             return state;
         case 'ACTUATE_PRESSED':
             let valve = action.data.valve;
