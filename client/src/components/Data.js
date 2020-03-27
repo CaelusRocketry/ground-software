@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from "react-redux";
-import store from '../store/reducers/index';
 
 import './Data.css';
 
