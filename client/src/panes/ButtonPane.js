@@ -37,7 +37,7 @@ const ButtonPane = () => {
   
   const progress = () => {
     // If the pi isn't 100% ready to progress to next stage, mention that here. Otherwise, progress (w/ confirmation).
-    if (window.confirm("Are you sure you want to progress to" + next_stage + "?")) {
+    if (window.confirm("Are you sure you want to progress to " + next_stage + "?")) {
       dispatch(generalPressed({type: "progress", pressed: true}));
     }
   }
@@ -58,20 +58,20 @@ const ButtonPane = () => {
     <div class={valveView ? "block" : "hidden"}>
       <div>
         <form class="mt-4" onSubmit={solenoid_actuation}>
-          <label>Valve: </label>
-          <select class="ml-2 mr-4">
+          <b><label>Valve: </label></b>
+          <select class="ml-2 mr-4 border-2">
             <option>Main Propellant Valve</option>
             <option>Pressure Relief Valve</option>
             <option>Propellant Vent Valve</option>
           </select>
-          <label>Actuation Type: </label>
-          <select class="ml-2 mr-4">
+          <b><label>Actuation Type: </label></b>
+          <select class="ml-2 mr-4 border-2">
             <option>Pulse</option>
             <option>Open Vent</option>
             <option>Close Vent</option>
           </select>
-          <label>Priority: </label>
-          <select class="ml-2 mr-2">
+          <b><label>Priority: </label></b>
+          <select class="ml-2 mr-2 border-2">
             <option>1</option>
             <option>2</option>
             <option>3</option>
