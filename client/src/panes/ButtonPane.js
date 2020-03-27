@@ -37,7 +37,7 @@ const ButtonPane = () => {
   
   const progress = () => {
     // If the pi isn't 100% ready to progress to next stage, mention that here. Otherwise, progress (w/ confirmation).
-    if (window.confirm("Are you sure you want to progress to" + next_stage + "?")) {
+    if (window.confirm("Are you sure you want to progress to " + next_stage + "?")) {
       dispatch(generalPressed({type: "progress", pressed: true}));
     }
   }
