@@ -48,7 +48,7 @@ const socketConnection = (store) => {
         }
         if(buttons.general.progress){
             header = "sensor_request"; message = {"sensor_type": buttons.request.sensor[0], "sensor_location": buttons.request.sensor[1]};
-            store.dispatch(requestPressed({type: "progress", pressed: false}));
+            store.dispatch(generalPressed({type: "progress", pressed: false}));
             sendMessage(header, message);
         }
         for(let valve in buttons.actuation){

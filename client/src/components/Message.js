@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { useSelector } from "react-redux";
 
 const Message = (props) => {
-    const [messages, updateMessages] = useState(
+    const [messages, updateMessages] = useState([]);
+    messages.push(
         {
         header: "sensor_data", 
         message: {
             "location": "chamber", 
             "type": "thermocouple", 
-            "value": (147, 152)
+            "value": [147, 152]
         }, 
         timestamp: 42
     });
@@ -18,65 +19,38 @@ const Message = (props) => {
         padding: "5px",
         marginLeft: "35px"
     };
-
-    const toArray = (obj) => {
-        let arr = Object.entries(obj);
-        
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i][0] == "message") {
-                arr[i][1] = Object.entries(arr[i][1]);
-            }
-        }
-
-        console.log(arr)
-        return arr;
-    };
-    const createDisplay = (arr) => {
+    const createDisplay = (obj) => {
         // arr = [[header, sensor_data], [message, [[location, chamber], [type, thermocouple], [value, 147]]], [timestamp, 42]]
-        let extendedArray = []
-        for (let array = 0; array < arr.length; array++) {
-            if (typeof(arr[array]) == Array) { // 100% case since everything is an array
-
-                for (let arrayTwo = 0; arrayTwo < arr[array].length; arrayTwo++) { // iterates through things inside 1st layer arrays
-
-                    if (typeof(arr[array][arrayTwo]) == Array) { // rare case, only for message object --> array
-
-                        for (let arrayThree = 0; arrayThree < arr[array][arrayTwo].length; arrayThree++) { // 
-                            
-                            if (typeof(arr[array][arrayTwo][arrayThree]) == Array) {
-
-                                for (let arrayFour = 0; arrayFour < arr[array][arrayTwo][arrayThree].length; arrayFour++) {
-                                    extendedArray.push(arr[array][arrayTwo][arrayThree][arrayFour]);
-                                }
-                            }
-                            else {
-                                extendedArray.push(arr[array][arrayTwo][arrayThree]);
-                            }
-
-                        } 
-                    }
-                    else {
-                        extendedArray.push(arr[array][arrayTwo]);
-                    }
-                }
-
-            }
-
-            else {
-                extendedArray.push(arr[array]);
-            }
+        let header = obj.header;
+        let message = obj.message;
+        let timestamp = obj.timestamp;
+        let messageArr = [];
+        for(let name in message){
+            messageArr.push(name + ": " + message[name]);
         }
-
-        return extendedArray;
+        return (
+            <div>
+                <h3 class="text-lg font-bold">{header}</h3>
+                <p class="text-xs mb-2">- {timestamp} seconds</p>
+                {messageArr.map(element => (
+                    <div>
+                        <tb>{element}</tb>
+                    </div>
+                ))}
+                <br></br>
+            </div>
+        )
     };
 
     return (
         <div>
             <body>
                 <ol className="list-group" style={style}>
-                        <li>
-                            {createDisplay(toArray(messages))}
-                        </li>
+                        {messages.map(data => 
+                            <li>
+                                {createDisplay(data)}
+                            </li>    
+                        )}
                 </ol>
             </body>
         </div>
