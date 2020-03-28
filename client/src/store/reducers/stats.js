@@ -31,13 +31,15 @@ const updateData = (state = initialState, action) => {
     let [message, timestamp] = [undefined, undefined];
     if(['UPDATE_SENSOR_DATA', 'UPDATE_VALVE_DATA', 'UPDATE_HEARTBEAT'].includes(action.type)){
         message = action.data.message;
-        timestamp = action.data.timestamp;
+        timestamp = action.data.timestamp.toFixed(0);
     }
     switch (action.type) {
         case 'UPDATE_SENSOR_DATA':
             for(let type in message){
                 for(let loc in message[type]){
-                    let value = message[type][loc];
+                    console.log("SENSOR DATA INCOMING");
+                    console.log(message[type][loc].value);
+                    let value = message[type][loc].value[1].toFixed(3);
                     state.sensorData[type][loc].push(value);
                     if(state.sensorData[type][loc].length > 10){
                         state.sensorData[type][loc].shift();

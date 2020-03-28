@@ -21,6 +21,7 @@ const Data = (props) => {
             }
         }
 
+        console.log("HII");
         console.log(data);
         return data;
     });
@@ -30,24 +31,26 @@ const Data = (props) => {
         return valveState;
     });
 
+    console.log(data);
+
     return (
         <div class="flex-container">
             <div class="data">
                 <b>Pressure:</b><br/><br/> 
-                <i>Chamber:</i> <b>{data.pressure.chamber.toFixed(3)}</b><br/>
-                <i>Injector:</i> <b>{data.pressure.injector.toFixed(3)}</b><br/>
-                <i>Tank:</i> <b>{data.pressure.tank.toFixed(3)}</b><br/>
-                <i>Time-stamp:</i> <b>{data.time}</b> s<br/>
+                <i>Chamber:</i> <b>{data.pressure.chamber}</b><br/>
+                <i>Injector:</i> <b>{data.pressure.injector}</b><br/>
+                <i>Tank:</i> <b>{data.pressure.tank}</b><br/>
+                <i>Time-stamp:</i> <b>{data.time}s</b><br/>
             </div>
             <div class="data">
                 <b>Thermo:</b><br/><br/>
-                <i>Chamber:</i> <b>{data.thermocouple.chamber.toFixed(3)}</b><br/>
-                <i>Tank:</i> <b>{data.thermocouple.tank.toFixed(3)}</b><br/><br/><br/>
+                <i>Chamber:</i> <b>{data.thermocouple.chamber}</b><br/>
+                <i>Tank:</i> <b>{data.thermocouple.tank}</b><br/><br/><br/>
                 <i>Time-stamp:</i> <b>{data.time}</b> s<br/>
             </div>
             <div class="data">
                 <b>Load:</b><br/><br/>
-                <i>Tank:</i> <b>{data.load.tank.toFixed(3)}</b><br/><br/><br/><br/><br/>
+                <i>Tank:</i> <b>{data.load.tank}</b><br/><br/><br/><br/><br/>
                 <i>Time-stamp:</i> <b>{data.time}</b> s<br/>
             </div>
             <div class="data">
