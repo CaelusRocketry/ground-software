@@ -5,14 +5,78 @@ const Message = (props) => {
     const [messages, updateMessages] = useState([]);
     messages.push(
         {
-        header: "sensor_data", 
-        message: {
-            "location": "chamber", 
-            "type": "thermocouple", 
-            "value": [147, 152]
-        }, 
-        timestamp: 42
-    });
+            header: "sensor_data", 
+            message: {
+                "location": "chamber", 
+                "type": "thermocouple", 
+                "value": [147, 152]
+            }, 
+            timestamp: 42
+        },
+        {
+            header: "more_fake_data",
+            message: {
+                "location": "injector",
+                "type": "temperature",
+                "value": [1000, 1007]
+            },
+            timestamp: 43
+        },
+        {
+            header: "more_fake_data",
+            message: {
+                "location": "injector",
+                "type": "temperature",
+                "value": [1000, 1007]
+            },
+            timestamp: 43
+        },
+        {
+            header: "more_fake_data",
+            message: {
+                "location": "injector",
+                "type": "temperature",
+                "value": [1000, 1007]
+            },
+            timestamp: 43
+        },
+        {
+            header: "more_fake_data",
+            message: {
+                "location": "injector",
+                "type": "temperature",
+                "value": [1000, 1007]
+            },
+            timestamp: 43
+        },
+        {
+            header: "more_fake_data",
+            message: {
+                "location": "injector",
+                "type": "temperature",
+                "value": [1000, 1007]
+            },
+            timestamp: 43
+        },
+        {
+            header: "more_fake_data",
+            message: {
+                "location": "injector",
+                "type": "temperature",
+                "value": [1000, 1007]
+            },
+            timestamp: 43
+        },
+        {
+            header: "more_fake_data",
+            message: {
+                "location": "injector",
+                "type": "temperature",
+                "value": [1000, 1007]
+            },
+            timestamp: 43
+        },
+    );
 
     const style = {
         background: "#F5F5F5",
@@ -43,7 +107,7 @@ const Message = (props) => {
     };
 
     return (
-        <div>
+        <div style={{overflowY: "scroll"}}>
             <body>
                 <ol className="list-group" style={style}>
                         {messages.map(data => 
