@@ -10,7 +10,7 @@ const socketConnection = (store) => {
         console.log("Header: " + log.header);
         if(log.header == 'heartbeat'){
             store.dispatch(updateHeartbeat(log));
-            store.dispatch(addResponse(log));
+//            store.dispatch(addResponse(log));
         }
         else if(log.header == 'progress'){
             store.dispatch(updateStage(log));
