@@ -13,9 +13,9 @@ class Backend(Namespace):
         print("Initialized")
 
     
-    def update_heartbeat(self, message):
+    def update_general(self, message):
         #print(message)
-        self.socketio.emit('heartbeat',  message)
+        self.socketio.emit('general',  message)
 
     
     def update_sensor_data(self, message):
@@ -28,7 +28,7 @@ class Backend(Namespace):
         self.socketio.emit('update valve data',  message)
 
 
-    def on_button_press(self, message):
-        print(message)
-        log = Log(header="test", message={"response": message})
+    def on_button_press(self, data):
+        print(data)
+        log = Log(header=data['header'], message=data['message'])
         self.telem.enqueue(Packet(logs=[log], level=LogPriority.INFO))
