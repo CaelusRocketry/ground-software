@@ -13,6 +13,16 @@ export const updateHeartbeat = (data) => ({
   data
 });
 
+export const updateStage = (data) => ({
+  type: "UPDATE_STAGE", 
+  data
+});
+
+export const addResponse = (data) => ({
+  type: "ADD_RESPONSE", 
+  data
+});
+
 export const generalPressed = (data) => ({
   type: "GENERAL_PRESSED",
   data

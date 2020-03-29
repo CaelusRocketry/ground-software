@@ -1,13 +1,29 @@
 import io from 'socket.io-client';
-import { updateSensorData, updateValveData, updateHeartbeat, generalPressed, abortPressed, requestPressed, actuatePressed } from './store/actions';
+import { updateSensorData, updateValveData, updateHeartbeat, generalPressed, abortPressed, requestPressed, actuatePressed, updateStage, addResponse } from './store/actions';
 
 
 const socket = io('http://localhost:5000');
 
 const socketConnection = (store) => {
-    socket.on('heartbeat', function(log){ 
-        store.dispatch(updateHeartbeat(log));
+    socket.on('general', function(log){
+        console.log(log);
+        console.log("Header: " + log.header);
+        if(log.header == 'heartbeat'){
+            store.dispatch(updateHeartbeat(log));
+            store.dispatch(addResponse(log));
+        }
+        else if(log.header == 'progress'){
+            store.dispatch(updateStage(log));
+            store.dispatch(addResponse(log));
+        }
+        else if(log.header == 'response'){
+            store.dispatch(addResponse(log));
+        }
+        else{
+            console.log("Unknown general header");
+        }
     });
+
     socket.on('update sensor data', function(log){ 
         store.dispatch(updateSensorData(log));
     });
@@ -60,9 +76,6 @@ const socketConnection = (store) => {
             store.dispatch(actuatePressed({valve: valve, type: type, priority: priority}));
             sendMessage(header, message);
         }
-
-
-
     }
 
     store.subscribe(handleChange);
