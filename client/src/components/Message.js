@@ -81,7 +81,8 @@ const Message = (props) => {
     const style = {
         background: "#F5F5F5",
         padding: "5px",
-        marginLeft: "35px"
+        marginLeft: "35px",
+        marginRight: "35px"
     };
     const createDisplay = (obj) => {
         // arr = [[header, sensor_data], [message, [[location, chamber], [type, thermocouple], [value, 147]]], [timestamp, 42]]
