@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import Plot from 'react-plotly.js';
 
 import {
   LineChart,
@@ -35,16 +36,21 @@ const Graph = props => {
   });
   
   const data = useSelector((state) => {
-    let data = [];
+    let x_values = [];
+    let y_values = [];
+
     let x = state.data.sensorData.timestamp;
     let y = state.data.sensorData[metadata.type][metadata.location];
     if(x.length !== y.length){
       console.log("X: " + x.length + ", Y: " + y.length);
     }
     for(let i = 0; i < x.length; i++){
-      data.push({x: x[i], y: y[i]});
+      x_values.push(x[i]);
+      y_values.push(y[i]);
     }
-    return data;
+    return {
+      'x': x_values, 
+      'y': y_values};
   });
 
   return (
@@ -63,15 +69,37 @@ const Graph = props => {
         <option value="chamber.pressure">Chamber/Pressure</option>
         <option value="injector.pressure">Injector/Pressure</option>
       </select>
-      <LineChart width={400} height={400} data={data}>
-        <XAxis dataKey="x">
-          <Label value={properties[metadata.type].xaxis} />
-        </XAxis>
-        <YAxis dataKey="y">
-          <Label value={properties[metadata.type].yaxis} angle={270} />
-        </YAxis>
-        <Line type="monotone" dataKey="y" stroke="#8884d8" />
-      </LineChart>
+      <Plot
+        data={[
+          {
+            x: data['x'],
+            y: data['y'],
+            type: 'scatter',
+            mode: 'lines+markers',
+            marker: {color: 'red'},
+          },
+          {type: 'lines', x: data['x'], y: data['y']},
+        ]}
+        layout={ 
+          {width: 500, height: 500, title: 'A Fancy Plot'},
+          {xaxis: {
+            title: properties[metadata.type].xaxis,
+            titlefont: {
+              family: "Courier New, monospace",
+              size: 18,
+              color: "#7f7f7f"
+            }
+          }},
+          {yaxis: {
+            title: properties[metadata.type].yaxis,
+            titlefont: {
+              family: "Courier New, monospace",
+              size: 18,
+              color: "#7f7f7f"
+            }
+          }}
+         }
+      />
     </div>
   );
 };
