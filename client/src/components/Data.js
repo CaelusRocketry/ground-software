@@ -4,26 +4,15 @@ import { useSelector } from "react-redux";
 import './Data.css';
 
 const Data = (props) => {
-    const data = useSelector((state) => {
-        let data = Object();
-        let sensorData = state.data.sensorData;
-        data.time = sensorData.timestamp[sensorData.timestamp.length - 1];
 
-        for(let type in sensorData){
-            data[type] = {};
-            
-            for(let loc in sensorData[type]){
-                // Default value
-                data[type][loc] = 0.000;
-                if(sensorData[type][loc].length > 0){
-                    data[type][loc] = sensorData[type][loc][sensorData[type][loc].length - 1];
-                }
-            }
-        }
+    const data_info = useSelector((state) => {
+        let data_info = Object();
+        return data_info;
+    });
 
-        console.log("HII");
-        console.log(data);
-        return data;
+    const sensorState = useSelector((state) => {
+        let sensorState = state.data.sensorData;
+        return sensorState;
     });
 
     const valveState = useSelector((state) => {
@@ -31,35 +20,61 @@ const Data = (props) => {
         return valveState;
     });
 
-    console.log(data);
+    const heartbeatState = useSelector((state) => {
+        let heartbeatState = state.data.heartbeat;
+        return heartbeatState;
+    });
+
+    const style = {
+        background: "#F5F5F5",
+        padding: "15px",
+        margin: "5px",
+    };
 
     return (
-        <div class="flex-container">
-            <div class="data">
-                <b>Pressure:</b><br/><br/> 
-                <i>Chamber:</i> <b>{data.pressure.chamber}</b><br/>
-                <i>Injector:</i> <b>{data.pressure.injector}</b><br/>
-                <i>Tank:</i> <b>{data.pressure.tank}</b><br/>
-                <i>Time-stamp:</i> <b>{data.time}s</b><br/>
-            </div>
-            <div class="data">
-                <b>Thermo:</b><br/><br/>
-                <i>Chamber:</i> <b>{data.thermocouple.chamber}</b><br/>
-                <i>Tank:</i> <b>{data.thermocouple.tank}</b><br/><br/><br/>
-                <i>Time-stamp:</i> <b>{data.time}</b> s<br/>
-            </div>
-            <div class="data">
-                <b>Load:</b><br/><br/>
-                <i>Tank:</i> <b>{data.load.tank}</b><br/><br/><br/><br/><br/>
-                <i>Time-stamp:</i> <b>{data.time}</b> s<br/>
-            </div>
-            <div class="data">
-                <b>Valves:</b><br/>
-                <i>Pressure Relief Valve:</i> <b>{valveState.solenoid.pressure_relief}</b><br/><br/>
-                <i>Propellant Vent:</i> <b>{valveState.solenoid.pressure_relief}</b><br/><br/>
-                <i>Main Propellant Valve:</i> <b>{valveState.solenoid.pressure_relief}</b>
-            </div>
-        </div>    
+        <div> <center> 
+            <body>
+                <h3 class="text-lg font-bold">Sensors</h3>  
+
+                <div  style={style}>
+                    <h4>Tank</h4> 
+                        pressure: {sensorState.pressure.tank[sensorState.pressure.tank.length - 1]}  <br/>
+                        thermo: {sensorState.thermocouple.tank[sensorState.thermocouple.tank.length - 1]} <br />
+                        load: {sensorState.load.tank[sensorState.load.tank.length - 1]}  <br/>
+                    <br></br>
+
+                    <h4>Chamber</h4> 
+                        pressure: {sensorState.pressure.chamber[sensorState.pressure.chamber.length - 1]}  <br/>
+                        thermo: {sensorState.thermocouple.chamber[sensorState.thermocouple.chamber.length - 1]} <br/>
+                    <br></br>
+
+                    <h4>Injector</h4>
+                        pressure: {sensorState.pressure.injector[sensorState.pressure.injector.length - 1]}  <br/>  
+                    <br></br>
+                    timestamp: {sensorState.timestamp[sensorState.timestamp.length - 1]}  <br/>  
+                </div>
+
+                <br></br>
+
+                <h3 class="text-lg font-bold">Valves</h3> 
+                 
+                <div  style={style}>
+                    pressure relief: {valveState.solenoid.pressure_relief} <br/>  
+                    propellant: {valveState.solenoid.propellant_vent} <br/> 
+                    main propellant: {valveState.solenoid.main_propellant_valve} <br/> 
+                    <br></br>
+                    timestamp: {valveState.timestamp}  <br/>  
+                </div>
+
+                <br></br>
+
+                <h3 class="text-lg font-bold">Heartbeat</h3> 
+                <div  style={style}>
+                    timestamp: {heartbeatState.timestamp}  <br/>  
+                </div>
+
+            </body>
+        </center> </div>
     );
 }
 

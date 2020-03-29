@@ -9,10 +9,7 @@ const StatisticsView = () => (
   <SplitPane className="view" split="vertical" defaultSize="23%">
     <SequencePane />
     <SplitPane className="view2" split="vertical" defaultSize="33%">
-      <SplitPane className="view3" split="horizontal" defaultSize="40%">
-        <Clock />
-        <DataPane />
-      </SplitPane>
+      <DataPane />
       <GraphPane />
     </SplitPane>
   </SplitPane>
