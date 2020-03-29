@@ -8,7 +8,6 @@ const Message = (props) => {
     for(let name in message){
         messageArr.push(name + ": " + message[name]);
     }
-    console.log("HI IM A MESSAGE ELEMENT");
     return (
         <div>
             <h3 class="text-lg font-bold">{header}</h3>

@@ -5,7 +5,7 @@ import ButtonPane from "../panes/ButtonPane";
 import MessagePane from "../panes/MessagePane";
 
 const ActionsView = () => (
-  <SplitPane className="view" split="vertical" defaultSize="55%">
+  <SplitPane className="view" split="vertical" defaultSize="65%">
     <ButtonPane />
     <MessagePane />
   </SplitPane>
