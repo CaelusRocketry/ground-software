@@ -15,8 +15,7 @@ const Data = (props) => {
     });
 
     const heartbeatState = useSelector((state) => {
-        let heartbeatState = state.data.heartbeat;
-        return heartbeatState;
+        return state.data.general.heartbeat;
     });
 
     const style = {
@@ -27,7 +26,7 @@ const Data = (props) => {
 
     return (
         <div> <center> 
-            <body>
+            <div>
                 <h3 class="text-lg font-bold">Sensors</h3>  
 
                 <div  style={style}>
@@ -64,10 +63,10 @@ const Data = (props) => {
 
                 <h3 class="text-lg font-bold">Heartbeat</h3> 
                 <div  style={style}>
-                    timestamp: {heartbeatState.timestamp}  <br/>  
+                    timestamp: {heartbeatState}  <br/>  
                 </div>
 
-            </body>
+            </div>
         </center> </div>
     );
 }
