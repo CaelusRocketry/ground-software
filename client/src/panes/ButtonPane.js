@@ -52,7 +52,7 @@ const ButtonPane = () => {
 
 
   return (
-  <div className="pane">
+  <div class="pane">
     <Header title="GS To Flight"/>
 
     <div><button onClick={() => setAbortView(!abortView)} class={btn_big}>Abort</button></div>
