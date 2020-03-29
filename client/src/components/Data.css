@@ -3,10 +3,11 @@
     flex-wrap: nowrap;
     background-color: rgb(255, 255, 255);
     border-color: rgb(0, 0, 0);
-    border-width: 5px;
+    /* border-width: 5px; */
     padding: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
+    /* font-family: Arial, Helvetica, sans-serif; */
+    font-family: "Century Gothic", Futura, sans-serif;
+    font-size: 16px;
     text-align: center;
     align-items: stretch;
     width: 80%;
@@ -20,4 +21,5 @@
     width: 350px;
     height: 40px; 
     margin: 10px;
+    font-family: "Century Gothic", Futura, sans-serif;
 }
