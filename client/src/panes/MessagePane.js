@@ -11,11 +11,15 @@ const MessagePane = () => {
     };
 
     const responses = useSelector((state) => {
-        console.log("STATE");
-        console.log(state);
-        console.log(state.data.general.responses.length);
+//        console.log("STATE");
+//        console.log(state);
+//        console.log(state.data.general.responses.length);
         return state.data.general.responses;
-   });
+    });
+
+    const heartbeatState = useSelector((state) => {
+        return state.data.general.heartbeat;
+    });
 
 
     return (

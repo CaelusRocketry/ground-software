@@ -31,7 +31,7 @@ const initialState = {
 
 const updateData = (state = initialState, action) => {
     let [message, timestamp] = [undefined, undefined];
-    if(['UPDATE_SENSOR_DATA', 'UPDATE_VALVE_DATA', 'UPDATE_HEARTBEAT'].includes(action.type)){
+    if(['UPDATE_SENSOR_DATA', 'UPDATE_VALVE_DATA', 'UPDATE_HEARTBEAT', 'UPDATE_STAGE', 'ADD_RESPONSE'].includes(action.type)){
         message = action.data.message;
         timestamp = action.data.timestamp.toFixed(0);
     }
@@ -74,15 +74,16 @@ const updateData = (state = initialState, action) => {
 
         case 'ADD_RESPONSE':
             let obj = Object();
-            if(action.data.header === 'response'){
+            if(action.data.header == 'response'){
                 obj.header = message.header;
+                delete message.header;
             }
             else{
                 obj.header = action.data.header;
             }
             obj.message = message;
             obj.timestamp = timestamp;
-            state.general.responses.push(action.data);
+            state.general.responses.push(obj);
             return state;        
 
         default:
