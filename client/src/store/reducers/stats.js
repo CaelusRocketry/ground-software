@@ -22,8 +22,10 @@ const initialState = {
         }, 
         timestamp: undefined
     },
-    heartbeat: {
-        timestamp: undefined
+    general: {
+        heartbeat: undefined,
+        stage: undefined,
+        responses: []
     }
 }
 
@@ -63,15 +65,28 @@ const updateData = (state = initialState, action) => {
             return state;
 
         case 'UPDATE_HEARTBEAT':
-            return {
-                ...state,
-                heartbeat: {
-                    timestamp: timestamp
-                }
-            }
+            state.general.heartbeat = timestamp;
+            return state;
         
-      default:
-        return state
+        case 'UPDATE_STAGE':
+            state.general.stage = message.stage;
+            return state;
+
+        case 'ADD_RESPONSE':
+            let obj = Object();
+            if(action.data.header === 'response'){
+                obj.header = message.header;
+            }
+            else{
+                obj.header = action.data.header;
+            }
+            obj.message = message;
+            obj.timestamp = timestamp;
+            state.general.responses.push(action.data);
+            return state;        
+
+        default:
+            return state
     }
 }
 

@@ -21,39 +21,38 @@ const Data = (props) => {
             }
         }
 
-        console.log("HII");
-        console.log(data);
+//        console.log("HII");
+//        console.log(data);
         return data;
     });
 
     const valveState = useSelector((state) => {
-        let valveState = state.data.valveData;
-        return valveState;
+        return state.data.valveData;
     });
 
-    console.log(data);
+//    console.log(data);
 
     return (
-        <div class="flex-container">
-            <div class="data">
+        <div className="flex-container">
+            <div className="data">
                 <b>Pressure:</b><br/><br/> 
                 <i>Chamber:</i> <b>{data.pressure.chamber}</b><br/>
                 <i>Injector:</i> <b>{data.pressure.injector}</b><br/>
                 <i>Tank:</i> <b>{data.pressure.tank}</b><br/>
                 <i>Time-stamp:</i> <b>{data.time}s</b><br/>
             </div>
-            <div class="data">
+            <div className="data">
                 <b>Thermo:</b><br/><br/>
                 <i>Chamber:</i> <b>{data.thermocouple.chamber}</b><br/>
                 <i>Tank:</i> <b>{data.thermocouple.tank}</b><br/><br/><br/>
                 <i>Time-stamp:</i> <b>{data.time}</b> s<br/>
             </div>
-            <div class="data">
+            <div className="data">
                 <b>Load:</b><br/><br/>
                 <i>Tank:</i> <b>{data.load.tank}</b><br/><br/><br/><br/><br/>
                 <i>Time-stamp:</i> <b>{data.time}</b> s<br/>
             </div>
-            <div class="data">
+            <div className="data">
                 <b>Valves:</b><br/>
                 <i>Pressure Relief Valve:</i> <b>{valveState.solenoid.pressure_relief}</b><br/><br/>
                 <i>Propellant Vent:</i> <b>{valveState.solenoid.pressure_relief}</b><br/><br/>

@@ -68,10 +68,11 @@ class Telemetry:
         """ Constantly listens for any from ground station """
         while True:
             data = self.conn.recv(BYTE_SIZE)
-            self.ingest_thread = threading.Thread(
-                target=self.ingest, args=(data,))
-            self.ingest_thread.daemon = True
-            self.ingest_thread.start()
+            self.ingest(data)
+#            self.ingest_thread = threading.Thread(
+#                target=self.ingest, args=(data,))
+#            self.ingest_thread.daemon = True
+#            self.ingest_thread.start()
             time.sleep(DELAY_LISTEN)
 
 
@@ -86,9 +87,9 @@ class Telemetry:
         packet = Packet.from_string(packet_str)
         for log in packet.logs:
             log.timestamp = int(log.timestamp - self.start_time)
-            print(log.to_string())
-            if log.header == "heartbeat":
-                self.backend.update_heartbeat(log.__dict__)
+            print("Ingesting:", log.to_string())
+            if log.header in ["heartbeat", "stage", "response"]:
+                self.backend.update_general(log.__dict__)
 
             if log.header == "sensor_data":
                 self.backend.update_sensor_data(log.__dict__)
