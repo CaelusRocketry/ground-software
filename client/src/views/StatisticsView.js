@@ -3,7 +3,6 @@ import SplitPane from "react-split-pane";
 import SequencePane from "../panes/SequencePane";
 import GraphPane from "../panes/GraphPane";
 import DataPane from "../panes/DataPane";
-import Clock from "../components/Clock";
 
 const StatisticsView = () => (
   <SplitPane className="view" split="vertical" defaultSize="23%">
