@@ -25,6 +25,8 @@ const socketConnection = (store) => {
     });
 
     socket.on('update sensor data', function(log){ 
+        console.log(log);
+        console.log("Header: " + log.header);
         store.dispatch(updateSensorData(log));
     });
 
