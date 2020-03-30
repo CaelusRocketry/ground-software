@@ -18,7 +18,7 @@ const ButtonPane = () => {
   const [selectValues, setSelectValues] = useState({});
 
   const abort = (type) => {
-    if(!confirm("Are you sure you want to " + type + " abort?")){
+    if(!window.confirm("Are you sure you want to " + type + " abort?")){
       return;
     }
     dispatch(abortPressed({type: type, pressed: true}));
@@ -29,7 +29,7 @@ const ButtonPane = () => {
       alert("You haven't selected something for each dropdown.");
       return;
     }
-    if(!confirm("Are you sure u wanna actuate the " + type + " valve at " + loc + " w/ priority " + p)){
+    if(!window.confirm("Are you sure u wanna actuate the " + type + " valve at " + loc + " w/ priority " + p)){
       return;
     }
     dispatch(actuatePressed({valve: loc, actuation_type: type, priority: p}));
@@ -45,7 +45,7 @@ const ButtonPane = () => {
   
   const progress = () => {
     // If the pi isn't 100% ready to progress to next stage, mention that here. Otherwise, progress (w/ confirmation).
-    if (!confirm("Are you sure you want to progress to " + nextStage + "?")) {
+    if (!window.confirm("Are you sure you want to progress to " + nextStage + "?")) {
       return;
     }
     dispatch(generalPressed({type: "progress", pressed: true}));
