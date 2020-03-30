@@ -33,16 +33,16 @@ const updateData = (state = initialState, action) => {
     let [message, timestamp] = [undefined, undefined];
     if(['UPDATE_SENSOR_DATA', 'UPDATE_VALVE_DATA', 'UPDATE_HEARTBEAT', 'UPDATE_STAGE', 'ADD_RESPONSE'].includes(action.type)){
         message = action.data.message;
-        timestamp = action.data.timestamp.toFixed(0);
+        timestamp = action.data.timestamp;
     }
     switch (action.type) {
         case 'UPDATE_SENSOR_DATA':
             for(let type in message){
                 for(let loc in message[type]){
-                    console.log("SENSOR DATA INCOMING");
-                    console.log(message[type][loc].value);
-                    let value = message[type][loc].value[1].toFixed(3);
-                    state.sensorData[type][loc].push(value);
+                    let measured = message[type][loc].value[0].toFixed(3);
+                    let normalized = message[type][loc].value[1].toFixed(3);
+                    let status = message[type][loc].status;
+                    state.sensorData[type][loc].push([normalized, status]);
                     if(state.sensorData[type][loc].length > 10){
                         state.sensorData[type][loc].shift();
                     }
@@ -74,7 +74,7 @@ const updateData = (state = initialState, action) => {
 
         case 'ADD_RESPONSE':
             let obj = Object();
-            if(action.data.header == 'response'){
+            if(action.data.header === 'response'){
                 obj.header = message.header;
                 delete message.header;
             }

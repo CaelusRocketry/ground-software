@@ -2,15 +2,6 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Plot from 'react-plotly.js';
 
-import {
-  LineChart,
-  Line,
-  Label,
-  XAxis,
-  YAxis,
-} from "recharts";
-
-
 const properties = {
   thermocouple: {
     xaxis: "Time (s)",
@@ -43,14 +34,16 @@ const Graph = props => {
     let y = state.data.sensorData[metadata.type][metadata.location];
     if(x.length !== y.length){
       console.log("X: " + x.length + ", Y: " + y.length);
+      alert("Mismatch in X and Y data for graph");
     }
     for(let i = 0; i < x.length; i++){
       x_values.push(x[i]);
-      y_values.push(y[i]);
+      y_values.push(y[i][0]);
     }
     return {
       'x': x_values, 
-      'y': y_values};
+      'y': y_values
+    };
   });
 
   return (
