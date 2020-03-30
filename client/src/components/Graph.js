@@ -78,27 +78,35 @@ const Graph = props => {
             mode: 'lines+markers',
             marker: {color: 'red'},
           },
-          {type: 'lines', x: data['x'], y: data['y']},
+          //{type: 'lines', x: data['x'], y: data['y']},
         ]}
         layout={ 
-          {width: 500, height: 500, title: 'A Fancy Plot'},
-          {xaxis: {
-            title: properties[metadata.type].xaxis,
-            titlefont: {
-              family: "Courier New, monospace",
-              size: 18,
-              color: "#7f7f7f"
+          {
+            width: 800, 
+            height: 350, 
+            title: metadata.location + "/" + metadata.type,
+            "titlefont": {
+              "family": "Courier New, monospace",
+              "size": 22
+            },
+            xaxis: {
+              title: properties[metadata.type].xaxis,
+              titlefont: {
+                family: "Courier New, monospace",
+                size: 17,
+                color: "#7f7f7f"
+              }
+            },
+            yaxis: {
+              title: properties[metadata.type].yaxis,
+              titlefont: {
+                family: "Courier New, monospace",
+                size: 17,
+                color: "#7f7f7f"
+              }
             }
-          }},
-          {yaxis: {
-            title: properties[metadata.type].yaxis,
-            titlefont: {
-              family: "Courier New, monospace",
-              size: 18,
-              color: "#7f7f7f"
-            }
-          }}
-         }
+          }
+        }
       />
     </div>
   );
