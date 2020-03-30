@@ -8,15 +8,15 @@ const socketConnection = (store) => {
     socket.on('general', function(log){
         console.log(log);
         console.log("Header: " + log.header);
-        if(log.header == 'heartbeat'){
+        if(log.header === 'heartbeat'){
             store.dispatch(updateHeartbeat(log));
 //            store.dispatch(addResponse(log));
         }
-        else if(log.header == 'progress'){
+        else if(log.header === 'progress'){
             store.dispatch(updateStage(log));
             store.dispatch(addResponse(log));
         }
-        else if(log.header == 'response'){
+        else if(log.header === 'response'){
             store.dispatch(addResponse(log));
         }
         else{

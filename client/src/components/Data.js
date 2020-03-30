@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from "react-redux";
 
 import './Data.css';
@@ -11,63 +11,53 @@ const Data = () => {
             heartbeatState: state.data.general.heartbeat
         };
     });
-    /*const sensorState = useSelector((state) => {
-        return state.data.sensorData;
-    });
 
-    const valveState = useSelector((state) => {
-        return state.data.valveData;
-    });
+    const blockStyle = "m-1 p-4 bg-gray-100";
+    const blockHeaderStyle = "text-lg font-bold";
+    const groupHeaderStyle = "font-bold mb-1";
 
-    const heartbeatState = useSelector((state) => {
-        return state.data.general.heartbeat;
-    });*/
-
-    const style = {
-        background: "#F5F5F5",
-        padding: "15px",
-        margin: "5px",
-    };
+    const getLast = (arr) => (arr.length > 0 ? arr[arr.length - 1] : undefined);
 
     return (    
         <center> 
-            <h3 class="text-lg font-bold">Sensors</h3>  
+            <h3 class={blockHeaderStyle}>Sensors</h3>  
 
-            <div style={style}>
-                <h4>Tank</h4> 
-                    pressure: {data.sensorState.pressure.tank[data.sensorState.pressure.tank.length - 1]}  <br/>
-                    thermo: {data.sensorState.thermocouple.tank[data.sensorState.thermocouple.tank.length - 1]} <br />
-                    load: {data.sensorState.load.tank[data.sensorState.load.tank.length - 1]}  <br/>
+            <div class={blockStyle}>
+                <h4 class={groupHeaderStyle}>Tank</h4> 
+                    Pressure: {getLast(data.sensorState.pressure.tank)}  <br/>
+                    Thermo: {getLast(data.sensorState.thermocouple.tank)} <br />
+                    Load: {getLast(data.sensorState.load.tank)}  <br/>
                 <br></br>
 
-                <h4>Chamber</h4> 
-                    pressure: {data.sensorState.pressure.chamber[data.sensorState.pressure.chamber.length - 1]}  <br/>
-                    thermo: {data.sensorState.thermocouple.chamber[data.sensorState.thermocouple.chamber.length - 1]} <br/>
+                <h4 class={groupHeaderStyle}>Chamber</h4> 
+                    Pressure: {getLast(data.sensorState.pressure.chamber)}  <br/>
+                    Thermo: {getLast(data.sensorState.thermocouple.chamber)} <br/>
                 <br></br>
 
-                <h4>Injector</h4>
-                    pressure: {data.sensorState.pressure.injector[data.sensorState.pressure.injector.length - 1]}  <br/>  
+                <h4 class={groupHeaderStyle}>Injector</h4>
+                    Pressure: {getLast(data.sensorState.pressure.injector)}  <br/>  
                 <br></br>
-                timestamp: {data.sensorState.timestamp[data.sensorState.timestamp.length - 1]}  <br/>  
+                Timestamp: {getLast(data.sensorState.timestamp)}  <br/>  
             </div>
 
             <br></br>
 
-            <h3 class="text-lg font-bold">Valves</h3> 
+            <h3 class={blockHeaderStyle}>Valves</h3> 
                 
-            <div style={style}>
-                pressure relief: {data.valveState.solenoid.pressure_relief} <br/>  
-                propellant: {data.valveState.solenoid.propellant_vent} <br/> 
-                main propellant: {data.valveState.solenoid.main_propellant_valve} <br/> 
+            <div class={blockStyle}>
+                <h4 class={groupHeaderStyle}>Solenoids</h4>
+                Pressure Relief: {data.valveState.solenoid.pressure_relief} <br/>  
+                Propellant: {data.valveState.solenoid.propellant_vent} <br/> 
+                Main Propellant Valve: {data.valveState.solenoid.main_propellant_valve} <br/> 
                 <br></br>
-                timestamp: {data.valveState.timestamp}  <br/>  
+                Timestamp: {data.valveState.timestamp}  <br/>  
             </div>
 
             <br></br>
 
-            <h3 class="text-lg font-bold">Heartbeat</h3> 
-            <div  style={style}>
-                timestamp: {data.heartbeatState}  <br/>  
+            <h3 class={blockHeaderStyle}>Heartbeat</h3> 
+            <div class={blockStyle}>
+                Timestamp: {data.heartbeatState}  <br/>  
             </div>
 
         </center>

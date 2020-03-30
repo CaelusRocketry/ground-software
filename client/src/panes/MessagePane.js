@@ -17,10 +17,6 @@ const MessagePane = () => {
         return state.data.general.responses;
     });
 
-    const heartbeatState = useSelector((state) => {
-        return state.data.general.heartbeat;
-    });
-
 
     return (
     <div>

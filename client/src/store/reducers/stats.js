@@ -74,7 +74,7 @@ const updateData = (state = initialState, action) => {
 
         case 'ADD_RESPONSE':
             let obj = Object();
-            if(action.data.header == 'response'){
+            if(action.data.header === 'response'){
                 obj.header = message.header;
                 delete message.header;
             }
