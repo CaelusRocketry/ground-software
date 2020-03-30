@@ -71,7 +71,6 @@ const Graph = props => {
             mode: 'lines+markers',
             marker: {color: 'red'},
           },
-          //{type: 'lines', x: data['x'], y: data['y']},
         ]}
         layout={ 
           {
