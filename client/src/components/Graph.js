@@ -62,7 +62,10 @@ const Graph = props => {
         <option value="chamber.pressure">Chamber/Pressure</option>
         <option value="injector.pressure">Injector/Pressure</option>
       </select>
-      <Plot
+      <Plot style={{
+        width: "100vh",
+        height: "43vh"
+      }}
         data={[
           {
             x: data['x'],
@@ -74,8 +77,6 @@ const Graph = props => {
         ]}
         layout={ 
           {
-            width: 800, 
-            height: 350, 
             title: metadata.location + "/" + metadata.type,
             "titlefont": {
               "family": "Courier New, monospace",
