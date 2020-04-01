@@ -25,7 +25,8 @@ const initialState = {
     general: {
         heartbeat: undefined,
         stage: undefined,
-        responses: []
+        responses: [],
+        percent_data: undefined
     }
 }
 
@@ -48,6 +49,7 @@ const updateData = (state = initialState, action) => {
                     }
                 }
             }
+            state.general.percent_data = state.tank.pressure/800;
             state.sensorData.timestamp.push(timestamp);
             if(state.sensorData.timestamp.length > 10){
                 state.sensorData.timestamp.shift();
