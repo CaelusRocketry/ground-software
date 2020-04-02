@@ -39,7 +39,7 @@ const ButtonPane = () => {
   }
   
   const actuateValve = (loc, type, p) => {
-    if([loc, type, p].contains(undefined)){
+    if([loc, type, p].includes(undefined)){
       alert("You haven't selected something for each dropdown.");
       return;
     }
@@ -50,7 +50,7 @@ const ButtonPane = () => {
   }
   
   const request = (type, objectType, location) => {
-    if([type, objectType, location].contains(undefined)){
+    if([type, objectType, location].includes(undefined)){
       alert("You haven't selected something for each dropdown.");
       return;
     }
