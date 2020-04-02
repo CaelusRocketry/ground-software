@@ -34,7 +34,12 @@ const SequencePane = () => {
 
   const calcTitle = (idx) => {
     if (current === idx) {
-      return "In Progress";
+      if(percentage === 100){
+        return "Ready for next stage"
+      }
+      else{
+        return "In Progress";
+      }
     }
     else if (current > idx) {
       return "Completed";
