@@ -29,6 +29,7 @@ const MessagePane = () => {
         <Header title="Messages" />
         {responses.length}
         <ul className="list-group" style={style}>
+            {responses.length}
             {responses.slice(0).reverse().map((data, i) => 
                 <li key={i} className="list-group-item list-group-item-primary">
                     {i}
