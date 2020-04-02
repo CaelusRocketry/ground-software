@@ -20,12 +20,13 @@ const names = ["Propellant Loading",
 const ButtonPane = () => {
   const dispatch = useDispatch();
 //  const sensors = {thermocouple: ["chamber", "tank"], pressure: ["chamber", "injector", "tank"], load: ["tank"]};
-  const btn_big = "mt-2 col-md-12 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded";
+  const btn_big = "mt-2 col-md-12 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded disabled:bg-gray-900";
   const btn_small = "ml-6 mt-2 col-md-12 bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded";
   const btn_small_marginless = "col-md-12 bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded";
 
   // Change this to useSelector
   const current_stage = useSelector(state => stages.indexOf(state.data.general.stage));
+  const current_progress = useSelector(state => state.data.general.percent_data);
 
   const [views, setViews] = useState({abort: false, actuation: false, sensor: false, valve: false});
   const [selectValues, setSelectValues] = useState({});
@@ -120,7 +121,8 @@ const ButtonPane = () => {
         <button onClick={() => request("valve", selectValues.requestValve, selectValues.requestValveLocation)} class={btn_small_marginless}>Request State</button>
       </div>
     </div>
-    <div><button onClick={progress} class={btn_big}>Progress To {names[current_stage + 1]}</button></div>
+    <div><button onClick={progress} class={btn_big} disabled={current_progress != 100}>Progress To {names[current_stage + 1]}</button></div>
+    {current_progress}
   </div>
   );
 }
