@@ -120,7 +120,7 @@ const ButtonPane = () => {
         <button onClick={() => request("valve", selectValues.requestValve, selectValues.requestValveLocation)} class={btn_small_marginless}>Request State</button>
       </div>
     </div>
-    <div><button onClick={progress} class={btn_big}>Progress To {names[current_stage]}</button></div>
+    <div><button onClick={progress} class={btn_big}>Progress To {names[current_stage + 1]}</button></div>
   </div>
   );
 }
