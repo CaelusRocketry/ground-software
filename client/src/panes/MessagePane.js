@@ -1,5 +1,4 @@
 import React from 'react';
-import Message from '../components/Message';
 import Header from "../components/Header";
 import { useSelector } from "react-redux";
 
@@ -7,31 +6,44 @@ const MessagePane = () => {
     const style = {
         background: "#F5F5F5",
         padding: "5px",
-        marginLeft: "35px"
+        marginLeft: "35px",
+        overflowY: "scroll"
     };
 
-    const responses = useSelector((state) => {
-//        console.log("STATE");
-//        console.log(state);
-//        console.log(state.data.general.responses.length);
-        return state.data.general.responses;
-    });
+    const responses = useSelector(state => state.data.general.responses);
+
+    const messageArray = (data) => {
+        let header = data.header;
+        let message = data.message;
+        let timestamp = data.timestamp;
+        let messageArr = [];
+        for(let name in message){
+            messageArr.push(name + ": " + message[name]);
+        }
+        return {header, messageArr, timestamp};
+    };
 
 
     return (
     <div>
         <Header title="Messages" />
         {responses.length}
-        <div style={{overflowY: "scroll"}}>
-            <ol className="list-group" style={style}>
-                    {responses.slice(0).reverse().map((data, i) => 
-                        <li key={i}>
-                            {i}
-                            <Message data={data} />
-                        </li>
-                    )}
-            </ol>
-        </div>
+        <ul className="list-group" style={style}>
+            {responses.length}
+            {responses.slice(0).reverse().map((data, i) => 
+                <li key={i} className="list-group-item list-group-item-primary">
+                    {i}
+
+                    <h3 class="text-lg font-bold">{messageArray(data).header}</h3>
+                    <p class="text-xs mb-2">- {messageArray(data).timestamp} seconds</p>
+                    {messageArray(data).messageArr.map((element, index) => (
+                        <p key={index}>{element}</p>
+                    ))}
+                    <br></br>
+
+                </li>
+            )}
+        </ul>
     </div>
     );
 };
