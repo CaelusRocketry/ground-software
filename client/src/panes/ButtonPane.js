@@ -1,8 +1,21 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { generalPressed, abortPressed, requestPressed, actuatePressed } from '../store/actions/index.js';
 
+const stages = ["propellant_loading",
+                "leak_testing_1",
+                "pressurant_loading",
+                "leak_testing_2",
+                "pre_ignition",
+                "disconnection"];
+
+const names = ["Propellant Loading",
+              "Leak Testing Phase 1",
+              "Pressurant Loading",
+              "Leak Testing Phase 2",
+              "Pre-Ignition",
+              "Disconnection"];
 
 const ButtonPane = () => {
   const dispatch = useDispatch();
@@ -12,7 +25,7 @@ const ButtonPane = () => {
   const btn_small_marginless = "col-md-12 bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded";
 
   // Change this to useSelector
-  let nextStage = "Propellant loading";
+  const current_stage = useSelector(state => stages.indexOf(state.data.general.stage));
 
   const [views, setViews] = useState({abort: false, actuation: false, sensor: false, valve: false});
   const [selectValues, setSelectValues] = useState({});
@@ -45,7 +58,7 @@ const ButtonPane = () => {
   
   const progress = () => {
     // If the pi isn't 100% ready to progress to next stage, mention that here. Otherwise, progress (w/ confirmation).
-    if (!window.confirm("Are you sure you want to progress to " + nextStage + "?")) {
+    if (!window.confirm("Are you sure you want to progress to " + names[current_stage + 1] + "?")) {
       return;
     }
     dispatch(generalPressed({type: "progress", pressed: true}));
@@ -107,7 +120,7 @@ const ButtonPane = () => {
         <button onClick={() => request("valve", selectValues.requestValve, selectValues.requestValveLocation)} class={btn_small_marginless}>Request State</button>
       </div>
     </div>
-    <div><button onClick={progress} class={btn_big}>Progress To {nextStage}</button></div>
+    <div><button onClick={progress} class={btn_big}>Progress To {names[current_stage]}</button></div>
   </div>
   );
 }

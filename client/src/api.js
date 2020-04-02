@@ -65,7 +65,7 @@ const socketConnection = (store) => {
             sendMessage(header, message);
         }
         if(buttons.general.progress){
-            header = "sensor_request"; message = {"sensor_type": buttons.request.sensor[0], "sensor_location": buttons.request.sensor[1]};
+            header = "progress"; message = {};
             store.dispatch(generalPressed({type: "progress", pressed: false}));
             sendMessage(header, message);
         }

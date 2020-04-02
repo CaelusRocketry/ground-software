@@ -21,6 +21,7 @@ const initialState = {
 const buttonPressed = (state = initialState, action) => {
     switch(action.type) {
         case 'GENERAL_PRESSED':
+            console.log("General button was pressed");
             state.general[action.data.type] = action.data.pressed;
             return state;
         case 'ABORT_PRESSED':
