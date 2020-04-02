@@ -24,7 +24,7 @@ const MessagePane = () => {
         {responses.length}
         <div style={{overflowY: "scroll"}}>
             <ol className="list-group" style={style}>
-                    {responses.map((data, i) => 
+                    {responses.slice(0).reverse().map((data, i) => 
                         <li key={i}>
                             {i}
                             <Message data={data} />
