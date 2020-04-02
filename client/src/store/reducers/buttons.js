@@ -5,13 +5,13 @@ const initialState = {
     },
     actuation: {
         // Actuation type, actuation priority
-        pressure_relief: [null, null],
-        propellant_vent: [null, null],
-        main_propellant_valve: [null, null]
+        pressure_relief: [undefined, undefined],
+        propellant_vent: [undefined, undefined],
+        main_propellant_valve: [undefined, undefined]
     },
     request: {
-        valve: [null, null],
-        sensor: [null, null]
+        valve: [undefined, undefined],
+        sensor: [undefined, undefined]
     },
     general: {
         progress: false

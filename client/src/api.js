@@ -54,14 +54,14 @@ const socketConnection = (store) => {
             store.dispatch(abortPressed({type: "hard", pressed: false}));
             sendMessage(header, message);
         }
-        if(buttons.request.valve[0] != null){
+        if(buttons.request.valve[0] != undefined){
             header = "valve_request"; message = {"valve_type": buttons.request.valve[0], "valve_location": buttons.request.valve[1]};
-            store.dispatch(requestPressed({type: "valve", objectType: null, location: null}));
+            store.dispatch(requestPressed({type: "valve", objectType: undefined, location: undefined}));
             sendMessage(header, message);
         }
-        if(buttons.request.sensor[0] != null){
+        if(buttons.request.sensor[0] != undefined){
             header = "sensor_request"; message = {"sensor_type": buttons.request.sensor[0], "sensor_location": buttons.request.sensor[1]};
-            store.dispatch(requestPressed({type: "sensor", objectType: null, location: null}));
+            store.dispatch(requestPressed({type: "sensor", objectType: undefined, location: undefined}));
             sendMessage(header, message);
         }
         if(buttons.general.progress){
@@ -71,11 +71,14 @@ const socketConnection = (store) => {
         }
         for(let valve in buttons.actuation){
             let [type, priority] = buttons.actuation[valve];
-            if(type === null){
+            if(type === null || type === undefined || priority === null || priority === undefined){
                 continue;
             }
             header = "solenoid_actuate"; message = {"valve_location": valve, "actuation_type": type, "priority": priority};
-            store.dispatch(actuatePressed({valve: valve, type: type, priority: priority}));
+            console.log(type + " " + priority);
+            console.log("Dispatching null");
+            store.dispatch(actuatePressed({valve: valve, type: undefined, priority: undefined}));
+            console.log(store.getState());
             sendMessage(header, message);
         }
     }

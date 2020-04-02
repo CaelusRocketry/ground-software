@@ -39,6 +39,8 @@ const ButtonPane = () => {
   }
   
   const actuateValve = (loc, type, p) => {
+    console.log(selectValues);
+    console.log([loc, type, p]);
     if([loc, type, p].includes(undefined)){
       alert("You haven't selected something for each dropdown.");
       return;
@@ -73,7 +75,7 @@ const ButtonPane = () => {
     return (
       <div class="float-left">
       <b><label>{label}: </label></b>
-        <select onChange={(e) => {selectValues[name] = e.target.value}} class="ml-2 mr-4 border-2">
+        <select onChange={(e) => {let values = Object.assign({}, selectValues); console.log(name); values[name] = e.target.value; setSelectValues(values); console.log(values); console.log(selectValues);}} class="ml-2 mr-4 border-2">
           <option class="hidden"></option>
           {options.map((arr) => 
             <option value={arr[0]}>{arr[1]}</option>
@@ -102,7 +104,7 @@ const ButtonPane = () => {
         {createSelect("Valve", "actuationValve", [["main_propellant_valve", "Main Propellant Valve"], ["pressure_relief", "Pressure Relief Valve"], ["propellant_vent", "Propellant Vent Valve"]])}
         {createSelect("Actuation Type", "actuationType", [["pulse", "Pulse"], ["open_vent", "Open Vent"], ["close_vent", "Close Vent"]])}
         {createSelect("Priority", "actuationPriority", [["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]])}
-        <button onClick={() => actuateValve(selectValues.valve, selectValues.actuationType, selectValues.priority)} class={btn_small_marginless}>Actuate Solenoid</button>
+        <button onClick={() => actuateValve(selectValues.actuationValve, selectValues.actuationType, selectValues.actuationPriority)} class={btn_small_marginless}>Actuate Solenoid</button>
       </div>
     </div>
 
