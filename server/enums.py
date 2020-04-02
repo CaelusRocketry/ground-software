@@ -49,14 +49,3 @@ class Stage(IntEnum):
     LEAK_TESTING_2 = 4
     PRE_IGNITION = 5
     DISCONNECTION = 6
-
-
-ENUMS = [SensorType, SensorLocation, SolenoidState, ValveType, ValveLocation, ActuationType, Stage]
-class EnumEncoder(json.JSONEncoder):
-    def default(self, obj):
-        print("TYPE: ", type(obj))
-        if type(obj) in ENUMS:
-            string = str(obj)
-#            return string[string.index(".") + 1:]
-            return string
-        return json.JSONEncoder.default(self, obj)
