@@ -61,25 +61,6 @@ const SequencePane = () => {
         <Progress percentage={"" + calcPercentage(i)} />
       </Event>
       )}
-{/*        <Event interval={calcTitle(0)} title={"Propellant Loading"} intervalBackground={calcColor(0)}>
-        <Progress percentage={"" + percentage}/>
-        </Event>
-        <Event interval={calcTitle(1)} title={"Leak Testing Phase 1"} intervalBackground={calcColor(1)}>
-          <Progress percentage={"" + percentage}/>
-        </Event>
-        <Event interval={calcTitle(2)} title={"Pressurant Loading"} intervalBackground={calcColor(2)}>
-          <Progress percentage={"" + percentage}/>
-        </Event>
-        <Event interval={calcTitle(3)} title={"Leak Testing Phase 2"} intervalBackground={calcColor(3)}>
-          <Progress percentage={"" + percentage}/>
-        </Event>
-        <Event interval={calcTitle(4)} title={"Pre-Ignition"} intervalBackground={calcColor(4)}>
-          <Progress percentage={"" + percentage}/>
-        </Event>
-        <Event interval={calcTitle(5)} title={"Disconnection"} intervalBackground={calcColor(5)}>
-          <Progress percentage={"" + percentage}/>
-        </Event>
-  */}
       </Timeline>
   </div>
     );
