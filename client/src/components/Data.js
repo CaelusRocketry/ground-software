@@ -15,6 +15,15 @@ const Data = () => {
     const groupHeaderStyle = "font-bold mb-1";
 
     const getLast = (arr) => (arr.length > 0 ? arr[arr.length - 1] : undefined);
+    const getColor = (status) => {
+        status = status.length == 0 ? undefined : status[status.length - 1][1];
+        switch (status) {
+            case undefined: return "black"
+            case 3: return "green"; 
+            case 2: return "orange";
+            default: return "red";
+        }
+    }
 
     return (    
         <center> 
@@ -22,20 +31,21 @@ const Data = () => {
 
             <div class={blockStyle}>
                 <h4 class={groupHeaderStyle}>Tank</h4> 
-                    Pressure: {getLast(data.sensorState.pressure.tank)}  <br/>
-                    Thermo: {getLast(data.sensorState.thermocouple.tank)} <br />
-                    Load: {getLast(data.sensorState.load.tank)}  <br/>
+                    <p style={{color: getColor(data.sensorState.pressure.tank)}}> Pressure: {getLast(data.sensorState.pressure.tank)} </p> <br/>
+                    <p style={{color: getColor(data.sensorState.thermocouple.tank)}}> Thermo: {getLast(data.sensorState.thermocouple.tank)} </p> <br />
+                    <p style={{color: getColor(data.sensorState.load.tank)}}> Load: {getLast(data.sensorState.load.tank)} </p> <br/>
                 <br></br>
 
                 <h4 class={groupHeaderStyle}>Chamber</h4> 
-                    Pressure: {getLast(data.sensorState.pressure.chamber)}  <br/>
-                    Thermo: {getLast(data.sensorState.thermocouple.chamber)} <br/>
+                    <p style={{color: getColor(data.sensorState.pressure.chamber)}}> Pressure: {getLast(data.sensorState.pressure.chamber)} </p> <br/>
+                    <p style={{color: getColor(data.sensorState.thermocouple.chamber)}}>Thermo: {getLast(data.sensorState.thermocouple.chamber)} </p> <br/>
                 <br></br>
 
                 <h4 class={groupHeaderStyle}>Injector</h4>
-                    Pressure: {getLast(data.sensorState.pressure.injector)}  <br/>  
+                    <p style={{color: getColor(data.sensorState.pressure.injector)}}> Pressure: {getLast(data.sensorState.pressure.injector)} </p>  <br/>  
                 <br></br>
-                Timestamp: {getLast(data.sensorState.timestamp)}  <br/>  
+                Timestamp: {getLast(data.sensorState.timestamp)}  <br/> 
+                <br></br>
             </div>
 
             <br></br>
