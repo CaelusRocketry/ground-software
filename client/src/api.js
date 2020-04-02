@@ -14,7 +14,7 @@ const socketConnection = (store) => {
         }
         else if(log.header === 'stage'){
             store.dispatch(updateStage(log));
-            store.dispatch(addResponse(log));
+//            store.dispatch(addResponse(log));
         }
         else if(log.header === 'response'){
             store.dispatch(addResponse(log));
