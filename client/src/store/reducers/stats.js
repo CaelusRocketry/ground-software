@@ -92,7 +92,9 @@ const updateData = (state = initialState, action) => {
             }
             obj.message = message;
             obj.timestamp = timestamp;
-            state.general.responses.push(obj);
+            let temp = state.general.responses.slice();
+            temp.push(obj)
+            state.general.responses = temp;
             return state;        
 
         default:

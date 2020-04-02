@@ -39,6 +39,8 @@ const ButtonPane = () => {
   }
   
   const actuateValve = (loc, type, p) => {
+    console.log(selectValues);
+    console.log([loc, type, p]);
     if([loc, type, p].includes(undefined)){
       alert("You haven't selected something for each dropdown.");
       return;
@@ -73,7 +75,7 @@ const ButtonPane = () => {
     return (
       <div class="float-left">
       <b><label>{label}: </label></b>
-        <select onChange={(e) => {selectValues[name] = e.target.value}} class="ml-2 mr-4 border-2">
+        <select onChange={(e) => {let values = Object.assign({}, selectValues); console.log(name); values[name] = e.target.value; setSelectValues(values); console.log(values); console.log(selectValues);}} class="ml-2 mr-4 border-2">
           <option class="hidden"></option>
           {options.map((arr) => 
             <option value={arr[0]}>{arr[1]}</option>
@@ -89,31 +91,31 @@ const ButtonPane = () => {
   <div class="pane">
     <Header title="Actions"/>
 
-    <div><button onClick={() => {views.abort = !views.abort; setViews(views)}} class={btn_big}>Abort</button></div>
+    <div><button onClick={() => {setViews({abort: !views.abort, actuation: views.actuation, sensor: views.sensor, valve: views.valve})}} class={btn_big}>Abort</button></div>
     <div class={views.abort ? "block" : "hidden"}>
       <div><button class={btn_small} onClick={() => abort("soft")}>Soft Abort</button></div>
       <div><button class={btn_small} onClick={() => abort("hard")}>Hard Abort</button></div>
     </div>
 
-    <button onClick={() => {views.actuation = !views.actuation; setViews(views)}} class={btn_big}>Valve Actuation</button>
+    <button onClick={() => {setViews({abort: views.abort, actuation: !views.actuation, sensor: views.sensor, valve: views.valve})}} class={btn_big}>Valve Actuation</button>
     <div class={views.actuation ? "block mt-2" : "hidden"}>
       <div class="mt-2">
         <b><label>Valve: </label></b>
         {createSelect("Valve", "actuationValve", [["main_propellant_valve", "Main Propellant Valve"], ["pressure_relief", "Pressure Relief Valve"], ["propellant_vent", "Propellant Vent Valve"]])}
         {createSelect("Actuation Type", "actuationType", [["pulse", "Pulse"], ["open_vent", "Open Vent"], ["close_vent", "Close Vent"]])}
         {createSelect("Priority", "actuationPriority", [["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]])}
-        <button onClick={() => actuateValve(selectValues.valve, selectValues.actuationType, selectValues.priority)} class={btn_small_marginless}>Actuate Solenoid</button>
+        <button onClick={() => actuateValve(selectValues.actuationValve, selectValues.actuationType, selectValues.actuationPriority)} class={btn_small_marginless}>Actuate Solenoid</button>
       </div>
     </div>
 
-    <div><button onClick={() => {views.sensor = !views.sensor; setViews(views)}} class={btn_big}>Request Sensor Data</button></div>
+    <div><button onClick={() => {setViews({abort: views.abort, actuation: views.actuation, sensor: !views.sensor, valve: views.valve})}} class={btn_big}>Request Sensor Data</button></div>
     <div class={views.sensor ? "block mt-2" : "hidden"}>
       {createSelect("Sensor Location", "requestSensorLocation", [["chamber", "Chamber"], ["tank", "Tank"], ["injector", "Injector"]])}
       {createSelect("Sensor Type", "requestSensor", [["thermocouple", "Thermocouple"], ["pressure", "Pressure Sensor"], ["load", "Load Sensor"]])}
       <button onClick={() => request("sensor", selectValues.requestSensor, selectValues.requestSensorLocation)} class={btn_small_marginless}>Request Data</button>
     </div>
 
-    <div><button onClick={() => {views.valve = !views.valve; setViews(views)}} class={btn_big}>Request Valve State</button></div>
+    <div><button onClick={() => {setViews({abort: views.abort, actuation: views.actuation, sensor: views.sensor, valve: !views.valve})}} class={btn_big}>Request Valve State</button></div>
     <div class={views.valve ? "block mt-2" : "hidden"}>
       <div class="mt-2">
         {createSelect("Valve Type", "requestValve", [["ball", "Ball"], ["solenoid", "Solenoid"]])}
