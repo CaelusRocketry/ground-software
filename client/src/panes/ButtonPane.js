@@ -89,13 +89,13 @@ const ButtonPane = () => {
   <div class="pane">
     <Header title="Actions"/>
 
-    <div><button onClick={() => {views.abort = !views.abort; setViews(views)}} class={btn_big}>Abort</button></div>
+    <div><button onClick={() => {setViews({abort: !views.abort, actuation: views.actuation, sensor: views.sensor, valve: views.valve})}} class={btn_big}>Abort</button></div>
     <div class={views.abort ? "block" : "hidden"}>
       <div><button class={btn_small} onClick={() => abort("soft")}>Soft Abort</button></div>
       <div><button class={btn_small} onClick={() => abort("hard")}>Hard Abort</button></div>
     </div>
 
-    <button onClick={() => {views.actuation = !views.actuation; setViews(views)}} class={btn_big}>Valve Actuation</button>
+    <button onClick={() => {setViews({abort: views.abort, actuation: !views.actuation, sensor: views.sensor, valve: views.valve})}} class={btn_big}>Valve Actuation</button>
     <div class={views.actuation ? "block mt-2" : "hidden"}>
       <div class="mt-2">
         <b><label>Valve: </label></b>
@@ -106,14 +106,14 @@ const ButtonPane = () => {
       </div>
     </div>
 
-    <div><button onClick={() => {views.sensor = !views.sensor; setViews(views)}} class={btn_big}>Request Sensor Data</button></div>
+    <div><button onClick={() => {setViews({abort: views.abort, actuation: views.actuation, sensor: !views.sensor, valve: views.valve})}} class={btn_big}>Request Sensor Data</button></div>
     <div class={views.sensor ? "block mt-2" : "hidden"}>
       {createSelect("Sensor Location", "requestSensorLocation", [["chamber", "Chamber"], ["tank", "Tank"], ["injector", "Injector"]])}
       {createSelect("Sensor Type", "requestSensor", [["thermocouple", "Thermocouple"], ["pressure", "Pressure Sensor"], ["load", "Load Sensor"]])}
       <button onClick={() => request("sensor", selectValues.requestSensor, selectValues.requestSensorLocation)} class={btn_small_marginless}>Request Data</button>
     </div>
 
-    <div><button onClick={() => {views.valve = !views.valve; setViews(views)}} class={btn_big}>Request Valve State</button></div>
+    <div><button onClick={() => {setViews({abort: views.abort, actuation: views.actuation, sensor: views.sensor, valve: !views.valve})}} class={btn_big}>Request Valve State</button></div>
     <div class={views.valve ? "block mt-2" : "hidden"}>
       <div class="mt-2">
         {createSelect("Valve Type", "requestValve", [["ball", "Ball"], ["solenoid", "Solenoid"]])}
