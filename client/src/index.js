@@ -6,13 +6,14 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducers from "./store/reducers";
 
-import {socketConnection} from './api';
+import {socketConnection, heartbeatError} from './api';
 
 import * as serviceWorker from "./serviceWorker";
 
 const store = createStore(reducers);
 socketConnection(store);
 setInterval(() => {console.log(store.getState());}, 1000);
+setInterval(() => {heartbeatError(store)} , 5000);
 
 ReactDOM.render(
   <Provider store={store}>
