@@ -49,7 +49,6 @@ const updateData = (state = initialState, action) => {
                     }
                 }
             }
-            state.general.percent_data = state.tank.pressure/800;
             state.sensorData.timestamp.push(timestamp);
             if(state.sensorData.timestamp.length > 10){
                 state.sensorData.timestamp.shift();
@@ -72,6 +71,7 @@ const updateData = (state = initialState, action) => {
         
         case 'UPDATE_STAGE':
             state.general.stage = message.stage;
+            state.general.percent_data = message.status;
             return state;
 
         case 'ADD_RESPONSE':

@@ -3,7 +3,6 @@ import heapq
 import socket
 import threading
 from packet import Packet, Log, LogPriority
-from enums import ValveLocation, ActuationType
 
 BYTE_SIZE = 8192
 
@@ -88,7 +87,7 @@ class Telemetry:
         packet = Packet.from_string(packet_str)
         for log in packet.logs:
             log.timestamp = round(log.timestamp - self.start_time, 1)
-            print("TIMESTAMP:", log.timestamp)
+#            print("Timestamp:", log.timestamp)
             if log.header in ["heartbeat", "stage", "response"]:
                 self.backend.update_general(log.__dict__)
 

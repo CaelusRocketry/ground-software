@@ -6,13 +6,13 @@ const socket = io('http://localhost:5000');
 
 const socketConnection = (store) => {
     socket.on('general', function(log){
-        console.log(log);
-        console.log("Header: " + log.header);
+//        console.log(log);
+//        console.log("Header: " + log.header);
         if(log.header === 'heartbeat'){
             store.dispatch(updateHeartbeat(log));
 //            store.dispatch(addResponse(log));
         }
-        else if(log.header === 'progress'){
+        else if(log.header === 'stage'){
             store.dispatch(updateStage(log));
             store.dispatch(addResponse(log));
         }
@@ -24,13 +24,13 @@ const socketConnection = (store) => {
         }
     });
 
-    socket.on('update sensor data', function(log){ 
-        console.log(log);
-        console.log("Header: " + log.header);
+    socket.on('sensor_data', function(log){ 
+//        console.log(log);
+//        console.log("Header: " + log.header);
         store.dispatch(updateSensorData(log));
     });
 
-    socket.on('update valve data', function(log){ 
+    socket.on('valve_data', function(log){ 
         store.dispatch(updateValveData(log));
     });
 
