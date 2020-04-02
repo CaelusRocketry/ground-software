@@ -24,6 +24,8 @@ const initialState = {
     },
     general: {
         heartbeat: undefined,
+        heartbeat_recieved: undefined,
+        heartbeat_status: undefined,
         stage: undefined,
         responses: [],
         percent_data: undefined
@@ -66,8 +68,13 @@ const updateData = (state = initialState, action) => {
             return state;
 
         case 'UPDATE_HEARTBEAT':
-            state.general.heartbeat = timestamp;
+            state.general.heartbeat_recieved = Date.now();
+            state.general.heartbeat = timestamp
             return state;
+
+        case 'UPDATE_HEARTBEAT_STATUS':
+            state.general.heartbeat_status = action.heartbeat_status;
+            return state
         
         case 'UPDATE_STAGE':
             state.general.stage = message.stage;

@@ -6,7 +6,8 @@ const Data = () => {
         return {
             sensorState: state.data.sensorData,
             valveState: state.data.valveData,
-            heartbeatState: state.data.general.heartbeat
+            heartbeatState: state.data.general.heartbeat,
+            heartbeatStatus: state.data.general.heartbeat_status == undefined? []: [["", state.data.general.heartbeat_status]]
         };
     });
 
@@ -31,9 +32,9 @@ const Data = () => {
 
             <div class={blockStyle}>
                 <h4 class={groupHeaderStyle}>Tank</h4> 
-                    <p style={{color: getColor(data.sensorState.pressure.tank)}}> Pressure: {getLast(data.sensorState.pressure.tank)} </p> <br/>
-                    <p style={{color: getColor(data.sensorState.thermocouple.tank)}}> Thermo: {getLast(data.sensorState.thermocouple.tank)} </p> <br />
-                    <p style={{color: getColor(data.sensorState.load.tank)}}> Load: {getLast(data.sensorState.load.tank)} </p> <br/>
+                    <p style={{color: getColor(data.sensorState.pressure.tank)}}> Pressure: {getLast(data.sensorState.pressure.tank)} </p> 
+                    <p style={{color: getColor(data.sensorState.thermocouple.tank)}}> Thermo: {getLast(data.sensorState.thermocouple.tank)} </p> 
+                    <p style={{color: getColor(data.sensorState.load.tank)}}> Load: {getLast(data.sensorState.load.tank)} </p>
                 <br></br>
 
                 <h4 class={groupHeaderStyle}>Chamber</h4> 
@@ -65,7 +66,7 @@ const Data = () => {
 
             <h3 class={blockHeaderStyle}>Heartbeat</h3> 
             <div class={blockStyle}>
-                Timestamp: {data.heartbeatState}  <br/>  
+            <p style={{color:getColor(data.heartbeatStatus)}}> Timestamp: {data.heartbeatState}  </p> <br/>  
             </div>
 
         </center>

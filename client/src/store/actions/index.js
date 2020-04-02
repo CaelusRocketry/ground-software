@@ -13,6 +13,11 @@ export const updateHeartbeat = (data) => ({
   data
 });
 
+export const updateHeartbeatStatus = (heartbeat_status) => ({
+  type: "UPDATE_HEARTBEAT_STATUS", 
+  heartbeat_status
+});
+
 export const updateStage = (data) => ({
   type: "UPDATE_STAGE", 
   data
