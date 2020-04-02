@@ -42,8 +42,3 @@ export const actuatePressed = (data) => ({
   type: "ACTUATE_PRESSED",
   data
 });
-
-export const currentStage = (stage) => ({
-  type: "CURRENT_STAGE",
-  stage
-});

@@ -13,19 +13,19 @@ class Backend(Namespace):
         print("Initialized")
 
     
-    def update_general(self, message):
-        #print(message)
-        self.socketio.emit('general',  message)
+    def update_general(self, log):
+        print("General:", log)
+        self.socketio.emit('general',  log)
 
     
-    def update_sensor_data(self, message):
+    def update_sensor_data(self, log):
         #print(message)
-        self.socketio.emit('update sensor data',  message)
+        self.socketio.emit('sensor_data',  log)
 
     
-    def update_valve_data(self, message):
+    def update_valve_data(self, log):
         #print(message)
-        self.socketio.emit('update valve data',  message)
+        self.socketio.emit('valve_data',  log)
 
 
     def on_button_press(self, data):
