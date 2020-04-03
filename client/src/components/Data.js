@@ -38,12 +38,12 @@ const Data = () => {
                 <br></br>
 
                 <h4 class={groupHeaderStyle}>Chamber</h4> 
-                    <p style={{color: getColor(data.sensorState.pressure.chamber)}}> Pressure: {getLast(data.sensorState.pressure.chamber)} </p> <br/>
-                    <p style={{color: getColor(data.sensorState.thermocouple.chamber)}}>Thermo: {getLast(data.sensorState.thermocouple.chamber)} </p> <br/>
+                    <p style={{color: getColor(data.sensorState.pressure.chamber)}}> Pressure: {getLast(data.sensorState.pressure.chamber)} </p>
+                    <p style={{color: getColor(data.sensorState.thermocouple.chamber)}}>Thermo: {getLast(data.sensorState.thermocouple.chamber)} </p>
                 <br></br>
 
                 <h4 class={groupHeaderStyle}>Injector</h4>
-                    <p style={{color: getColor(data.sensorState.pressure.injector)}}> Pressure: {getLast(data.sensorState.pressure.injector)} </p>  <br/>  
+                    <p style={{color: getColor(data.sensorState.pressure.injector)}}> Pressure: {getLast(data.sensorState.pressure.injector)} </p>   
                 <br></br>
                 Timestamp: {getLast(data.sensorState.timestamp)}  <br/> 
                 <br></br>

@@ -1,6 +1,5 @@
 import io from 'socket.io-client';
 import { updateSensorData, updateValveData, updateHeartbeat, updateHeartbeatStatus, generalPressed, abortPressed, requestPressed, actuatePressed, updateStage, addResponse } from './store/actions';
-import { useSelector, useStore, useDispatch } from "react-redux";
 
 const socket = io('http://localhost:5000');
 
@@ -18,6 +17,11 @@ const socketConnection = (store) => {
         }
         else if(log.header === 'response'){
             store.dispatch(addResponse(log));
+
+            if(log.message.header === 'soft_abort') {
+                console.log("soft aborted")
+                store.dispatch(abortPressed({type: 'soft', pressed: true}));
+            }
         }
         else{
             console.log("Unknown general header");
