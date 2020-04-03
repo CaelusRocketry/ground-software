@@ -45,7 +45,7 @@ const ButtonPane = () => {
       alert("You haven't selected something for each dropdown.");
       return;
     }
-    if(!window.confirm("Are you sure u wanna actuate the " + type + " valve at " + loc + " w/ priority " + p)){
+    if(!window.confirm("Are you sure you want to actuate the " + type + " valve at " + loc + " w/ priority " + p)){
       return;
     }
     dispatch(actuatePressed({valve: loc, actuation_type: type, priority: p}));
