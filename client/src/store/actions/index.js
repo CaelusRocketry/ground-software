@@ -47,3 +47,8 @@ export const actuatePressed = (data) => ({
   type: "ACTUATE_PRESSED",
   data
 });
+
+export const updateMode = (data) => ({
+  type: "UPDATE_MODE",
+  data
+});

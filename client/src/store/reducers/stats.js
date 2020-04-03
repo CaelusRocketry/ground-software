@@ -28,7 +28,8 @@ const initialState = {
         heartbeat_status: undefined,
         stage: undefined,
         responses: [],
-        percent_data: undefined
+        percent_data: undefined, 
+        mode: "flight"
     }
 }
 
@@ -94,7 +95,14 @@ const updateData = (state = initialState, action) => {
             let temp = state.general.responses.slice();
             temp.push(obj)
             state.general.responses = temp;
-            return state;        
+            return state;  
+            
+        case 'UPDATE_MODE':
+            if(action.data.message.header === 'soft abort') 
+                state.general.mode = "soft"
+            else if(action.data.message.header === 'hard abort')
+                state.general.mode = "hard"
+            return state;
 
         default:
             return state
