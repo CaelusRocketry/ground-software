@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import { updateSensorData, updateValveData, updateHeartbeat, updateHeartbeatStatus, generalPressed, abortPressed, requestPressed, actuatePressed, updateStage, addResponse } from './store/actions';
+import { updateSensorData, updateValveData, updateHeartbeat, updateHeartbeatStatus, generalPressed, abortPressed, requestPressed, actuatePressed, updateStage, addResponse, updateMode } from './store/actions';
 
 const socket = io('http://localhost:5000');
 
@@ -21,6 +21,16 @@ const socketConnection = (store) => {
             if(log.message.header === 'soft_abort') {
                 console.log("soft aborted")
                 store.dispatch(abortPressed({type: 'soft', pressed: true}));
+            }
+
+            if(log.message.header === 'soft abort') {
+                console.log("soft abort confirmation")
+                store.dispatch(updateMode(log));
+            }
+
+            if(log.message.header === 'hard abort') {
+                console.log("hard abort confirmation")
+                store.dispatch(updateMode(log));
             }
         }
         else{
