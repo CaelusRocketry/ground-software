@@ -1,6 +1,5 @@
 import io from 'socket.io-client';
-import { updateSensorData, updateValveData, updateHeartbeat, generalPressed, abortPressed, requestPressed, actuatePressed, updateStage, addResponse } from './store/actions';
-
+import { updateSensorData, updateValveData, updateHeartbeat, updateHeartbeatStatus, generalPressed, abortPressed, requestPressed, actuatePressed, updateStage, addResponse, updateMode } from './store/actions';
 
 const socket = io('http://localhost:5000');
 
@@ -18,6 +17,21 @@ const socketConnection = (store) => {
         }
         else if(log.header === 'response'){
             store.dispatch(addResponse(log));
+
+            if(log.message.header === 'soft_abort') {
+                console.log("soft aborted")
+                store.dispatch(abortPressed({type: 'soft', pressed: true}));
+            }
+
+            if(log.message.header === 'soft abort') {
+                console.log("soft abort confirmation")
+                store.dispatch(updateMode(log));
+            }
+
+            if(log.message.header === 'hard abort') {
+                console.log("hard abort confirmation")
+                store.dispatch(updateMode(log));
+            }
         }
         else{
             console.log("Unknown general header");
@@ -54,14 +68,14 @@ const socketConnection = (store) => {
             store.dispatch(abortPressed({type: "hard", pressed: false}));
             sendMessage(header, message);
         }
-        if(buttons.request.valve[0] != null){
+        if(buttons.request.valve[0] != undefined){
             header = "valve_request"; message = {"valve_type": buttons.request.valve[0], "valve_location": buttons.request.valve[1]};
-            store.dispatch(requestPressed({type: "valve", objectType: null, location: null}));
+            store.dispatch(requestPressed({type: "valve", objectType: undefined, location: undefined}));
             sendMessage(header, message);
         }
-        if(buttons.request.sensor[0] != null){
+        if(buttons.request.sensor[0] != undefined){
             header = "sensor_request"; message = {"sensor_type": buttons.request.sensor[0], "sensor_location": buttons.request.sensor[1]};
-            store.dispatch(requestPressed({type: "sensor", objectType: null, location: null}));
+            store.dispatch(requestPressed({type: "sensor", objectType: undefined, location: undefined}));
             sendMessage(header, message);
         }
         if(buttons.general.progress){
@@ -71,11 +85,14 @@ const socketConnection = (store) => {
         }
         for(let valve in buttons.actuation){
             let [type, priority] = buttons.actuation[valve];
-            if(type === null){
+            if(type === null || type === undefined || priority === null || priority === undefined){
                 continue;
             }
             header = "solenoid_actuate"; message = {"valve_location": valve, "actuation_type": type, "priority": priority};
-            store.dispatch(actuatePressed({valve: valve, type: type, priority: priority}));
+            console.log(type + " " + priority);
+            console.log("Dispatching null");
+            store.dispatch(actuatePressed({valve: valve, type: undefined, priority: undefined}));
+            console.log(store.getState());
             sendMessage(header, message);
         }
     }
@@ -84,4 +101,14 @@ const socketConnection = (store) => {
 
 }
 
-export {socketConnection} 
+const heartbeatError = (store) => {
+    let general = store.getState().data.general;
+    let curr = Date.now();
+
+    if(general.heartbeat == undefined) store.dispatch(updateHeartbeatStatus(1));
+    else if(curr - general.heartbeat_recieved > 10000) store.dispatch(updateHeartbeatStatus(1));
+    else if(curr - general.heartbeat_recieved > 6000) store.dispatch(updateHeartbeatStatus(2));
+    else store.dispatch(updateHeartbeatStatus(3));
+}
+
+export {socketConnection, heartbeatError} 

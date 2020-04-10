@@ -27,6 +27,7 @@ const ButtonPane = () => {
   // Change this to useSelector
   const current_stage = useSelector(state => stages.indexOf(state.data.general.stage));
   const current_progress = useSelector(state => state.data.general.percent_data);
+  const mode = useSelector(state => state.data.general.mode);
 
   const [views, setViews] = useState({abort: false, actuation: false, sensor: false, valve: false});
   const [selectValues, setSelectValues] = useState({});
@@ -39,11 +40,13 @@ const ButtonPane = () => {
   }
   
   const actuateValve = (loc, type, p) => {
+    console.log(selectValues);
+    console.log([loc, type, p]);
     if([loc, type, p].includes(undefined)){
       alert("You haven't selected something for each dropdown.");
       return;
     }
-    if(!window.confirm("Are you sure u wanna actuate the " + type + " valve at " + loc + " w/ priority " + p)){
+    if(!window.confirm("Are you sure you want to actuate the " + type + " valve at " + loc + " w/ priority " + p)){
       return;
     }
     dispatch(actuatePressed({valve: loc, actuation_type: type, priority: p}));
@@ -73,7 +76,7 @@ const ButtonPane = () => {
     return (
       <div class="float-left">
       <b><label>{label}: </label></b>
-        <select onChange={(e) => {selectValues[name] = e.target.value}} class="ml-2 mr-4 border-2">
+        <select onChange={(e) => {let values = Object.assign({}, selectValues); console.log(name); values[name] = e.target.value; setSelectValues(values); console.log(values); console.log(selectValues);}} class="ml-2 mr-4 border-2">
           <option class="hidden"></option>
           {options.map((arr) => 
             <option value={arr[0]}>{arr[1]}</option>
@@ -95,14 +98,14 @@ const ButtonPane = () => {
       <div><button class={btn_small} onClick={() => abort("hard")}>Hard Abort</button></div>
     </div>
 
-    <button onClick={() => {setViews({abort: views.abort, actuation: !views.actuation, sensor: views.sensor, valve: views.valve})}} class={btn_big}>Valve Actuation</button>
+    <button onClick={() => {setViews({abort: views.abort, actuation: !views.actuation, sensor: views.sensor, valve: views.valve})}} class={btn_big} disabled={(mode === "flight"? false: true)}>Valve Actuation</button>
     <div class={views.actuation ? "block mt-2" : "hidden"}>
       <div class="mt-2">
         <b><label>Valve: </label></b>
         {createSelect("Valve", "actuationValve", [["main_propellant_valve", "Main Propellant Valve"], ["pressure_relief", "Pressure Relief Valve"], ["propellant_vent", "Propellant Vent Valve"]])}
         {createSelect("Actuation Type", "actuationType", [["pulse", "Pulse"], ["open_vent", "Open Vent"], ["close_vent", "Close Vent"]])}
         {createSelect("Priority", "actuationPriority", [["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]])}
-        <button onClick={() => actuateValve(selectValues.valve, selectValues.actuationType, selectValues.priority)} class={btn_small_marginless}>Actuate Solenoid</button>
+        <button onClick={() => actuateValve(selectValues.actuationValve, selectValues.actuationType, selectValues.actuationPriority)} class={btn_small_marginless}>Actuate Solenoid</button>
       </div>
     </div>
 
