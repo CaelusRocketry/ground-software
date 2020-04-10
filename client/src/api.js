@@ -1,6 +1,5 @@
 import io from 'socket.io-client';
-import { updateSensorData, updateValveData, updateHeartbeat, generalPressed, abortPressed, requestPressed, actuatePressed, updateStage, addResponse } from './store/actions';
-
+import { updateSensorData, updateValveData, updateHeartbeat, updateHeartbeatStatus, generalPressed, abortPressed, requestPressed, actuatePressed, updateStage, addResponse, updateMode } from './store/actions';
 
 const socket = io('http://localhost:5000');
 
@@ -19,6 +18,21 @@ const socketConnection = (store) => {
         }
         else if(log.header === 'response'){
             store.dispatch(addResponse(log));
+
+            if(log.message.header === 'soft_abort') {
+                console.log("soft aborted")
+                store.dispatch(abortPressed({type: 'soft', pressed: true}));
+            }
+
+            if(log.message.header === 'soft abort') {
+                console.log("soft abort confirmation")
+                store.dispatch(updateMode(log));
+            }
+
+            if(log.message.header === 'hard abort') {
+                console.log("hard abort confirmation")
+                store.dispatch(updateMode(log));
+            }
         }
         else{
             console.log("Unknown general header");
@@ -88,4 +102,14 @@ const socketConnection = (store) => {
 
 }
 
-export {socketConnection} 
+const heartbeatError = (store) => {
+    let general = store.getState().data.general;
+    let curr = Date.now();
+
+    if(general.heartbeat == undefined) store.dispatch(updateHeartbeatStatus(1));
+    else if(curr - general.heartbeat_recieved > 10000) store.dispatch(updateHeartbeatStatus(1));
+    else if(curr - general.heartbeat_recieved > 6000) store.dispatch(updateHeartbeatStatus(2));
+    else store.dispatch(updateHeartbeatStatus(3));
+}
+
+export {socketConnection, heartbeatError} 

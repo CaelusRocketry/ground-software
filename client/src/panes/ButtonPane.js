@@ -27,6 +27,7 @@ const ButtonPane = () => {
   // Change this to useSelector
   const current_stage = useSelector(state => stages.indexOf(state.data.general.stage));
   const current_progress = useSelector(state => state.data.general.percent_data);
+  const mode = useSelector(state => state.data.general.mode);
 
   const [views, setViews] = useState({abort: false, actuation: false, sensor: false, valve: false});
   const [selectValues, setSelectValues] = useState({});
@@ -45,7 +46,7 @@ const ButtonPane = () => {
       alert("You haven't selected something for each dropdown.");
       return;
     }
-    if(!window.confirm("Are you sure u wanna actuate the " + type + " valve at " + loc + " w/ priority " + p)){
+    if(!window.confirm("Are you sure you want to actuate the " + type + " valve at " + loc + " w/ priority " + p)){
       return;
     }
     dispatch(actuatePressed({valve: loc, actuation_type: type, priority: p}));
@@ -97,7 +98,7 @@ const ButtonPane = () => {
       <div><button class={btn_small} onClick={() => abort("hard")}>Hard Abort</button></div>
     </div>
 
-    <button onClick={() => {setViews({abort: views.abort, actuation: !views.actuation, sensor: views.sensor, valve: views.valve})}} class={btn_big}>Valve Actuation</button>
+    <button onClick={() => {setViews({abort: views.abort, actuation: !views.actuation, sensor: views.sensor, valve: views.valve})}} class={btn_big} disabled={(mode === "flight"? false: true)}>Valve Actuation</button>
     <div class={views.actuation ? "block mt-2" : "hidden"}>
       <div class="mt-2">
         <b><label>Valve: </label></b>
