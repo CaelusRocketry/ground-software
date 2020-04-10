@@ -6,7 +6,9 @@ const Data = () => {
         return {
             sensorState: state.data.sensorData,
             valveState: state.data.valveData,
-            heartbeatState: state.data.general.heartbeat
+            heartbeatState: state.data.general.heartbeat,
+            heartbeatStatus: state.data.general.heartbeat_status == undefined? []: [["", state.data.general.heartbeat_status]],
+            modeState: state.data.general.mode
         };
     });
 
@@ -33,20 +35,20 @@ const Data = () => {
 
             <div class={blockStyle}>
                 <h4 class={groupHeaderStyle}>Tank</h4> 
-                    <p style={{color: getColor(data.sensorState.pressure.tank)}}> Pressure: {getLast(data.sensorState.pressure.tank)} </p> <br/>
-                    <p style={{color: getColor(data.sensorState.thermocouple.tank)}}> Thermo: {getLast(data.sensorState.thermocouple.tank)} </p> <br />
-                    <p style={{color: getColor(data.sensorState.load.tank)}}> Load: {getLast(data.sensorState.load.tank)} </p> <br/>
+                    <p style={{color: getColor(data.sensorState.pressure.tank)}}> Pressure: {getLast(data.sensorState.pressure.tank)} PSI</p> <br/>
+                    <p style={{color: getColor(data.sensorState.thermocouple.tank)}}> Thermo: {getLast(data.sensorState.thermocouple.tank)} C</p> <br />
+                    <p style={{color: getColor(data.sensorState.load.tank)}}> Load: {getLast(data.sensorState.load.tank)} N</p> <br/>
                 <br></br>
 
                 <h4 class={groupHeaderStyle}>Chamber</h4> 
-                    <p style={{color: getColor(data.sensorState.pressure.chamber)}}> Pressure: {getLast(data.sensorState.pressure.chamber)} </p> <br/>
-                    <p style={{color: getColor(data.sensorState.thermocouple.chamber)}}>Thermo: {getLast(data.sensorState.thermocouple.chamber)} </p> <br/>
+                    <p style={{color: getColor(data.sensorState.pressure.chamber)}}> Pressure: {getLast(data.sensorState.pressure.chamber)} PSI</p> <br/>
+                    <p style={{color: getColor(data.sensorState.thermocouple.chamber)}}>Thermo: {getLast(data.sensorState.thermocouple.chamber)} C</p> <br/>
                 <br></br>
 
                 <h4 class={groupHeaderStyle}>Injector</h4>
-                    <p style={{color: getColor(data.sensorState.pressure.injector)}}> Pressure: {getLast(data.sensorState.pressure.injector)} </p>  <br/>  
+                    <p style={{color: getColor(data.sensorState.pressure.injector)}}> Pressure: {getLast(data.sensorState.pressure.injector)} PSI</p>  <br/>  
                 <br></br>
-                Timestamp: {getLast(data.sensorState.timestamp)}  <br/> 
+                Timestamp: {getLast(data.sensorState.timestamp)} s<br/> 
                 <br></br>
             </div>
 
@@ -60,14 +62,21 @@ const Data = () => {
                 Propellant: {data.valveState.solenoid.propellant_vent} <br/> 
                 Main Propellant Valve: {data.valveState.solenoid.main_propellant_valve} <br/> 
                 <br></br>
-                Timestamp: {data.valveState.timestamp}  <br/>  
+                Timestamp: {data.valveState.timestamp} 
             </div>
 
             <br></br>
 
             <h3 class={blockHeaderStyle}>Heartbeat</h3> 
             <div class={blockStyle}>
-                Timestamp: {data.heartbeatState}  <br/>  
+            <p style={{color:getColor(data.heartbeatStatus)}}> Timestamp: {data.heartbeatState}  </p> 
+            </div>
+
+            <br></br>
+
+            <h3 class={blockHeaderStyle}>Mode</h3> 
+            <div class={blockStyle}>
+            <p>{data.modeState}  </p> 
             </div>
 
         </center>

@@ -27,12 +27,11 @@ const MessagePane = () => {
     return (
     <div>
         <Header title="Messages" />
-        {responses.length}
+        {/* {responses.length} */}
         <ul className="list-group" style={style}>
-            {responses.length}
             {responses.slice(0).reverse().map((data, i) => 
                 <li key={i} className="list-group-item list-group-item-primary">
-                    {i}
+                    {responses.length - i}
 
                     <h3 class="text-lg font-bold">{messageArray(data).header}</h3>
                     <p class="text-xs mb-2">- {messageArray(data).timestamp} seconds</p>
