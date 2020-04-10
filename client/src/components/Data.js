@@ -16,12 +16,14 @@ const Data = () => {
 
     const getLast = (arr) => (arr.length > 0 ? arr[arr.length - 1] : undefined);
     const getColor = (status) => {
-        status = status.length == 0 ? undefined : status[status.length - 1][1];
-        switch (status) {
-            case undefined: return "black"
+        if(status.length === 0){
+            return "black";
+        }
+        switch (status[status.length - 1][1]) {
             case 3: return "green"; 
             case 2: return "orange";
-            default: return "red";
+            case 1: return "red";
+            default: return "blue";
         }
     }
 
