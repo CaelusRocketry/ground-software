@@ -8,6 +8,7 @@ const socketConnection = (store) => {
     socket.on('general', function(log){
 //        console.log(log);
 //        console.log("Header: " + log.header);
+        console.log("Got log: " + log.header);
         if(log.header === 'heartbeat'){
             store.dispatch(updateHeartbeat(log));
 //            store.dispatch(addResponse(log));
@@ -54,12 +55,12 @@ const socketConnection = (store) => {
             store.dispatch(abortPressed({type: "hard", pressed: false}));
             sendMessage(header, message);
         }
-        if(buttons.request.valve[0] != undefined){
+        if(buttons.request.valve[0] !== undefined){
             header = "valve_request"; message = {"valve_type": buttons.request.valve[0], "valve_location": buttons.request.valve[1]};
             store.dispatch(requestPressed({type: "valve", objectType: undefined, location: undefined}));
             sendMessage(header, message);
         }
-        if(buttons.request.sensor[0] != undefined){
+        if(buttons.request.sensor[0] !== undefined){
             header = "sensor_request"; message = {"sensor_type": buttons.request.sensor[0], "sensor_location": buttons.request.sensor[1]};
             store.dispatch(requestPressed({type: "sensor", objectType: undefined, location: undefined}));
             sendMessage(header, message);
