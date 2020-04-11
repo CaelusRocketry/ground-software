@@ -1,6 +1,5 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
 *$py.class
 
 # C extensions
@@ -114,3 +113,8 @@ venv.bak/
 private.pem
 black_box.txt
 incoming.txt
+examples/general/node_modules/
+examples/general/public/
+examples/general/node_modules/package-lock.json
+examples/general/node_modules/package.json
+examples/general/node_modules/README.md

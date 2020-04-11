@@ -1,8 +1,12 @@
-import time
-import heapq
 import socket
 import threading
+import time
+import heapq
+import multiprocessing
 from packet import Packet, Log, LogPriority
+from enums import ValveLocation, ActuationType
+import ast
+import base64
 
 BYTE_SIZE = 8192
 
@@ -24,22 +28,12 @@ class Telemetry:
     def __init__(self, ip, port):
         """ Based on given IP and port, create and connect a socket """
         self.queue_send = []
-        self.connect(ip, port)
-        self.start_time = time.time()
-
-
-    def connect(self, ip, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((ip, port))
         self.sock.listen(1)
         self.conn, self.addr = self.sock.accept()
-        Log("Created socket")
-
-
-    def init_backend(self, b):
-        self.backend = b
-
+        Log("Creasted socket")
 
     def begin(self):
         """ Starts the send and listen threads """
@@ -53,7 +47,6 @@ class Telemetry:
         self.listen_thread.start()
         self.heartbeat_thread.start()
 
-
     def send(self):
         """ Constantly sends next packet from queue to ground station """
         while True:
@@ -62,48 +55,54 @@ class Telemetry:
                 self.conn.send(encoded)
             time.sleep(DELAY_SEND)
 
-
     def listen(self):
         """ Constantly listens for any from ground station """
         while True:
             data = self.conn.recv(BYTE_SIZE)
-            self.ingest(data)
-#            self.ingest_thread = threading.Thread(
-#                target=self.ingest, args=(data,))
-#            self.ingest_thread.daemon = True
-#            self.ingest_thread.start()
+            self.ingest_thread = threading.Thread(
+                target=self.ingest, args=(data,))
+            self.ingest_thread.daemon = True
+            self.ingest_thread.start()
             time.sleep(DELAY_LISTEN)
-
 
     def enqueue(self, packet):
         """ Encripts and enqueues the given Packet """
         packet_str = packet.to_string().encode()
         heapq.heappush(self.queue_send, (packet.level, packet_str))
 
-
     def ingest(self, packet_str):
         """ Prints any packets received """
-#        print("Ingesting:", packet_str)
         packet = Packet.from_string(packet_str)
         for log in packet.logs:
-            log.timestamp = round(log.timestamp - self.start_time, 1)
-#            print("Timestamp:", log.timestamp)
-            if log.header in ["heartbeat", "stage", "response", "mode"]:
-                self.backend.update_general(log.__dict__)
-
-            if log.header == "sensor_data":
-                self.backend.update_sensor_data(log.__dict__)
-
-            if log.header == "valve_data":
-                self.backend.update_valve_data(log.__dict__)
-            
+            print(log.to_string())
             log.save()
-
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while True:
+#            continue
             log = Log(header="heartbeat", message="AT")
             self.enqueue(Packet(logs=[log], level=LogPriority.INFO))
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
+
+
+GS_IP, GS_PORT = '127.0.0.1', 5005
+telem = Telemetry(GS_IP, GS_PORT)
+telem.begin()
+
+def send_actuation_command(loc, act_type, priority):
+    header = "solenoid_actuate"
+    message = {"valve_location": ValveLocation(loc), "actuation_type": ActuationType(act_type), "priority": int(priority)}
+    print(message)
+    log = Log(header, message)
+    telem.enqueue(Packet(logs=[log], level=LogPriority.CRIT))
+
+
+while True:
+    inp = input().split()
+    cmd = inp[0]
+    args = inp[1:]
+    print(args)
+    if cmd == "actuate":
+        send_actuation_command(*args)
