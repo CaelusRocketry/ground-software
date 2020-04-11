@@ -29,7 +29,7 @@ const initialState = {
         stage: undefined,
         responses: [],
         percent_data: undefined, 
-        mode: "flight"
+        mode: "Normal"
     }
 }
 
@@ -98,10 +98,7 @@ const updateData = (state = initialState, action) => {
             return state;  
             
         case 'UPDATE_MODE':
-            if(action.data.message.header === 'soft abort') 
-                state.general.mode = "soft"
-            else if(action.data.message.header === 'hard abort')
-                state.general.mode = "hard"
+            state.general.mode = action.data.message.mode
             return state;
 
         default:
