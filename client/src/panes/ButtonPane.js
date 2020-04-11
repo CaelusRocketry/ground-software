@@ -113,7 +113,7 @@ const ButtonPane = () => {
       <div class="mt-2">
         <b><label>Valve: </label></b>
         {createSelect("Valve", "actuationValve", [["main_propellant_valve", "Main Propellant Valve"], ["pressure_relief", "Pressure Relief Valve"], ["propellant_vent", "Propellant Vent Valve"]])}
-        {createSelect("Actuation Type", "actuationType", [["pulse", "Pulse"], ["open_vent", "Open Vent"], ["close_vent", "Close Vent"]])}
+        {createSelect("Actuation Type", "actuationType", [["pulse", "Pulse"], ["open_vent", "Open Vent"], ["close_vent", "Close Vent"], ["none", "Stop actuation"]])}
         {createSelect("Priority", "actuationPriority", [[1, 1], [2, 2], [3, 3]])}
         <button onClick={() => actuateValve(selectValues.actuationValve, selectValues.actuationType, selectValues.actuationPriority)} class={btn_small_marginless}>Actuate Solenoid</button>
       </div>
