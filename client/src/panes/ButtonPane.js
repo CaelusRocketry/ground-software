@@ -90,19 +90,25 @@ const ButtonPane = () => {
     )
   }
 
+  const switchView = (name) => {
+    let temp = Object.assign({}, views);
+    temp[name] = !temp[name]
+    setViews(temp);
+  }
+
 
 
   return (
   <div class="pane">
     <Header title="Actions"/>
 
-    <div><button onClick={() => {setViews({abort: !views.abort, actuation: views.actuation, sensor: views.sensor, valve: views.valve})}} class={btn_big}>Abort</button></div>
+    <div><button onClick={() => {switchView("abort")}} class={btn_big}>Abort</button></div>
     <div class={views.abort ? "block" : "hidden"}>
-      <div><button class={btn_small} onClick={() => abort("soft")}>Soft Abort</button></div>
-      <div><button class={btn_small} onClick={() => abort("hard")}>Hard Abort</button></div>
+      <div><button class={btn_small} onClick={() => abort("soft")} disabled={mode === "Normal" ? false : true}>Soft Abort</button></div>
+      <div><button class={btn_small} onClick={() => abort("hard")} disabled={mode === "Hard abort" ? true : false}>Hard Abort</button></div>
     </div>
 
-    <button onClick={() => {setViews({abort: views.abort, actuation: !views.actuation, sensor: views.sensor, valve: views.valve})}} class={btn_big} disabled={(mode === "flight"? false: true)}>Valve Actuation</button>
+    <button onClick={() => {switchView("actuation")}} class={btn_big} disabled={mode === "Normal" ? false : true}>Valve Actuation</button>
     <div class={views.actuation ? "block mt-2" : "hidden"}>
       <div class="mt-2">
         <b><label>Valve: </label></b>
@@ -113,14 +119,14 @@ const ButtonPane = () => {
       </div>
     </div>
 
-    <div><button onClick={() => {setViews({abort: views.abort, actuation: views.actuation, sensor: !views.sensor, valve: views.valve})}} class={btn_big}>Request Sensor Data</button></div>
+    <div><button onClick={() => {switchView("sensor")}} class={btn_big}>Request Sensor Data</button></div>
     <div class={views.sensor ? "block mt-2" : "hidden"}>
       {createSelect("Sensor Location", "requestSensorLocation", [["chamber", "Chamber"], ["tank", "Tank"], ["injector", "Injector"]])}
       {createSelect("Sensor Type", "requestSensor", [["thermocouple", "Thermocouple"], ["pressure", "Pressure Sensor"], ["load", "Load Sensor"]])}
       <button onClick={() => request("sensor", selectValues.requestSensor, selectValues.requestSensorLocation)} class={btn_small_marginless}>Request Data</button>
     </div>
 
-    <div><button onClick={() => {setViews({abort: views.abort, actuation: views.actuation, sensor: views.sensor, valve: !views.valve})}} class={btn_big}>Request Valve State</button></div>
+    <div><button onClick={() => {switchView("valve")}} class={btn_big}>Request Valve State</button></div>
     <div class={views.valve ? "block mt-2" : "hidden"}>
       <div class="mt-2">
         {createSelect("Valve Type", "requestValve", [["ball", "Ball"], ["solenoid", "Solenoid"]])}
