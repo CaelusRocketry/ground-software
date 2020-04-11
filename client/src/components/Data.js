@@ -8,7 +8,7 @@ const Data = () => {
             valveState: state.data.valveData,
             heartbeatState: state.data.general.heartbeat,
             heartbeatStatus: state.data.general.heartbeat_status == undefined? []: [["", state.data.general.heartbeat_status]],
-            modeState: state.data.general.mode
+            mode: state.data.general.mode
         };
     });
 
@@ -76,7 +76,7 @@ const Data = () => {
 
             <h3 class={blockHeaderStyle}>Mode</h3> 
             <div class={blockStyle}>
-            <p>{data.modeState}  </p> 
+            <p>{data.mode}  </p> 
             </div>
 
         </center>

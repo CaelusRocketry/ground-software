@@ -46,6 +46,7 @@ const ButtonPane = () => {
       alert("You haven't selected something for each dropdown.");
       return;
     }
+    p = parseInt(p);
     if(!window.confirm("Are you sure you want to actuate the " + type + " valve at " + loc + " w/ priority " + p)){
       return;
     }
@@ -68,15 +69,18 @@ const ButtonPane = () => {
     dispatch(generalPressed({type: "progress", pressed: true}));
   }
 
+  const handleSelectChange = (e, name) => {
+    let values = Object.assign({}, selectValues);
+    values[name] = e.target.value;
+    setSelectValues(values);
+  }
+
 
   const createSelect = (label, name, options) => {
-    // label = Sensor Type
-    // onchange = e => {sensorType = e.target.value}
-    // options = [[thermocouple, Thermocouple], [pressure, Pressure Sensor], [load, Load Sensor]]
     return (
       <div class="float-left">
       <b><label>{label}: </label></b>
-        <select onChange={(e) => {let values = Object.assign({}, selectValues); console.log(name); values[name] = e.target.value; setSelectValues(values); console.log(values); console.log(selectValues);}} class="ml-2 mr-4 border-2">
+        <select onChange={(e) => {handleSelectChange(e, name)}} class="ml-2 mr-4 border-2">
           <option class="hidden"></option>
           {options.map((arr) => 
             <option value={arr[0]}>{arr[1]}</option>
@@ -104,7 +108,7 @@ const ButtonPane = () => {
         <b><label>Valve: </label></b>
         {createSelect("Valve", "actuationValve", [["main_propellant_valve", "Main Propellant Valve"], ["pressure_relief", "Pressure Relief Valve"], ["propellant_vent", "Propellant Vent Valve"]])}
         {createSelect("Actuation Type", "actuationType", [["pulse", "Pulse"], ["open_vent", "Open Vent"], ["close_vent", "Close Vent"]])}
-        {createSelect("Priority", "actuationPriority", [["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]])}
+        {createSelect("Priority", "actuationPriority", [[1, 1], [2, 2], [3, 3]])}
         <button onClick={() => actuateValve(selectValues.actuationValve, selectValues.actuationType, selectValues.actuationPriority)} class={btn_small_marginless}>Actuate Solenoid</button>
       </div>
     </div>

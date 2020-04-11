@@ -19,12 +19,12 @@ class Backend(Namespace):
 
     
     def update_sensor_data(self, log):
-        #print(message)
+        print("Sensor:", log)
         self.socketio.emit('sensor_data',  log)
 
     
     def update_valve_data(self, log):
-        #print(message)
+        print("Valve:", log)
         self.socketio.emit('valve_data',  log)
 
 
