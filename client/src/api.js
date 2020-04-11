@@ -16,23 +16,11 @@ const socketConnection = (store) => {
             store.dispatch(updateStage(log));
 //            store.dispatch(addResponse(log));
         }
+        else if(log.header === 'mode'){
+            store.dispatch(updateMode(log));
+        }
         else if(log.header === 'response'){
             store.dispatch(addResponse(log));
-
-            if(log.message.header === 'soft_abort') {
-                console.log("soft aborted")
-                store.dispatch(abortPressed({type: 'soft', pressed: true}));
-            }
-
-            if(log.message.header === 'soft abort') {
-                console.log("soft abort confirmation")
-                store.dispatch(updateMode(log));
-            }
-
-            if(log.message.header === 'hard abort') {
-                console.log("hard abort confirmation")
-                store.dispatch(updateMode(log));
-            }
         }
         else{
             console.log("Unknown general header");

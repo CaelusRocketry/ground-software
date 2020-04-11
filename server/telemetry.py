@@ -88,7 +88,7 @@ class Telemetry:
         for log in packet.logs:
             log.timestamp = round(log.timestamp - self.start_time, 1)
 #            print("Timestamp:", log.timestamp)
-            if log.header in ["heartbeat", "stage", "response"]:
+            if log.header in ["heartbeat", "stage", "response", "mode"]:
                 self.backend.update_general(log.__dict__)
 
             if log.header == "sensor_data":
