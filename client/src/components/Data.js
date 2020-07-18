@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from "react-redux";
 
+const VALVE_MAP = {1: "OPEN", 0: "CLOSED"};
+
 const Data = () => {
     const data = useSelector((state) => {
         return {
@@ -58,9 +60,9 @@ const Data = () => {
                 
             <div class={blockStyle}>
                 <h4 class={groupHeaderStyle}>Solenoids</h4>
-                Pressure Relief: {data.valveState.solenoid.pressure_relief} <br/>  
-                Propellant: {data.valveState.solenoid.propellant_vent} <br/> 
-                Main Propellant Valve: {data.valveState.solenoid.main_propellant_valve} <br/> 
+                Pressure Relief: {VALVE_MAP[data.valveState.solenoid.pressure_relief]} <br/>  
+                Propellant: {VALVE_MAP[data.valveState.solenoid.propellant_vent]} <br/> 
+                Main Propellant Valve: {VALVE_MAP[data.valveState.solenoid.main_propellant_valve]} <br/> 
                 <br></br>
                 Timestamp: {data.valveState.timestamp} 
             </div>
