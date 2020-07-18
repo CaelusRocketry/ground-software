@@ -1,24 +1,10 @@
+import config from '../../config.json';
+
 const initialState = {
     sensorData: {
-        thermocouple: {
-            chamber: [], 
-            tank: [], 
-        },
-        pressure: {
-            chamber: [], 
-            tank: [], 
-            injector: [],
-        },
-        load: {
-            tank: [], 
-        },
-        timestamp: []
     }, 
     valveData: {
         solenoid: {
-            pressure_relief: undefined,
-            propellant_vent: undefined,
-            main_propellant_valve: undefined
         }, 
         timestamp: undefined
     },
@@ -32,6 +18,21 @@ const initialState = {
         mode: "Normal"
     }
 }
+
+for (var sensor in config["sensors"]["list"]) {
+    initialState["sensorData"][sensor] = {}
+    for(var loc in config["sensors"]["list"][sensor]) {
+        initialState["sensorData"][sensor][loc] = []
+    }
+}
+initialState["sensorData"]["timestamp"] = []
+
+for (var valve in config["valves"]["list"]["solenoid"]) {
+    initialState["valveData"]["solenoid"][valve] = undefined
+}
+
+
+
 
 const updateData = (state = initialState, action) => {
     let [message, timestamp] = [undefined, undefined];
