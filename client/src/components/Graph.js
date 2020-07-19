@@ -71,7 +71,7 @@ const Graph = props => {
         arr.push([sensorLoc, sensorType]);
       }
     }
-    console.log(arr);
+
     return arr.map((val) => {
       let loc = val[0];
       let type = val[1];
