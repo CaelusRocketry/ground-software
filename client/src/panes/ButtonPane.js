@@ -37,10 +37,10 @@ const valve_loc_names = {
 }
 
 const acutation_type_names = {
-  "pulse": "Pulse",
-  "open_vent": "Open Vent",
-  "close_vent": "Close Vent",
-  "none": "Stop actuation"
+  4: "Pulse",
+  3: "Open Vent",
+  2: "Close Vent",
+  1: "Stop actuation"
 }
 
 
@@ -99,6 +99,7 @@ const ButtonPane = () => {
       alert("You haven't selected something for each dropdown.");
       return;
     }
+    type = parseInt(type);
     p = parseInt(p);
     if (!window.confirm("Are you sure you want to actuate the " + type + " valve at " + loc + " w/ priority " + p)) {
       return;
@@ -167,12 +168,12 @@ const ButtonPane = () => {
         <div><button class={btn_small} onClick={() => abort("hard")} disabled={mode === "Hard abort" ? true : false}>Hard Abort</button></div>
       </div>
 
-      <button onClick={() => { switchView("actuation") }} class={btn_big} disabled={mode === "Normal" ? false : true}>Valve Actuation</button>
+      <button onClick={() => {switchView("actuation")}} class={btn_big} disabled={mode === "Normal" ? false : true}>Valve Actuation</button>
       <div class={views.actuation ? "block mt-2" : "hidden"}>
         <div class="mt-2">
           <b><label>Valve: </label></b>
           {createSelect("Valve", "actuationValve", valve_loc, valve_loc_names)}
-          {createSelect("Actuation Type", "actuationType", ["pulse", "open_vent", "close_vent", "none"], acutation_type_names)}
+          {createSelect("Actuation Type", "actuationType", [4, 3, 2, 1], acutation_type_names)}
           {createSelect("Priority", "actuationPriority", [1, 2, 3], { 1: 1, 2: 2, 3: 3 })}
           <button onClick={() => actuateValve(selectValues.actuationValve, selectValues.actuationType, selectValues.actuationPriority)} class={btn_small_marginless}>Actuate Solenoid</button>
         </div>
