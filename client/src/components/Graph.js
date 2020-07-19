@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Plot from 'react-plotly.js';
+import config from '../config.json'
 
 const properties = {
   thermocouple: {
@@ -17,6 +18,11 @@ const properties = {
     xaxis: "Time (s)",
     yaxis: "Force (N)",
     title: "Load vs. Time"
+  },
+  undefined: {
+    xaxis: "Undefined",
+    yaxis: "Undefined",
+    title: "Undefined"
   }
 };
 
@@ -27,6 +33,11 @@ const Graph = props => {
   });
   
   const data = useSelector((state) => {
+    // Graph type hasn't been selected yet
+    if(metadata.type == "undefined" || metadata.location == "undefined"){
+      return {'x': [], 'y': []};
+    }
+
     let x_values = [];
     let y_values = [];
 
@@ -46,6 +57,29 @@ const Graph = props => {
     };
   });
 
+  const stylizeName = (name) => {
+    let split = name.split("_");
+    split = split.map((x) => x.charAt(0).toUpperCase() + x.substring(1));
+    return split.join(" ");
+  }
+
+  const getOptions = () => {
+    let sensors = config["sensors"]["list"];
+    let arr = [["undefined", "undefined"]];
+    for(let sensorType in sensors){
+      for(let sensorLoc in sensors[sensorType]){
+        arr.push([sensorLoc, sensorType]);
+      }
+    }
+    console.log(arr);
+    return arr.map((val) => {
+      let loc = val[0];
+      let type = val[1];
+      let value = loc + "." + type;
+      return <option value={value}>{stylizeName(loc)}/{stylizeName(type)}</option>;
+    });
+  }
+
   return (
     <div>
       <select
@@ -55,12 +89,7 @@ const Graph = props => {
         }}
         value={metadata.location + "." + metadata.type}
       >
-        <option value="tank.thermocouple">Tank/Thermocouple</option>
-        <option value="tank.pressure">Tank/Pressure</option>
-        <option value="tank.load">Tank/Load</option>
-        <option value="chamber.thermocouple">Chamber/Thermocouple</option>
-        <option value="chamber.pressure">Chamber/Pressure</option>
-        <option value="injector.pressure">Injector/Pressure</option>
+        {getOptions()}
       </select>
       <Plot style={{
         width: "100vh",
