@@ -1,13 +1,35 @@
-import config from '../../config.json';
+import config from '../../config.json'
+
+const sensors = config["sensors"]["list"];
+const valves = config["valves"]["list"];
+
+console.log(sensors);
+console.log(valves);
+
+const configToStore = (data, base_val) => {
+    let storeData = {};
+    for(let i in data){
+        storeData[i] = {};
+        for(let j in data[i]){
+            if(Array.isArray(base_val)){
+                storeData[i][j] = base_val.slice();
+            }
+            else{
+                storeData[i][j] = base_val;
+            }
+        }
+    }
+    return storeData;
+}
+
+const initialSensorData = configToStore(sensors, []);
+initialSensorData.timestamp = [];
+const initialValveData = configToStore(valves, undefined);
+initialValveData.timestamp = undefined;
 
 const initialState = {
-    sensorData: {
-    }, 
-    valveData: {
-        solenoid: {
-        }, 
-        timestamp: undefined
-    },
+    sensorData: initialSensorData, 
+    valveData: initialValveData,
     general: {
         heartbeat: undefined,
         heartbeat_recieved: undefined,
@@ -18,20 +40,6 @@ const initialState = {
         mode: "Normal"
     }
 }
-
-for (var sensor in config["sensors"]["list"]) {
-    initialState["sensorData"][sensor] = {}
-    for(var loc in config["sensors"]["list"][sensor]) {
-        initialState["sensorData"][sensor][loc] = []
-    }
-}
-initialState["sensorData"]["timestamp"] = []
-
-for (var valve in config["valves"]["list"]["solenoid"]) {
-    initialState["valveData"]["solenoid"][valve] = undefined
-}
-
-
 
 
 const updateData = (state = initialState, action) => {
