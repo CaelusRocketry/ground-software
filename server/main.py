@@ -12,8 +12,8 @@ log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 config = json.loads(open("config.json").read())
-GS_IP = config["GS_IP"]
-GS_PORT = config["GS_PORT"]
+GS_IP = config["telemetry"]["GS_IP"]
+GS_PORT = config["telemetry"]["GS_PORT"]
 
 app = Flask(__name__, static_folder="templates")
 CORS(app)

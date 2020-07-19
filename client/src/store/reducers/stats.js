@@ -1,27 +1,35 @@
+import config from '../../config.json'
+
+const sensors = config["sensors"]["list"];
+const valves = config["valves"]["list"];
+
+console.log(sensors);
+console.log(valves);
+
+const configToStore = (data, base_val) => {
+    let storeData = {};
+    for(let i in data){
+        storeData[i] = {};
+        for(let j in data[i]){
+            if(Array.isArray(base_val)){
+                storeData[i][j] = base_val.slice();
+            }
+            else{
+                storeData[i][j] = base_val;
+            }
+        }
+    }
+    return storeData;
+}
+
+const initialSensorData = configToStore(sensors, []);
+initialSensorData.timestamp = [];
+const initialValveData = configToStore(valves, undefined);
+initialValveData.timestamp = undefined;
+
 const initialState = {
-    sensorData: {
-        thermocouple: {
-            chamber: [], 
-            tank: [], 
-        },
-        pressure: {
-            chamber: [], 
-            tank: [], 
-            injector: [],
-        },
-        load: {
-            tank: [], 
-        },
-        timestamp: []
-    }, 
-    valveData: {
-        solenoid: {
-            pressure_relief: undefined,
-            propellant_vent: undefined,
-            main_propellant_valve: undefined
-        }, 
-        timestamp: undefined
-    },
+    sensorData: initialSensorData, 
+    valveData: initialValveData,
     general: {
         heartbeat: undefined,
         heartbeat_recieved: undefined,
@@ -32,6 +40,7 @@ const initialState = {
         mode: "Normal"
     }
 }
+
 
 const updateData = (state = initialState, action) => {
     let [message, timestamp] = [undefined, undefined];
