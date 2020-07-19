@@ -3,20 +3,17 @@ import Header from "../components/Header";
 import Progress from "./../components/Progress";
 import { useSelector } from 'react-redux';
 import { Timeline, Event } from "../components/Timeline";
+import config from '../config.json';
 
-const stages = ["propellant_loading",
-                "leak_testing_1",
-                "pressurant_loading",
-                "leak_testing_2",
-                "pre_ignition",
-                "disconnection"];
+const stages = config["stages"]["list"]
 
-const names = ["Propellant Loading",
-              "Leak Testing Phase 1",
-              "Pressurant Loading",
-              "Leak Testing Phase 2",
-              "Pre-Ignition",
-              "Disconnection"];
+const names = {"propellant_loading": "Propellant Loading",
+              "leak_testing_1": "Leak Testing Phase 1",
+              "pressurant_loading": "Pressurant Loading",
+              "leak_testing_2": "Leak Testing Phase 2",
+              "pre_ignition": "Pre-Ignition",
+              "disconnection": "Disconnection"};
+              
 
 const SequencePane = () => {
   const current = useSelector(state => stages.indexOf(state.data.general.stage));
@@ -61,8 +58,8 @@ const SequencePane = () => {
     <div className="pane">
       <Header title="Sequence" />
       <Timeline>
-     {names.map((name,i) => 
-      <Event interval={calcTitle(i)} title={name} intervalBackground={calcColor(i)}>
+     {stages.map((stage,i) => 
+      <Event interval={calcTitle(i)} title={names[stage]} intervalBackground={calcColor(i)}>
         <Progress percentage={"" + calcPercentage(i)} />
       </Event>
       )}
