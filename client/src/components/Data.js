@@ -3,6 +3,15 @@ import { useSelector } from "react-redux";
 
 const VALVE_MAP = {1: "OPEN", 0: "CLOSED"};
 
+const stylizeName = (name) => {
+    let spaced = name.split("_").join(" ");
+    let words = spaced.split(" ");
+    for(let idx in words){
+        words[idx] = words[idx][0].toUpperCase() + words[idx].slice(1);
+    }
+    return words.join(" ");
+}
+
 const Data = () => {
     const data = useSelector((state) => {
         return {
@@ -47,17 +56,17 @@ const Data = () => {
                     {Object.keys(data.sensorState).map(sensor => (
                         sensor != "timestamp" &&
                         (<div>
-                            <h4 class={groupHeaderStyle}>{sensor}</h4>
+                            <h4 class={groupHeaderStyle}>{stylizeName(sensor)}</h4>
                             <div>
                                 {Object.keys(data.sensorState[sensor]).map(loc => (
-                                    <p style={{ color: getColor(data.sensorState[sensor][loc]) }}>{loc}: {getLast(data.sensorState[sensor][loc])} {units[sensor]}</p>
+                                    <p style={{ color: getColor(data.sensorState[sensor][loc]) }}>{stylizeName(loc)}: {getLast(data.sensorState[sensor][loc])} {units[sensor]}</p>
                                 ))}
                             </div>
                             <br></br>
                         </div>) ||
                         sensor === "timestamp" &&
                         (<div>
-                            <h4 class={groupHeaderStyle}>{sensor}: {getLast(data.sensorState.timestamp)} s</h4>
+                            <h4 class={groupHeaderStyle}>Timestamp: {getLast(data.sensorState.timestamp)} s</h4>
                         </div>)
                     ))}
                 </div>
@@ -72,17 +81,17 @@ const Data = () => {
                     {Object.keys(data.valveState).map(valve => (
                         valve != "timestamp" &&
                         (<div>
-                            <h4 class={groupHeaderStyle}>{valve}</h4>
+                            <h4 class={groupHeaderStyle}>{stylizeName(valve)}</h4>
                             <div>
                                 {Object.keys(data.valveState[valve]).map(loc => (
-                                    <p>{loc}: {VALVE_MAP[data.valveState.solenoid[loc]]}</p>
+                                    <p>{stylizeName(loc)}: {VALVE_MAP[data.valveState.solenoid[loc]]}</p>
                                 ))}
                             </div>
                             <br></br>
                         </div>) ||
                         valve === "timestamp" &&
                         (<div>
-                            <h4 class={groupHeaderStyle}>{valve}: {data.valveState.timestamp} s</h4>
+                            <h4 class={groupHeaderStyle}>Timestamp: {data.valveState.timestamp} s</h4>
                         </div>)
                     ))}
                 </div>
