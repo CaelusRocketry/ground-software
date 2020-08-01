@@ -7,44 +7,8 @@
     "sensors": {
         "list": {
             "thermocouple": {
-                "chamber": {
-                    "kalman_args": {
-                        "process_variance": 0.01,
-                        "measurement_variance": 0.0075,
-                        "kalman_value": 3000    
-                    },
-                    "boundaries": {
-                        "safe": [200, 250],
-                        "warn": [100, 500]        
-                    },
-                    "pins": [4, 5, 6, 7]
-                },
-                "tank": {
-                    "kalman_args": {
-                        "process_variance": 0.01,
-                        "measurement_variance": 0.0075,
-                        "kalman_value": 200    
-                    },
-                    "boundaries": {
-                        "safe": [200, 250],
-                        "warn": [100, 500]        
-                    },
-                    "pins": [8, 9, 10, 11]
-                }
             },
             "pressure": {
-                "chamber": {
-                    "kalman_args": {
-                        "process_variance": 0.01,
-                        "measurement_variance": 0.02,
-                        "kalman_value": 1000
-                    },
-                    "boundaries": {
-                        "safe": [100, 150],
-                        "warn": [50, 200]
-                    },
-                    "pin": 1
-                },
                 "tank": {
                     "kalman_args": {
                         "process_variance": 0.01,
@@ -55,46 +19,26 @@
                         "safe": [100, 150],
                         "warn": [50, 200]
                     },
-                    "pin": 2
-                },
-                "injector": {
-                    "kalman_args": {
-                        "process_variance": 0.01,
-                        "measurement_variance": 0.02,
-                        "kalman_value": 1000
-                    },
-                    "boundaries": {
-                        "safe": [100, 150],
-                        "warn": [50, 200]
-                    },
-                    "pin": 3
+                    "pin": 14
                 }
             }
         },
-        "address": 8,
+        "address": "COM4",
+        "baud": 19200,
         "send_interval": 0.5
     },
     "valves": {
         "list": {
             "solenoid": {
                 "pressure_relief": {
-                    "pin": 14,
-                    "natural": "OPEN",
-                    "special": false
-                },
-                "propellant_vent": {
-                    "pin": 15,
-                    "natural": "OPEN",
-                    "special": false
-                },
-                "main_propellant_valve": {
-                    "pin": 16,
+                    "pin": 4,
                     "natural": "CLOSED",
-                    "special": true
+                    "special": false
                 }
             }
         },
-        "address": 4,
+        "address": "COM4",
+        "baud": 19200,
         "send_interval": 0.5
     },
     "stages": {
@@ -106,5 +50,8 @@
                 "disconnection"],
         "request_interval": 10,
         "send_interval": 2
+    },
+    "timer": {
+        "delay": 1
     }
 }
