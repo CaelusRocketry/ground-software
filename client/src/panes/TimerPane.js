@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
 
-function TimerPane() {
+const TimerPane = () => {
     const data = useSelector((state) => (state.data));  
 
     return (
