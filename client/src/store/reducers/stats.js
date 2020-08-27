@@ -34,7 +34,8 @@ const initialState = {
         heartbeat: undefined,
         heartbeat_recieved: undefined,
         heartbeat_status: undefined,
-        stage: undefined,
+        stage: 'autosequence',
+        countdown: 10,
         responses: [],
         percent_data: undefined, 
         mode: "Normal"
@@ -89,6 +90,12 @@ const updateData = (state = initialState, action) => {
         case 'UPDATE_STAGE':
             state.general.stage = message.stage;
             state.general.percent_data = message.status;
+            return state;
+
+        case 'UPDATE_COUNTDOWN':
+            if (state.general.countdown > 0) {
+                state.general.countdown -= 1
+            }
             return state;
 
         case 'ADD_RESPONSE':

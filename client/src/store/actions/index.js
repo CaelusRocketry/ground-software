@@ -23,6 +23,10 @@ export const updateStage = (data) => ({
   data
 });
 
+export const updateCountdown = () => ({
+  type: "UPDATE_COUNTDOWN"
+});
+
 export const addResponse = (data) => ({
   type: "ADD_RESPONSE", 
   data
