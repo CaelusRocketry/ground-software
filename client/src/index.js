@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 
 import { createStore } from "redux";
-import { Provider, useSelector, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import reducers from "./store/reducers";
 
 import {socketConnection, heartbeatError} from './api';
@@ -15,10 +15,12 @@ const store = createStore(reducers);
 socketConnection(store);
 setInterval(() => {console.log(store.getState());}, 1000);
 setInterval(() => {heartbeatError(store)} , 5000);
+
 if (store.getState().data.general.stage == "autosequence") {
   setInterval(() => {
     if (store.getState().data.general.countdown > 0) {
       store.dispatch(updateCountdown());
+      console.log(store.getState().data.general.countdown)
     }
   }, 1000);
 }
