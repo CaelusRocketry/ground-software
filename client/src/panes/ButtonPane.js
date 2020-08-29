@@ -12,13 +12,8 @@ import config from "../config.json";
 const stages = config["stages"]["list"];
 
 const stage_names = {
-  propellant_loading: "Propellant Loading",
-  leak_testing_1: "Leak Testing Phase 1",
-  pressurant_loading: "Pressurant Loading",
-  leak_testing_2: "Leak Testing Phase 2",
-  pre_ignition: "Pre-Ignition",
-  disconnection: "Disconnection",
   waiting: "Waiting",
+  pressurization: "Pressurization",
   autosequence: "Autosequence",
   postburn: "Postburn",
 };
@@ -42,7 +37,6 @@ const valve_type_names = {
 const valve_loc_names = {
   main_propellant_valve: "Main Propellant Valve",
   pressure_relief: "Pressure Relief Valve",
-  // propellant_vent: "Propellant Vent Valve",
   pressurization: "Pressurization Valve",
 };
 
