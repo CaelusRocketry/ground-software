@@ -62,6 +62,8 @@ class Packet:
 
     @staticmethod
     def from_string(input_string):
+        print("in packet from_string:")
+        print(input_string)
         input_dict = json.loads(input_string)
         input_dict["logs"] = [Log.from_string(log_str) for log_str in input_dict["logs"]]
         packet = Packet()

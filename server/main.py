@@ -2,11 +2,13 @@ import json
 from telemetry import Telemetry
 from backend import Backend
 
+
 from flask import Flask, render_template
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, Namespace
 import time
 import logging
+
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
@@ -33,7 +35,8 @@ if __name__ == "__main__":
     telem.init_backend(b)
 
     socketio.on_namespace(b)
-    socketio.run(app, host='127.0.0.1', port=5000)
+    socketio.run(app, host=config["telemetry"]["SOCKETIO_HOST"], port=int(config["telemetry"]["SOCKETIO_PORT"]))
+
 
     # while True:
     #     temp = input("")
