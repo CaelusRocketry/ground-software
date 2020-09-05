@@ -68,11 +68,11 @@ class Telemetry:
         while True:
             data = self.conn.recv(BYTE_SIZE)
             self.ingest(data)
-#            self.ingest_thread = threading.Thread(
-#                target=self.ingest, args=(data,))
-#            self.ingest_thread.daemon = True
-#            self.ingest_thread.start()
-            time.sleep(DELAY_LISTEN)
+            self.ingest_thread = threading.Thread(
+                target=self.ingest, args=(data,))
+            self.ingest_thread.daemon = True
+            self.ingest_thread.start()
+            # time.sleep(DELAY_LISTEN)
 
 
     def enqueue(self, packet):
