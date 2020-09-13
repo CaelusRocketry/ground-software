@@ -19,19 +19,19 @@ const StyledItem = styled.li`
 `;
 
 const StyledIcon = styled.div`
-  border: ${props => {
+  border: ${(props) => {
     if (props.lineColor === null) {
       return "none";
     }
     return `2px solid ${props.lineColor}`;
   }};
-  padding: ${props => {
+  padding: ${(props) => {
     if (props.lineColor === null) {
       return "2px";
     }
     return "0";
   }};
-  background: ${props => props.iconFill};
+  background: ${(props) => props.iconFill};
   border-radius: 10px;
   margin-left: 2px;
   display: block;
@@ -76,7 +76,7 @@ const StyledContent = styled.div`
   position: relative;
   margin-left: 2.5em;
   :before {
-    background-color: ${props => props.lineColor};
+    background-color: ${(props) => props.lineColor};
     content: "";
     margin-left: 1px;
     position: absolute;
@@ -89,8 +89,8 @@ const StyledContent = styled.div`
 const StyledInterval = styled.p`
   margin: 0 0 0 1em;
   padding: 0.25em 1em;
-  background: ${props => props.background};
-  color: ${props => props.color};
+  background: ${(props) => props.background};
+  color: ${(props) => props.color};
   border-radius: 5px;
 `;
 
@@ -117,7 +117,7 @@ const StyledIntervalContainer = styled.div`
   align-items: center;
 `;
 export const Timeline = ({ lineColor, intervalSeparator, children }) => {
-  const childrenWithProps = React.Children.map(children, child =>
+  const childrenWithProps = React.Children.map(children, (child) =>
     React.cloneElement(child, {
       lineColor: child.props.lineColor || lineColor,
       intervalSeparator: child.props.intervalSeparator || intervalSeparator,
@@ -159,11 +159,7 @@ export const Event = ({
         lineColor={iconOutline === null ? null : iconOutline || lineColor}
         iconFill={iconFill}
       />
-      <StyledInterval
-        className="font-mono"
-        color={intervalColor}
-        background={intervalBackground}
-      >
+      <StyledInterval color={intervalColor} background={intervalBackground}>
         <Interval interval={interval} separator={intervalSeparator} />
       </StyledInterval>
     </StyledIntervalContainer>
