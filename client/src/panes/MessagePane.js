@@ -23,6 +23,24 @@ const MessagePane = () => {
         return {header, messageArr, timestamp};
     };
 
+    const clean = (responsesArr) => {
+        let newResponses = [];
+        for (let response of responsesArr) {
+            if (newResponses.length == 0) {
+                newResponses.push(response);
+            }
+            else {
+                if (JSON.stringify(response) == JSON.stringify(newResponses[newResponses.length - 1])) {
+                    continue;
+                }
+                else {
+                    newResponses.push(response);
+                }
+            }
+        }
+        console.log("ARRAY: " + newResponses);
+        return newResponses;
+    }
 
     return (
     <div>
