@@ -2,6 +2,7 @@ import config from "../../config.json";
 
 const sensors = config["sensors"]["list"];
 const valves = config["valves"]["list"];
+const dataCutoff = config['UI']['data_cutoff'];
 
 console.log(sensors);
 console.log(valves);
@@ -64,13 +65,13 @@ const updateData = (state = initialState, action) => {
           let normalized = message[type][loc].value[1].toFixed(3);
           let status = message[type][loc].status;
           state.sensorData[type][loc].push([normalized, status]);
-          if (state.sensorData[type][loc].length > 10) {
+          if (state.sensorData[type][loc].length > dataCutoff) {
             state.sensorData[type][loc].shift();
           }
         }
       }
       state.sensorData.timestamp.push(timestamp);
-      if (state.sensorData.timestamp.length > 10) {
+      if (state.sensorData.timestamp.length > dataCutoff) {
         state.sensorData.timestamp.shift();
       }
       return state;
