@@ -67,12 +67,13 @@ class Telemetry:
         """ Constantly listens for any from ground station """
         while True:
             data = self.conn.recv(BYTE_SIZE)
-            self.ingest(data)
-            self.ingest_thread = threading.Thread(
-                target=self.ingest, args=(data,))
-            self.ingest_thread.daemon = True
-            self.ingest_thread.start()
-            # time.sleep(DELAY_LISTEN)
+            if data:
+                self.ingest(data)
+                self.ingest_thread = threading.Thread(
+                    target=self.ingest, args=(data,))
+                self.ingest_thread.daemon = True
+                self.ingest_thread.start()
+                # time.sleep(DELAY_LISTEN)
 
 
     def enqueue(self, packet):

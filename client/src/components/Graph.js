@@ -7,7 +7,7 @@ const properties = {
   thermocouple: {
     xaxis: "Time (s)",
     yaxis: "Temperature (C)",
-    title: "Temperature vs. Time",
+    title: "Temperature vs. Time"
   },
   pressure: {
     xaxis: "Time (s)",
@@ -125,7 +125,8 @@ const Graph = props => {
                 family: "Courier New, monospace",
                 size: 17,
                 color: "#7f7f7f"
-              }
+              },
+              range: [0, 500]
             }
           }
         }
