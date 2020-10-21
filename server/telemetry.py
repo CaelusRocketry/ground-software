@@ -77,28 +77,37 @@ class Telemetry:
 
 
     def enqueue(self, packet):
-        """ Encripts and enqueues the given Packet """
-        packet_str = packet.to_string().encode()
+        """ Encrypts and enqueues the given Packet """
+        packet_str = (packet.to_string() + "END").encode()
         heapq.heappush(self.queue_send, (packet.level, packet_str))
 
 
     def ingest(self, packet_str):
         """ Prints any packets received """
 #        print("Ingesting:", packet_str)
-        packet = Packet.from_string(packet_str)
-        for log in packet.logs:
-            log.timestamp = round(log.timestamp - self.start_time, 1)
-#            print("Timestamp:", log.timestamp)
-            if log.header in ["heartbeat", "stage", "response", "mode"]:
-                self.backend.update_general(log.__dict__)
+        packet_str = packet_str.decode()
+        packet_strs = packet_str.split("END")[:-1]
+        print("HERE ARE THE PACKET STRINGS FROM TELEMETRY.PY: " + str(packet_strs))
+        if (packet_str.count("END") > 1):
+            packets = [Packet.from_string(p_str) for p_str in packet_strs]
+        else:
+            packets = [Packet.from_string(packet_strs[0])]
 
-            if log.header == "sensor_data":
-                self.backend.update_sensor_data(log.__dict__)
+        #packet = Packet.from_string(packet_str)
+        for packet in packets:
+            for log in packet.logs:
+                log.timestamp = round(log.timestamp - self.start_time, 1)
+#                print("Timestamp:", log.timestamp)
+                if log.header in ["heartbeat", "stage", "response", "mode"]:
+                    self.backend.update_general(log.__dict__)
 
-            if log.header == "valve_data":
-                self.backend.update_valve_data(log.__dict__)
-            
-            log.save()
+                if log.header == "sensor_data":
+                    self.backend.update_sensor_data(log.__dict__)
+
+                if log.header == "valve_data":
+                    self.backend.update_valve_data(log.__dict__)
+                
+                log.save()
 
 
     def heartbeat(self):
