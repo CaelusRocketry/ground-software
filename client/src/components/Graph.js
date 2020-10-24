@@ -32,6 +32,7 @@ const Graph = props => {
     location: props.location
   });
   
+  // RETRIEVE DATA
   const data = useSelector((state) => {
     // Graph type hasn't been selected yet
     if(metadata.type == "undefined" || metadata.location == "undefined"){
@@ -57,12 +58,27 @@ const Graph = props => {
     };
   });
 
+  // RETURN RANGE FOR SENSOR/VALVE READINGS
+  const findRange = (type, loc) => {
+    let sensorsList = config["sensors"]["list"];
+    if (type == "undefined" || loc == "undefined") {
+      let range = [0, 0];
+      return range;
+    }
+    else {
+      let range = [sensorsList[type][loc]["boundaries"]["safe"][0], sensorsList[type][loc]["boundaries"]["warn"][1]];
+      return range;
+    }
+  }
+
+  // STYLIZE TITLE/AXES
   const stylizeName = (name) => {
     let split = name.split("_");
     split = split.map((x) => x.charAt(0).toUpperCase() + x.substring(1));
     return split.join(" ");
   }
 
+  // DROPDOWN OPTIONS
   const getOptions = () => {
     let sensors = config["sensors"]["list"];
     let arr = [["undefined", "undefined"]];
@@ -80,6 +96,7 @@ const Graph = props => {
     });
   }
 
+  // DROPDOWN + GRAPH
   return (
     <div>
       <select
@@ -126,7 +143,7 @@ const Graph = props => {
                 size: 17,
                 color: "#7f7f7f"
               },
-              range: [0, 500]
+              range: findRange(metadata.type, metadata.location)
             }
           }
         }
