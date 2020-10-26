@@ -32,5 +32,6 @@ Then, open a new command window, navigate to the ground-software/server folder, 
 ```
 python main.py
 ```
+This program won't terminate; as soon as you see some output (that's not an error), move on to the next step.
 
 Finally, follow the instructions in the Flight Software README to run the latest Flight Software local simulation, and head over to the web page which holds the Ground Station interface to see our software in action!
