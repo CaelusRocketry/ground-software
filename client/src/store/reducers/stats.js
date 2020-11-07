@@ -56,7 +56,6 @@ const updateData = (state = initialState, action) => {
     message = action.data.message;
     timestamp = action.data.timestamp;
   }
-  console.log("MESSAGE: " + JSON.stringify(message));
   switch (action.type) {
     case "UPDATE_SENSOR_DATA":
       state = JSON.parse(JSON.stringify(state));
