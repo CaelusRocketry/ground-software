@@ -68,7 +68,6 @@ class Telemetry:
         while True:
             data = self.conn.recv(BYTE_SIZE)
             if data:
-                self.ingest(data)
                 self.ingest_thread = threading.Thread(
                     target=self.ingest, args=(data,))
                 self.ingest_thread.daemon = True
@@ -94,7 +93,11 @@ class Telemetry:
             packets = [Packet.from_string(packet_strs[0])]
 
         #packet = Packet.from_string(packet_str)
+        print("LOGS: ")
         for packet in packets:
+            for log in packet.logs:
+                print(log.to_string())
+            print("DONE\n")
             for log in packet.logs:
                 log.timestamp = round(log.timestamp - self.start_time, 1)
 #                print("Timestamp:", log.timestamp)
