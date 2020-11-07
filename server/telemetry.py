@@ -86,18 +86,13 @@ class Telemetry:
 #        print("Ingesting:", packet_str)
         packet_str = packet_str.decode()
         packet_strs = packet_str.split("END")[:-1]
-        print("HERE ARE THE PACKET STRINGS FROM TELEMETRY.PY: " + str(packet_strs))
         if (packet_str.count("END") > 1):
             packets = [Packet.from_string(p_str) for p_str in packet_strs]
         else:
             packets = [Packet.from_string(packet_strs[0])]
 
         #packet = Packet.from_string(packet_str)
-        print("LOGS: ")
         for packet in packets:
-            for log in packet.logs:
-                print(log.to_string())
-            print("DONE\n")
             for log in packet.logs:
                 log.timestamp = round(log.timestamp - self.start_time, 1)
 #                print("Timestamp:", log.timestamp)
