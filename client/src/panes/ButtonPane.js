@@ -361,11 +361,11 @@ const ButtonPane = () => {
           class={btn_big}
           disabled={current_progress !== 100}
         >
-          <div className="flex justify-start py-1 px-2">
+          <div className="py-1 px-2">
             {current_progress != 100 ? 
-            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-gray-300 bg-gray-600">Task in progress</span>
+            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-gray-300 bg-gray-600">"{stages[current_stage]}" in progress</span>
             :
-            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-gray-300 bg-gray-600">Task completed</span>
+            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-gray-300 bg-gray-600">"{stages[current_stage]}" completed</span>
             }
           </div>
 

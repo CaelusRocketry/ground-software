@@ -26,7 +26,8 @@ const Data = () => {
     };
   });
 
-  const blockStyle = "m-1 p-4 bg-gray-100";
+  const blockStyle = "rounded-lg m-1 p-4 bg-gray-100";
+  const abortStyle = "animate-ping rounded-lg m-1 p-4 bg-pink-300";
   const blockHeaderStyle = "text-lg font-bold";
   const groupHeaderStyle = "font-bold mb-1";
 
@@ -143,7 +144,7 @@ const Data = () => {
       <br></br>
 
       <h3 class={blockHeaderStyle}>Mode</h3>
-      <div class={blockStyle}>
+      <div class={data.mode == "Soft abort" || data.mode == "Hard abort" ? abortStyle : blockStyle}>
         <p>{data.mode} </p>
       </div>
     </center>
