@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
+import Progress from "../components/Progress";
 import { useSelector, useDispatch } from "react-redux";
 import {
   generalPressed,
@@ -194,6 +195,15 @@ const ButtonPane = () => {
     setViews(temp);
   };
 
+  const round = (progress, places) => {
+    if (typeof progress != "number") {
+      return 0;
+    }
+    else {
+      return progress.toFixed(places);
+    }
+  }
+
   return (
     <div class="pane">
       <Header title="Actions" />
@@ -351,10 +361,29 @@ const ButtonPane = () => {
           class={btn_big}
           disabled={current_progress !== 100}
         >
+          <div className="flex justify-start py-1 px-2">
+            {current_progress != 100 ? 
+            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-gray-300 bg-gray-600">Task in progress</span>
+            :
+            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-gray-300 bg-gray-600">Task completed</span>
+            }
+          </div>
+
           Progress To {stage_names[stages[current_stage + 1]]}
+
+          <div className="relative pt-1">
+            <div className="flex mb-2 items-center justify-between">
+              <div className="text-right">
+                <span className="text-xs font-semibold inline-block text-gray-600">{round(current_progress, 2)}%</span>
+              </div>
+            </div>
+            <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-300">
+              <div style={{ width: round(current_progress, 0).toString() + "%"}} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gray-600" />
+            </div>
+          </div>
+
         </button>
       </div>
-      {current_progress}
     </div>
   );
 };
