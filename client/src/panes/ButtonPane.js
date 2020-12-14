@@ -92,6 +92,9 @@ const ButtonPane = () => {
   const current_progress = useSelector(
     (state) => state.data.general.percent_data
   );
+  const current_countdown = useSelector(
+    (state) => state.data.general.countdown
+  );
   const mode = useSelector((state) => state.data.general.mode);
 
   const [views, setViews] = useState({
@@ -359,7 +362,7 @@ const ButtonPane = () => {
         <button
           onClick={progress}
           class={btn_big}
-          disabled={current_progress !== 100}
+          disabled={current_progress !== 100 || (stages[current_stage] == "autosequence" && current_countdown != 0)}
         >
           <div className="py-1 px-2">
             {current_progress != 100 ? 

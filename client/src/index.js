@@ -13,17 +13,22 @@ import { updateCountdown } from "./store/actions";
 
 const store = createStore(reducers);
 socketConnection(store);
-setInterval(() => {console.log(store.getState());}, 1000);
+//setInterval(() => {console.log(store.getState());}, 1000);
 setInterval(() => {heartbeatError(store)} , 5000);
 
-if (store.getState().data.general.stage == "autosequence") {
-  setInterval(() => {
-    if (store.getState().data.general.countdown > 0) {
-      store.dispatch(updateCountdown());
-      console.log(store.getState().data.general.countdown)
-    }
-  }, 1000);
-}
+
+var countDownInterval = setInterval(() => {
+  if (store.getState().data.general.stage == "autosequence") {
+    setInterval(() => {
+      if (store.getState().data.general.countdown > 0) {
+        store.dispatch(updateCountdown());
+        console.log(store.getState().data.general.countdown);
+      }
+    }, 1000);
+    clearInterval(countDownInterval);
+  }
+}, 1000);
+
 
 ReactDOM.render(
   <Provider store={store}>
