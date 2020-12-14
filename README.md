@@ -1,37 +1,50 @@
 # Ground Software
+
 Ground software for Project Caelus.
 
-## Local Setup
+There are two parts to this software:
 
-All necessary python libraries can be installed using the following command: 
+- __client__: `/client`
+- __server__: `/server`
+
+## Setup
+
+### Server
+
+Under __server__, install the necessary Python packages with the following command:
+
 ```
 pip3 install -r requirements.txt
 ``` 
 
-### Node setup (first-time install)
+### Client
 
-First, download Node.js if you haven't already, and add this variable to the System Variables section in your computer's Environment Variables if you haven't already:
-- Variable name: ```NODE_OPTIONS```
-- Variable value: ```--max-old-space-size=8192```
+First, download Node.js if you haven't already, and add this variable to the your system's path:
 
-Then, navigate to the ground-software/client folder, and run this command:
+- Name: `NODE_OPTIONS`
+- Value: `--max-old-space-size=8192`
 
+Then, under __client__, install the necessary dependencies:
+
+```sh
+npm install
 ```
-npm i
-```
 
-### Starting the Ground Station
+## Run
 
-Navigate to the ground-software/client folder and run this command:
+Under __client__, run:
 
 ```
 npm start
 ```
 
-Then, open a new command window, navigate to the ground-software/server folder, and run:
+Under __server__, run:
+
 ```
 python main.py
 ```
+
 This program won't terminate; as soon as you see some output (that's not an error), move on to the next step.
 
-Finally, follow the instructions in the Flight Software README to run the latest Flight Software local simulation, and head over to the web page which holds the Ground Station interface to see our software in action!
+Finally, follow the instructions in the flight software README to run the latest flight software local simulation, 
+and head over to the client web page which holds our software interface!
