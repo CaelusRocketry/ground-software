@@ -118,3 +118,5 @@ examples/general/public/
 examples/general/node_modules/package-lock.json
 examples/general/node_modules/package.json
 examples/general/node_modules/README.md
+node_modules/
+
