@@ -17,15 +17,17 @@ socketConnection(store);
 setInterval(() => {heartbeatError(store)} , 5000);
 
 
-var countDownInterval = setInterval(() => {
+var countDownStart = setInterval(() => {
   if (store.getState().data.general.stage == "autosequence") {
-    setInterval(() => {
+    var countDownInterval = setInterval(() => {
       if (store.getState().data.general.countdown > 0) {
         store.dispatch(updateCountdown());
-        console.log(store.getState().data.general.countdown);
+      }
+      else {
+        clearInterval(countDownInterval);
       }
     }, 1000);
-    clearInterval(countDownInterval);
+    clearInterval(countDownStart);
   }
 }, 1000);
 
