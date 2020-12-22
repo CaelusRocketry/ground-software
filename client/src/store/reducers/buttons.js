@@ -1,7 +1,6 @@
 const initialState = {
   abort: {
     soft: false,
-    hard: false,
   },
   actuation: {
     // Actuation type, actuation priority

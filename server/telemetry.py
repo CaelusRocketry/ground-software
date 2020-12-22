@@ -31,10 +31,12 @@ class Telemetry:
     def connect(self, ip, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        print("IP:", ip, "PORT:", port)
         self.sock.bind((ip, port))
         self.sock.listen(1)
         self.conn, self.addr = self.sock.accept()
         Log("Created socket")
+        print("finished running connect method")
 
 
     def init_backend(self, b):

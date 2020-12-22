@@ -231,15 +231,6 @@ const ButtonPane = () => {
             Soft Abort
           </button>
         </div>
-        <div>
-          <button
-            class={btn_small}
-            onClick={() => abort("hard")}
-            disabled={mode === "Hard abort" ? true : false}
-          >
-            Hard Abort
-          </button>
-        </div>
       </div>
 
       <button

@@ -68,12 +68,6 @@ const socketConnection = (store) => {
       store.dispatch(abortPressed({ type: "soft", pressed: false }));
       sendMessage(header, message);
     }
-    if (buttons.abort.hard) {
-      header = "hard_abort";
-      message = {};
-      store.dispatch(abortPressed({ type: "hard", pressed: false }));
-      sendMessage(header, message);
-    }
     if (buttons.request.valve[0] !== undefined) {
       header = "valve_request";
       message = {
