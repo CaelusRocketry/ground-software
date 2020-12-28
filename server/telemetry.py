@@ -14,8 +14,7 @@ DELAY_HEARTBEAT = 3
 SEND_ALLOWED = True
 
 BLOCK_SIZE = 32
-f = open("black_box.txt", "w+")
-f.close()
+
 
 class Telemetry:
     """ Telemetry Class handles all communication """
@@ -25,8 +24,6 @@ class Telemetry:
         self.queue_send = []
         self.connect(ip, port)
         self.start_time = time.time()
-        self.sock: socket.socket
-        self.connected = False
 
     def connect(self, ip, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -61,9 +58,10 @@ class Telemetry:
     def send(self):
         """ Constantly sends next packet from queue to ground station """
         while self.connected:
-            if self.queue_send and SEND_ALLOWED:
-                encoded = heapq.heappop(self.queue_send)[1]
+            while self.queue_send and SEND_ALLOWED:
+                level, encoded = heapq.heappop(self.queue_send)
                 self.conn.send(encoded)
+                # print("sending packet: ", level, encoded)
             time.sleep(DELAY_SEND)
 
     def listen(self):
@@ -72,10 +70,12 @@ class Telemetry:
             try:
                 data = self.conn.recv(BYTE_SIZE)
                 if data:
-                    self.ingest_thread = threading.Thread(target=self.ingest, args=(data,))
-                    self.ingest_thread.daemon = True
-                    self.ingest_thread.start()
-                    # time.sleep(DELAY_LISTEN)
+                    self.ingest(data)
+                time.sleep(DELAY_LISTEN)
+                # if data:
+                #     self.ingest_thread = threading.Thread(target=self.ingest, args=(data,))
+                #     self.ingest_thread.daemon = True
+                #     self.ingest_thread.start()
             except ConnectionAbortedError:
                 print("Connection was aborted")
                 self.connected = False
@@ -89,19 +89,13 @@ class Telemetry:
 
     def ingest(self, packet_str):
         """ Prints any packets received """
-        #        print("Ingesting:", packet_str)
         packet_str = packet_str.decode()
         packet_strs = packet_str.split("END")[:-1]
-        if packet_str.count("END") > 1:
-            packets = [Packet.from_string(p_str) for p_str in packet_strs]
-        else:
-            packets = [Packet.from_string(packet_strs[0])]
+        packets = [Packet.from_string(p_str) for p_str in packet_strs]
 
-        # packet = Packet.from_string(packet_str)
         for packet in packets:
             for log in packet.logs:
                 log.timestamp = round(log.timestamp - self.start_time, 1)
-                #                print("Timestamp:", log.timestamp)
                 if log.header in ["heartbeat", "stage", "response", "mode"]:
                     self.backend.update_general(log.__dict__)
 
@@ -111,12 +105,12 @@ class Telemetry:
                 if log.header == "valve_data":
                     self.backend.update_valve_data(log.__dict__)
 
-                log.save()
+                if log.header != "heartbeat":
+                    log.save()
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while True:
             log = Log(header="heartbeat", message="AT")
             self.enqueue(Packet(logs=[log], level=LogPriority.INFO))
-            # print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
