@@ -61,8 +61,8 @@ const updateData = (state = initialState, action) => {
       state = JSON.parse(JSON.stringify(state));
       for (let type in message) {
         for (let loc in message[type]) {
-          let measured = message[type][loc].value[0].toFixed(3);
-          let normalized = message[type][loc].value[1].toFixed(3);
+          let measured = message[type][loc].measured.toFixed(3);
+          let normalized = message[type][loc].kalman.toFixed(3);
           let status = message[type][loc].status;
           state.sensorData[type][loc].push([normalized, status]);
           if (state.sensorData[type][loc].length > dataCutoff) {
