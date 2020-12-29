@@ -42,6 +42,11 @@ export const abortPressed = (data) => ({
   data
 });
 
+export const resetToNormal = (data) => ({
+  type: "RESET_TO_NORMAL",
+  data
+});
+
 export const requestPressed = (data) => ({
   type: "REQUEST_PRESSED",
   data

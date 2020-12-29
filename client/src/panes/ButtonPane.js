@@ -103,6 +103,7 @@ const ButtonPane = () => {
     sensor: false,
     valve: false,
   });
+
   const [selectValues, setSelectValues] = useState({});
 
   const abort = (type) => {
@@ -110,6 +111,10 @@ const ButtonPane = () => {
       return;
     }
     dispatch(abortPressed({ type: type, pressed: true }));
+  };
+
+  const return_to_normal = (type) => {
+    dispatch(abortPressed({ type: type, pressed: false }));
   };
 
   const actuateValve = (loc, type, p) => {
@@ -229,6 +234,17 @@ const ButtonPane = () => {
             disabled={mode === "Normal" ? false : true}
           >
             Soft Abort
+          </button>
+        </div>
+      </div>
+      <div class={views.abort ? "show" : "hidden"}>
+        <div>
+          <button
+            class={btn_small}
+            onClick={() => return_to_normal("soft")}
+            disabled={mode === "Normal" ? true : false}
+          >
+            Undo Soft Abort
           </button>
         </div>
       </div>
@@ -372,7 +388,7 @@ const ButtonPane = () => {
               </div>
             </div>
             <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-300">
-              <div style={{ width: round(current_progress, 0).toString() + "%"}} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gray-600" />
+              <div style={{ width: round(current_progress, 0).toString() + "%"}} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gray-600"></div>
             </div>
           </div>
 
