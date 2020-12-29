@@ -103,6 +103,7 @@ const ButtonPane = () => {
     sensor: false,
     valve: false,
   });
+
   const [selectValues, setSelectValues] = useState({});
 
   const abort = (type) => {
@@ -110,6 +111,10 @@ const ButtonPane = () => {
       return;
     }
     dispatch(abortPressed({ type: type, pressed: true }));
+  };
+
+  const return_to_normal = (type) => {
+    dispatch(abortPressed({ type: type, pressed: false }));
   };
 
   const actuateValve = (loc, type, p) => {
@@ -229,6 +234,16 @@ const ButtonPane = () => {
             disabled={mode === "Normal" ? false : true}
           >
             Soft Abort
+            </button>
+      </div>
+      <div class={views.abort ? "show" : "hidden"}>
+        <div>
+          <button
+            class={btn_small}
+            onClick={() => return_to_normal("soft")}
+            disabled={mode === "Normal" ? true : false}
+          >
+            Undo Soft Abort
           </button>
         </div>
       </div>
