@@ -2,7 +2,7 @@ import config from "../../config.json";
 
 const sensors = config["sensors"]["list"];
 const valves = config["valves"]["list"];
-const dataCutoff = config['UI']['data_cutoff'];
+const dataCutoff = config["UI"]["data_cutoff"];
 
 console.log(sensors);
 console.log(valves);
@@ -91,6 +91,7 @@ const updateData = (state = initialState, action) => {
       state = JSON.parse(JSON.stringify(state));
       state.general.heartbeat_recieved = Date.now();
       state.general.heartbeat = timestamp;
+      state.general.mode = action.data.message.mode;
       return state;
 
     case "UPDATE_HEARTBEAT_STATUS":

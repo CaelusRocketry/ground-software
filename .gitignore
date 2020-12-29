@@ -115,3 +115,4 @@ black_box.txt
 incoming.txt
 node_modules/
 
+server/blackbox.txt

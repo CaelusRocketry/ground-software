@@ -231,25 +231,6 @@ const ButtonPane = () => {
             Soft Abort
           </button>
         </div>
-        <div class={views.abort ? "show" : "hide"}>
-          <div>
-            <button
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-                onClick={() => abort("soft")}
-                disabled={mode === "Normal" ? false : true}
-            >
-              Undo Soft Abort
-          </button>
-        </div>
-        <div>
-          <button
-            class={btn_small}
-            onClick={() => abort("hard")}
-            disabled={mode === "Hard abort" ? true : false}
-          >
-            Hard Abort
-          </button>
-        </div>
       </div>
 
       <button

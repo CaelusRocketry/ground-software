@@ -144,7 +144,7 @@ const Data = () => {
       <br></br>
 
       <h3 class={blockHeaderStyle}>Mode</h3>
-      <div class={data.mode == "Soft abort" || data.mode == "Hard abort" ? abortStyle : blockStyle}>
+      <div class={data.mode == "Soft abort" ? abortStyle : blockStyle}>
         <p>{data.mode} </p>
       </div>
     </center>

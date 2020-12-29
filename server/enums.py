@@ -1,6 +1,7 @@
 import json
 from enum import Enum, IntEnum, auto
 
+
 class SensorType(str, Enum):
     THERMOCOUPLE = "thermocouple"
     PRESSURE = "pressure"
