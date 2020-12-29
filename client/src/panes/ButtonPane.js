@@ -234,7 +234,8 @@ const ButtonPane = () => {
             disabled={mode === "Normal" ? false : true}
           >
             Soft Abort
-            </button>
+          </button>
+        </div>
       </div>
       <div class={views.abort ? "show" : "hidden"}>
         <div>
@@ -387,7 +388,7 @@ const ButtonPane = () => {
               </div>
             </div>
             <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-300">
-              <div style={{ width: round(current_progress, 0).toString() + "%"}} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gray-600" />
+              <div style={{ width: round(current_progress, 0).toString() + "%"}} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gray-600"></div>
             </div>
           </div>
 
