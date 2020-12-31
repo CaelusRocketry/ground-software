@@ -27,7 +27,8 @@ const buttonPressed = (state = initialState, action) => {
       state.abort[action.data.type] = action.data.pressed;
       return state;
     case "RESET_TO_NORMAL":
-      //put some shit here to make it normal
+      //send message to telemetry to do "return to normal"
+      return state;
     case "REQUEST_PRESSED":
       state.request[action.data.type] = [
         action.data.objectType,

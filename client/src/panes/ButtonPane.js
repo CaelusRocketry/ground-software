@@ -7,6 +7,7 @@ import {
   abortPressed,
   requestPressed,
   actuatePressed,
+  resetToNormal,
 } from "../store/actions/index.js";
 import config from "../config.json";
 
@@ -113,8 +114,8 @@ const ButtonPane = () => {
     dispatch(abortPressed({ type: type, pressed: true }));
   };
 
-  const return_to_normal = (type) => {
-    dispatch(abortPressed({ type: type, pressed: false }));
+  const reset_to_normal = (type) => {
+    dispatch(resetToNormal({ type: type, pressed: true }));
   };
 
   const actuateValve = (loc, type, p) => {
@@ -241,8 +242,8 @@ const ButtonPane = () => {
         <div>
           <button
             class={btn_small}
-            onClick={() => return_to_normal("soft")}
-            disabled={mode === "Normal" ? true : false}
+            onClick={() => reset_to_normal("soft")}
+            disabled={mode === "Abort" ? true : false}
           >
             Undo Soft Abort
           </button>
