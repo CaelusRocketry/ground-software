@@ -134,7 +134,8 @@ const Graph = props => {
                 family: "Courier New, monospace",
                 size: 17,
                 color: "#7f7f7f"
-              }
+              },
+              autorange: true
             },
             yaxis: {
               title: properties[metadata.type].yaxis,
@@ -143,7 +144,8 @@ const Graph = props => {
                 size: 17,
                 color: "#7f7f7f"
               },
-              range: findRange(metadata.type, metadata.location)
+              range: findRange(metadata.type, metadata.location),
+              autorange: true
             }
           }
         }

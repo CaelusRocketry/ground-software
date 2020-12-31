@@ -56,6 +56,7 @@ if __name__ == "__main__":
     backend = Backend("/")
 
     telemetry = Telemetry(GS_IP, GS_PORT)
+    print('telemetery has started')
     telemetry.begin()
 
     backend.init(app, sio, telemetry)
