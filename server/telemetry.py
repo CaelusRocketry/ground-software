@@ -6,14 +6,16 @@ from packet import Packet, Log, LogPriority
 
 BYTE_SIZE = 8192
 
-DELAY = 0.05
-DELAY_LISTEN = 0.05
-DELAY_SEND = 0.05
+DELAY = .05
+DELAY_LISTEN = .05
+DELAY_SEND = .05
 DELAY_HEARTBEAT = 3
 
 SEND_ALLOWED = True
 
 BLOCK_SIZE = 32
+f = open("black_box.txt", "w+")
+f.close()
 
 
 class Telemetry:
@@ -25,23 +27,21 @@ class Telemetry:
         self.connect(ip, port)
         self.start_time = time.time()
 
+
     def connect(self, ip, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         print("IP:", ip, "PORT:", port)
         self.sock.bind((ip, port))
         self.sock.listen(1)
-        print("Waiting for a connection")
-        try:
-            self.conn, self.addr = self.sock.accept()
-            self.connected = True
-        except KeyboardInterrupt:
-            exit(0)
+        self.conn, self.addr = self.sock.accept()
         Log("Created socket")
-        print("Received connection")
+        print("finished running connect method")
+
 
     def init_backend(self, b):
         self.backend = b
+
 
     def begin(self):
         """ Starts the send and listen threads """
@@ -55,47 +55,49 @@ class Telemetry:
         self.listen_thread.start()
         self.heartbeat_thread.start()
 
+
     def send(self):
         """ Constantly sends next packet from queue to ground station """
-        while self.connected:
-            while self.queue_send and SEND_ALLOWED:
-                level, encoded = heapq.heappop(self.queue_send)
+        while True:
+            if self.queue_send and SEND_ALLOWED:
+                encoded = heapq.heappop(self.queue_send)[1]
                 self.conn.send(encoded)
-                # print("sending packet: ", level, encoded)
             time.sleep(DELAY_SEND)
+
 
     def listen(self):
         """ Constantly listens for any from ground station """
-        while self.connected:
-            try:
-                data = self.conn.recv(BYTE_SIZE)
-                if data:
-                    self.ingest(data)
-                time.sleep(DELAY_LISTEN)
-                # if data:
-                #     self.ingest_thread = threading.Thread(target=self.ingest, args=(data,))
-                #     self.ingest_thread.daemon = True
-                #     self.ingest_thread.start()
-            except ConnectionAbortedError:
-                print("Connection was aborted")
-                self.connected = False
-            except Exception as e:
-                print("Exception:", e)
+        while True:
+            data = self.conn.recv(BYTE_SIZE)
+            if data:
+                self.ingest_thread = threading.Thread(
+                    target=self.ingest, args=(data,))
+                self.ingest_thread.daemon = True
+                self.ingest_thread.start()
+                # time.sleep(DELAY_LISTEN)
+
 
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
         packet_str = (packet.to_string() + "END").encode()
         heapq.heappush(self.queue_send, (packet.level, packet_str))
 
+
     def ingest(self, packet_str):
         """ Prints any packets received """
+#        print("Ingesting:", packet_str)
         packet_str = packet_str.decode()
         packet_strs = packet_str.split("END")[:-1]
-        packets = [Packet.from_string(p_str) for p_str in packet_strs]
+        if (packet_str.count("END") > 1):
+            packets = [Packet.from_string(p_str) for p_str in packet_strs]
+        else:
+            packets = [Packet.from_string(packet_strs[0])]
 
+        #packet = Packet.from_string(packet_str)
         for packet in packets:
             for log in packet.logs:
-                log.timestamp = round(log.timestamp - self.start_time, 1)
+                log.timestamp = round(log.timestamp, 1)   ##########################################CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
+#                print("Timestamp:", log.timestamp)
                 if log.header in ["heartbeat", "stage", "response", "mode"]:
                     self.backend.update_general(log.__dict__)
 
@@ -104,13 +106,14 @@ class Telemetry:
 
                 if log.header == "valve_data":
                     self.backend.update_valve_data(log.__dict__)
+                
+                log.save()
 
-                if log.header != "heartbeat":
-                    log.save()
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while True:
             log = Log(header="heartbeat", message="AT")
             self.enqueue(Packet(logs=[log], level=LogPriority.INFO))
+            print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)

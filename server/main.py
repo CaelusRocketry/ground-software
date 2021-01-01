@@ -2,30 +2,26 @@ import json
 from telemetry import Telemetry
 from backend import Backend
 
-from flask import Flask
+
+from flask import Flask, render_template
 from flask_cors import CORS
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit, Namespace
 import time
 import logging
 
 import argparse
 
-log = logging.getLogger("werkzeug")
+
+log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 config = {}
 
-parser = argparse.ArgumentParser(
-    description="Run the Project Caelus Ground Station Server.",
-    formatter_class=argparse.RawTextHelpFormatter,
-)
+parser = argparse.ArgumentParser(description='Run the Project Caelus Ground Station Server.', formatter_class=argparse.RawTextHelpFormatter)
 
-parser.add_argument(
-    "--config",
-    help="The config file to use for the simulation (enter "
-    + "local if you want to run the simulation on the default local config). \n"
-    + "Default: config.json",
-)
+parser.add_argument('--config', help="The config file to use for the simulation (enter " + 
+        "local if you want to run the simulation on the default local config). \n" + 
+        "Default: config.json")
 
 args = parser.parse_args()
 
@@ -41,30 +37,37 @@ elif args.config != None:
 else:
     config = json.loads(open("config.json").read())
 
+
+
 GS_IP = config["telemetry"]["GS_IP"]
 GS_PORT = config["telemetry"]["GS_PORT"]
 
 app = Flask(__name__, static_folder="templates")
 CORS(app)
-sio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 time.sleep(1)
 
 if __name__ == "__main__":
     print("listening and sending")
 
-    backend = Backend("/")
+    b = Backend('/')
 
-    telemetry = Telemetry(GS_IP, GS_PORT)
-    print('telemetery has started')
-    telemetry.begin()
+    telem = Telemetry(GS_IP, GS_PORT)
+    telem.begin()
 
-    backend.init(app, sio, telemetry)
-    telemetry.init_backend(backend)
+    b.init(app, socketio, telem)
+    telem.init_backend(b)
 
-    sio.on_namespace(backend)
-    sio.run(
-        app,
-        host=config["telemetry"]["SOCKETIO_HOST"],
-        port=int(config["telemetry"]["SOCKETIO_PORT"]),
-    )
+    socketio.on_namespace(b)
+    socketio.run(app, host=config["telemetry"]["SOCKETIO_HOST"], port=int(config["telemetry"]["SOCKETIO_PORT"]))
+
+
+    # while True:
+    #     temp = input("")
+    #     header = temp[:temp.index(" ")]
+    #     message = temp[temp.index(" ") + 1:]
+    #     pack = Packet(header=header)
+    #     log = Log(header=header, message=message)
+    #     pack.add(log)
+    #     enqueue(Packet(header="MESSAGE", logs=[log]))
