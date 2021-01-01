@@ -242,8 +242,8 @@ const ButtonPane = () => {
         <div>
           <button
             class={btn_small}
-            onClick={() => reset_to_normal("soft")}
-            disabled={mode === "Abort" ? true : false}
+            onClick={() => reset_to_normal()}
+            disabled={mode === "Normal" ? true : false}
           >
             Undo Soft Abort
           </button>

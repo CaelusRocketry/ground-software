@@ -65,7 +65,7 @@ const socketConnection = (store) => {
     if (buttons.abort.soft) {
       header = "soft_abort";
       message = {};
-      store.dispatch(abortPressed({ type: "soft", pressed: false }));
+      store.dispatch(abortPressed({ type: "soft", pressed: true }));
       sendMessage(header, message);
     }
     if (buttons.request.valve[0] !== undefined) {

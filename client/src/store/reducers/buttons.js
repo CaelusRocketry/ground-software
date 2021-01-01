@@ -1,3 +1,5 @@
+import { socketConnection } from "../../api";
+
 const initialState = {
   abort: {
     soft: false,
@@ -27,9 +29,11 @@ const buttonPressed = (state = initialState, action) => {
       state.abort[action.data.type] = action.data.pressed;
       return state;
     case "RESET_TO_NORMAL":
-      state.general.mode = "Normal"
+      state = JSON.parse(JSON.stringify(state));
+      state.general.mode = "Normal";
+      socketConnection()
       //send message to telemetry to do "return to normal"
-      return state;
+      return state;  
     case "REQUEST_PRESSED":
       state.request[action.data.type] = [
         action.data.objectType,
