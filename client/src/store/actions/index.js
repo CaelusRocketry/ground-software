@@ -42,9 +42,8 @@ export const abortPressed = (data) => ({
   data
 });
 
-export const resetToNormal = () => ({
-  type: "RESET_TO_NORMAL",
-  data
+export const undoSoftAbort = () => ({
+  type: "UNDO_SOFT_ABORT"
 });
 
 export const requestPressed = (data) => ({

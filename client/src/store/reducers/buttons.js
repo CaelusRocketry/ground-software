@@ -3,6 +3,7 @@ import { socketConnection } from "../../api";
 const initialState = {
   abort: {
     soft: false,
+    undosofty: false
   },
   actuation: {
     // Actuation type, actuation priority
@@ -27,18 +28,16 @@ const buttonPressed = (state = initialState, action) => {
       return state;
     case "ABORT_PRESSED":
       state.abort[action.data.type] = action.data.pressed;
+      state.abort.undosofty = false;
       return state;
-    case "RESET_TO_NORMAL":
-      state = JSON.parse(JSON.stringify(state));
-      state.general.mode = "Normal";
-      socketConnection()
-      //send message to telemetry to do "return to normal"
-      return state;  
     case "REQUEST_PRESSED":
       state.request[action.data.type] = [
         action.data.objectType,
         action.data.location,
       ];
+      return state;
+    case "UNDO_SOFT_ABORT":
+      state.abort.undosofty = true;
       return state;
     case "ACTUATE_PRESSED":
       let valve = action.data.valve;
