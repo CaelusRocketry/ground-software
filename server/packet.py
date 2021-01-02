@@ -81,6 +81,7 @@ class Packet:
     @staticmethod
     def from_string(input_string):
         input_dict = json.loads(input_string)
+
         return Packet(
             [
                 Log(log["header"], log["message"], log["timestamp"])
