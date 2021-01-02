@@ -9,6 +9,7 @@ import {
   updateHeartbeatStatus,
   generalPressed,
   abortPressed,
+  undoSoftAbort,
   requestPressed,
   actuatePressed,
   updateStage,
@@ -72,7 +73,7 @@ const socketConnection = (store) => {
     if (buttons.abort.undosofty) {
       header = "undo_soft_abort";
       message = {};
-      store.dispatch(undoSoftAbort({pressed: true}));
+      store.dispatch(undoSoftAbort({ pressed: true }));
       sendMessage(header, message);
     }
     if (buttons.request.valve[0] !== undefined) {
