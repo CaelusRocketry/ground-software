@@ -79,8 +79,9 @@ class Telemetry:
 
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
+        # TODO: This is implemented wrong. It should enqueue by finding packets that have similar priorities, not changing the priorities of current packets.
         packet_str = (packet.to_string() + "END").encode()
-        heapq.heappush(self.queue_send, (packet.level, packet_str))
+        heapq.heappush(self.queue_send, (packet.priority, packet_str))
 
 
     def ingest(self, packet_str):
@@ -88,11 +89,7 @@ class Telemetry:
 #        print("Ingesting:", packet_str)
         packet_str = packet_str.decode()
         packet_strs = packet_str.split("END")[:-1]
-        if (packet_str.count("END") > 1):
-            packets = [Packet.from_string(p_str) for p_str in packet_strs]
-        else:
-            packets = [Packet.from_string(packet_strs[0])]
-
+        packets = [Packet.from_string(p_str) for p_str in packet_strs]
         #packet = Packet.from_string(packet_str)
         for packet in packets:
             for log in packet.logs:
@@ -114,6 +111,6 @@ class Telemetry:
         """ Constantly sends heartbeat message """
         while True:
             log = Log(header="heartbeat", message="AT")
-            self.enqueue(Packet(logs=[log], level=LogPriority.INFO))
+            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)

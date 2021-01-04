@@ -31,4 +31,4 @@ class Backend(Namespace):
     def on_button_press(self, data):
         print(data)
         log = Log(header=data['header'], message=data['message'])
-        self.telem.enqueue(Packet(logs=[log], level=LogPriority.INFO))
+        self.telem.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
