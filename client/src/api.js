@@ -9,7 +9,6 @@ import {
   updateHeartbeatStatus,
   generalPressed,
   abortPressed,
-  undoSoftAbort,
   requestPressed,
   actuatePressed,
   updateStage,
