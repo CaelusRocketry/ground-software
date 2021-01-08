@@ -15,7 +15,7 @@ class LogPriority(IntEnum):
 class Log:
     """ Log class stores messages to be sent to and from ground and flight station """
 
-    def __init__(self, header, message={}, timestamp: float = time.time()):
+    def __init__(self, header={}, message={}, timestamp: float = time.time()):
         self.header = header
         self.message = message
         self.timestamp = timestamp
@@ -48,7 +48,7 @@ class Log:
             timestamp=input_dict["timestamp"],
         )
         return log
-
+8
 
 class Packet:
     """ Packet class stores groups of messages, which are grouped by LogPriority. """

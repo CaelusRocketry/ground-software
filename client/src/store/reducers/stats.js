@@ -115,7 +115,7 @@ const updateData = (state = initialState, action) => {
     case "ADD_RESPONSE":
       state = JSON.parse(JSON.stringify(state));
       let obj = Object();
-      if (action.data.header === "response") {
+      if ("response" in action.data.header) {
         obj.header = message.header;
       } else {
         obj.header = action.data.header;

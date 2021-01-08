@@ -93,15 +93,15 @@ class Telemetry:
         #packet = Packet.from_string(packet_str)
         for packet in packets:
             for log in packet.logs:
-                log.timestamp = round(log.timestamp, 1)   ##########################################CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
+                log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
 #                print("Timestamp:", log.timestamp)
-                if log.header in ["heartbeat", "stage", "response", "mode"]:
+                if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
                     self.backend.update_general(log.__dict__)
 
-                if log.header == "sensor_data":
+                if "sensor_data" in log.header:
                     self.backend.update_sensor_data(log.__dict__)
 
-                if log.header == "valve_data":
+                if "valve_data" in log.header:
                     self.backend.update_valve_data(log.__dict__)
                 
                 log.save()

@@ -16,7 +16,7 @@ class Backend(Namespace):
     def update_general(self, log):
         print("General:", log)
         self.socketio.emit('general',  log)
-
+    
     
     def update_sensor_data(self, log):
         print("Sensor:", log)

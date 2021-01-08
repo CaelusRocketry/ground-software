@@ -28,15 +28,15 @@ const socketConnection = (store) => {
     //        console.log(log);
     //        console.log("Header: " + log.header);
     console.log("Got log: " + log.header);
-    if (log.header === "heartbeat") {
+    if ("heartbeat" in log.header) {
       store.dispatch(updateHeartbeat(log));
       //            store.dispatch(addResponse(log));
-    } else if (log.header === "stage") {
+    } else if ("stage" in log.header) {
       store.dispatch(updateStage(log));
       //            store.dispatch(addResponse(log));
-    } else if (log.header === "mode") {
+    } else if ("mode" in log.header) {
       store.dispatch(updateMode(log));
-    } else if (log.header === "response") {
+    } else if ("response" in log.header) {
       store.dispatch(addResponse(log));
     } else {
       console.log("Unknown general header");
@@ -61,24 +61,23 @@ const socketConnection = (store) => {
 
   const handleChange = () => {
     let buttons = store.getState().buttonReducer;
-    let header = "";
+    let header = [];
     let message = {};
     if (buttons.abort.soft) {
-      header = "soft_abort";
+      header = ["soft_abort"];
       message = {};
       store.dispatch(abortPressed({ type: "soft", pressed: true }));
       sendMessage(header, message);
     }
     if (buttons.abort.undosofty) {
-      header = "undo_soft_abort";
+      header = ["undo_soft_abort"];
       message = {};
       store.dispatch(undoSoftAbort({ pressed: true }));
       sendMessage(header, message);
     }
-    if (buttons.request.valve[0] !== undefined) {
-      header = "valve_request";
+    if (buttons.request.valve[0] !== undefined) {    
+      header = ["valve_request", buttons.request.valve[0]];
       message = {
-        valve_type: buttons.request.valve[0],
         valve_location: buttons.request.valve[1],
       };
       store.dispatch(
@@ -91,9 +90,8 @@ const socketConnection = (store) => {
       sendMessage(header, message);
     }
     if (buttons.request.sensor[0] !== undefined) {
-      header = "sensor_request";
+      header = ["sensor_request", buttons.request.sensor[0]];
       message = {
-        sensor_type: buttons.request.sensor[0],
         sensor_location: buttons.request.sensor[1],
       };
       store.dispatch(
@@ -106,7 +104,7 @@ const socketConnection = (store) => {
       sendMessage(header, message);
     }
     if (buttons.general.progress) {
-      header = "progress";
+      header = ["progress"];
       message = {};
       store.dispatch(generalPressed({ type: "progress", pressed: false }));
       sendMessage(header, message);
@@ -121,10 +119,8 @@ const socketConnection = (store) => {
       ) {
         continue;
       }
-      header = "solenoid_actuate";
+      header = ["solenoid_actuate", valve, type];
       message = {
-        valve_location: valve,
-        actuation_type: type,
         priority: priority,
       };
       console.log(type + " " + priority);
