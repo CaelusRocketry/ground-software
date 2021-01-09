@@ -43,7 +43,7 @@ const App = () => {
     <div className="App font-sans bg-light-1 text-dark-1">
       {select}
       {view}
-      <img src={Logo} id="logo" />
+      <img src={Logo} id="logo" alt="Logo" />
     </div>
   );
 };

@@ -11,9 +11,14 @@ import "../index.css";
 
 const GraphPane = () => (
   <div>
-    <Header title="Graphs" />
+    <Header>Graphs</Header>
     <div className="h-full border-2">
-      <SplitPane style={{marginTop:"32px"}} className="view" split="horizontal" size="50%">
+      <SplitPane
+        style={{ marginTop: "32px" }}
+        className="view"
+        split="horizontal"
+        size="50%"
+      >
         <Graph type="undefined" location="undefined" />
         <Graph type="undefined" location="undefined" />
       </SplitPane>

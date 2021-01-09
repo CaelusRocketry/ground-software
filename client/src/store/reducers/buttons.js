@@ -1,9 +1,7 @@
-import { socketConnection } from "../../api";
-
-const initialState = {
+const createInitialState = () => ({
   abort: {
     soft: false,
-    undosofty: false
+    undosofty: false,
   },
   actuation: {
     // Actuation type, actuation priority
@@ -18,9 +16,9 @@ const initialState = {
   general: {
     progress: false,
   },
-};
+});
 
-const buttonPressed = (state = initialState, action) => {
+const buttonPressed = (state = createInitialState(), action) => {
   switch (action.type) {
     case "GENERAL_PRESSED":
       console.log("General button was pressed");
@@ -40,10 +38,8 @@ const buttonPressed = (state = initialState, action) => {
       state.abort.undosofty = true;
       return state;
     case "ACTUATE_PRESSED":
-      let valve = action.data.valve;
-      let type = action.data.actuation_type;
-      let priority = action.data.priority;
-      state.actuation[valve] = [type, priority];
+      let { valve, actuation_type, priority } = action.data;
+      state.actuation[valve] = [actuation_type, priority];
       return state;
     default:
       return state;

@@ -1,13 +1,12 @@
 import React from "react";
-import Header from "../components/Header";
-import Progress from "./../components/Progress";
 import { useSelector } from "react-redux";
-import { Timeline, Event } from "../components/Timeline";
+import Header from "../components/Header";
+import { Event, Timeline } from "../components/Timeline";
 import config from "../config.json";
+import Progress from "./../components/Progress";
 
 const stages = config["stages"]["list"];
-
-const names = {
+const stageNames = {
   waiting: "Waiting",
   pressurization: "Pressurization",
   autosequence: "Autosequence",
@@ -15,53 +14,57 @@ const names = {
 };
 
 const SequencePane = () => {
-  const current = useSelector((state) =>
+  const currentStageIndex = useSelector((state) =>
     stages.indexOf(state.data.general.stage)
   );
   const percentage = useSelector((state) => state.data.general.percent_data);
   console.log("Percentage: " + percentage);
-  const calcColor = (idx) => {
-    if (current === idx) {
-      return "#FFFF00"; // yellow
-    } else if (current > idx) {
+
+  const calculateColor = (idx) => {
+    if (currentStageIndex === idx) {
+      return "#ffff00"; // yellow
+    } else if (currentStageIndex > idx) {
       return "#00ff00"; // green
+    } else {
+      return "#ff0000"; // red
     }
-    return "#ff0000"; // red
   };
 
-  const calcTitle = (idx) => {
-    if (current === idx) {
+  const calculateTitle = (idx) => {
+    if (currentStageIndex === idx) {
       if (percentage === 100) {
         return "Ready for next stage";
       } else {
         return "In Progress";
       }
-    } else if (current > idx) {
+    } else if (currentStageIndex > idx) {
       return "Completed";
+    } else {
+      return "Pending";
     }
-    return "Pending";
   };
 
-  const calcPercentage = (idx) => {
-    if (current === idx) {
+  const calculatePercentage = (idx) => {
+    if (currentStageIndex === idx) {
       return percentage;
-    } else if (current > idx) {
+    } else if (currentStageIndex > idx) {
       return 100;
+    } else {
+      return 0;
     }
-    return 0;
   };
 
   return (
     <div className="pane">
-      <Header title="Sequence" />
+      <Header>Sequence</Header>
       <Timeline>
-        {stages.map((stage, i) => (
+        {stages.map((stage, idx) => (
           <Event
-            interval={calcTitle(i)}
-            title={names[stage]}
-            intervalBackground={calcColor(i)}
+            interval={calculateTitle(idx)}
+            title={stageNames[stage]}
+            intervalBackground={calculateColor(idx)}
           >
-            <Progress percentage={"" + calcPercentage(i)} />
+            <Progress percentage={calculatePercentage(idx)} />
           </Event>
         ))}
       </Timeline>

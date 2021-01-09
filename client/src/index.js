@@ -6,31 +6,32 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducers from "./store/reducers";
 
-import {socketConnection, heartbeatError} from './api';
+import { createSocketIoCallbacks, updateHeartbeatStatus } from "./api";
 
 import * as serviceWorker from "./serviceWorker";
 import { updateCountdown } from "./store/actions";
 
 const store = createStore(reducers);
-socketConnection(store);
-//setInterval(() => {console.log(store.getState());}, 1000);
-setInterval(() => {heartbeatError(store)} , 5000);
+createSocketIoCallbacks(store);
 
+setInterval(() => {
+  updateHeartbeatStatus(store);
+}, 5000);
 
-var countDownStart = setInterval(() => {
-  if (store.getState().data.general.stage == "autosequence") {
-    var countDownInterval = setInterval(() => {
-      if (store.getState().data.general.countdown > 0) {
+const countDownStart = setInterval(() => {
+  const { general } = store.getState().data;
+
+  if (general.stage === "autosequence") {
+    const countDownInterval = setInterval(() => {
+      if (general.countdown > 0) {
         store.dispatch(updateCountdown());
-      }
-      else {
+      } else {
         clearInterval(countDownInterval);
       }
     }, 1000);
     clearInterval(countDownStart);
   }
 }, 1000);
-
 
 ReactDOM.render(
   <Provider store={store}>
@@ -42,6 +43,3 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
-
-
-

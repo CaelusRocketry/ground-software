@@ -1,21 +1,21 @@
 import config from "../../config.json";
+import duplicateJson from "../../lib/duplicateJson";
+import { sensors, valves } from "../../lib/locationNames";
 
-const sensors = config["sensors"]["list"];
-const valves = config["valves"]["list"];
-const dataCutoff = config["UI"]["data_cutoff"];
+const dataCutoff = config.UI.data_cutoff;
 
 console.log(sensors);
 console.log(valves);
 
-const configToStore = (data, base_val) => {
+const configToStore = (data, baseValue) => {
   let storeData = {};
   for (let i in data) {
     storeData[i] = {};
     for (let j in data[i]) {
-      if (Array.isArray(base_val)) {
-        storeData[i][j] = base_val.slice();
+      if (Array.isArray(baseValue)) {
+        storeData[i][j] = baseValue.slice();
       } else {
-        storeData[i][j] = base_val;
+        storeData[i][j] = baseValue;
       }
     }
   }
@@ -27,7 +27,7 @@ initialSensorData.timestamp = [];
 const initialValveData = configToStore(valves, undefined);
 initialValveData.timestamp = undefined;
 
-const initialState = {
+const createInitialState = () => ({
   sensorData: initialSensorData,
   valveData: initialValveData,
   general: {
@@ -40,100 +40,102 @@ const initialState = {
     percent_data: undefined,
     mode: "Normal",
   },
-};
+});
 
-const updateData = (state = initialState, action) => {
-  let [message, timestamp] = [undefined, undefined];
-  if (
-    [
-      "UPDATE_SENSOR_DATA",
-      "UPDATE_VALVE_DATA",
-      "UPDATE_HEARTBEAT",
-      "UPDATE_STAGE",
-      "ADD_RESPONSE",
-    ].includes(action.type)
-  ) {
+const actionsWithMessageAndTimestamp = [
+  "UPDATE_SENSOR_DATA",
+  "UPDATE_VALVE_DATA",
+  "UPDATE_HEARTBEAT",
+  "UPDATE_STAGE",
+  "ADD_RESPONSE",
+];
+
+const updateData = (state = createInitialState(), action) => {
+  let message, timestamp;
+  if (actionsWithMessageAndTimestamp.includes(action.type)) {
     message = action.data.message;
     timestamp = action.data.timestamp;
   }
+
+  // Ensure we can safely modify the state
+  state = duplicateJson(state);
+
   switch (action.type) {
     case "UPDATE_SENSOR_DATA":
-      state = JSON.parse(JSON.stringify(state));
-      for (let type in message) {
-        for (let loc in message[type]) {
-          let measured = message[type][loc].measured.toFixed(3);
-          let normalized = message[type][loc].kalman.toFixed(3);
-          let status = message[type][loc].status;
-          state.sensorData[type][loc].push([normalized, status]);
-          if (state.sensorData[type][loc].length > dataCutoff) {
-            state.sensorData[type][loc].shift();
+      for (let [type, locations] of Object.entries(message)) {
+        for (let [location, sensor] of Object.entries(locations)) {
+          let measured = sensor.measured.toFixed(3);
+          let kalman = sensor.kalman.toFixed(3);
+          let status = sensor.status;
+
+          state.sensorData[type][location].push([kalman, status]);
+
+          // Ensure that there are only dataCutoff values in the series
+          if (state.sensorData[type][location].length > dataCutoff) {
+            state.sensorData[type][location].shift();
           }
         }
       }
+
       state.sensorData.timestamp.push(timestamp);
+
+      // Ensure that there are only dataCutoff values in the series
       if (state.sensorData.timestamp.length > dataCutoff) {
         state.sensorData.timestamp.shift();
       }
+
       return state;
 
     case "UPDATE_VALVE_DATA":
-      state = JSON.parse(JSON.stringify(state));
-      for (let type in message) {
-        for (let loc in message[type]) {
-          let value = message[type][loc];
-          state.valveData[type][loc] = value;
+      for (let [type, locations] of Object.entries(message)) {
+        for (let [location, valve] in Object.entries(locations)) {
+          state.valveData[type][location] = valve;
         }
       }
+
       state.valveData.timestamp = timestamp;
       return state;
 
     case "UPDATE_HEARTBEAT":
-      state = JSON.parse(JSON.stringify(state));
       state.general.heartbeat_recieved = Date.now();
       state.general.heartbeat = timestamp;
       state.general.mode = action.data.message.mode;
       return state;
 
     case "UPDATE_HEARTBEAT_STATUS":
-      state = JSON.parse(JSON.stringify(state));
       state.general.heartbeat_status = action.heartbeat_status;
       return state;
 
     case "UPDATE_STAGE":
-      state = JSON.parse(JSON.stringify(state));
       state.general.stage = message.stage;
       state.general.percent_data = message.status;
       return state;
 
     case "UPDATE_COUNTDOWN":
-      state = JSON.parse(JSON.stringify(state));
       if (state.general.countdown > 0) {
         state.general.countdown -= 1;
       }
       return state;
 
     case "ADD_RESPONSE":
-      state = JSON.parse(JSON.stringify(state));
-      let obj = Object();
-      if ("response" in action.data.header) {
-        obj.header = message.header;
-      } else {
-        obj.header = action.data.header;
-      }
-      obj.message = message;
-      obj.timestamp = timestamp;
-      let temp = state.general.responses.slice();
-      temp.push(obj);
-      state.general.responses = temp;
+      state.general.responses = [
+        ...state.general.responses,
+        {
+          header:
+            "response" in action.data.header
+              ? message.header
+              : action.data.header,
+          message,
+          timestamp,
+        },
+      ];
       return state;
 
     case "UPDATE_MODE":
-      state = JSON.parse(JSON.stringify(state));
       state.general.mode = action.data.message.mode;
       return state;
 
     default:
-      state = JSON.parse(JSON.stringify(state));
       return state;
   }
 };

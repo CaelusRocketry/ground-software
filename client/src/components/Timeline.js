@@ -1,7 +1,7 @@
 // Adoped from https://github.com/tverdohleb/react-trivial-timeline [MIT]
 
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 import styled from "styled-components";
 
 const e = React.createElement;
@@ -29,7 +29,7 @@ const StyledIcon = styled.div`
     if (props.lineColor === null) {
       return "2px";
     }
-    return "0";
+    return "0px";
   }};
   background: ${(props) => props.iconFill};
   border-radius: 10px;

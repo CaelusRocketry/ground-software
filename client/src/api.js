@@ -1,51 +1,46 @@
 import io from "socket.io-client";
 import config from "./config.json";
-
 import {
-  undoSoftAbort,
-  updateSensorData,
-  updateValveData,
-  updateHeartbeat,
-  updateHeartbeatStatus,
-  generalPressed,
   abortPressed,
-  requestPressed,
   actuatePressed,
-  updateStage,
   addResponse,
+  generalPressed,
+  requestPressed,
+  undoSoftAbort,
+  updateHeartbeat,
+  updateHeartbeatStatus as updateHeartbeatStatusAction,
   updateMode,
+  updateSensorData,
+  updateStage,
+  updateValveData,
 } from "./store/actions";
 
-const socket = io(
+const SOCKETIO_URL =
   "http://" +
-    config["telemetry"]["SOCKETIO_HOST"] +
-    ":" +
-    config["telemetry"]["SOCKETIO_PORT"]
-);
+  config.telemetry.SOCKETIO_HOST +
+  ":" +
+  config.telemetry.SOCKETIO_PORT;
 
-const socketConnection = (store) => {
+const socket = io(SOCKETIO_URL);
+
+const generalUpdates = {
+  heartbeat: updateHeartbeat,
+  stage: updateStage,
+  mode: updateMode,
+  response: addResponse,
+};
+
+export const createSocketIoCallbacks = (store) => {
   socket.on("general", function (log) {
-    //        console.log(log);
-    //        console.log("Header: " + log.header);
-    console.log("Got log: " + log.header);
-    if ("heartbeat" in log.header) {
-      store.dispatch(updateHeartbeat(log));
-      //            store.dispatch(addResponse(log));
-    } else if ("stage" in log.header) {
-      store.dispatch(updateStage(log));
-      //            store.dispatch(addResponse(log));
-    } else if ("mode" in log.header) {
-      store.dispatch(updateMode(log));
-    } else if ("response" in log.header) {
-      store.dispatch(addResponse(log));
+    const { header } = log;
+    if (header in generalUpdates) {
+      store.dispatch(generalUpdates[header](log));
     } else {
       console.log("Unknown general header");
     }
   });
 
   socket.on("sensor_data", function (log) {
-    //        console.log(log);
-    //        console.log("Header: " + log.header);
     store.dispatch(updateSensorData(log));
   });
 
@@ -54,7 +49,7 @@ const socketConnection = (store) => {
   });
 
   const sendMessage = (header, message) => {
-    let log = { header: header, message: message };
+    const log = { header, message };
     console.log("Sending: " + log);
     socket.emit("button_press", log);
   };
@@ -63,19 +58,22 @@ const socketConnection = (store) => {
     let buttons = store.getState().buttonReducer;
     let header = [];
     let message = {};
+
     if (buttons.abort.soft) {
       header = ["soft_abort"];
       message = {};
       store.dispatch(abortPressed({ type: "soft", pressed: true }));
       sendMessage(header, message);
     }
+
     if (buttons.abort.undosofty) {
       header = ["undo_soft_abort"];
       message = {};
       store.dispatch(undoSoftAbort({ pressed: true }));
       sendMessage(header, message);
     }
-    if (buttons.request.valve[0] !== undefined) {    
+
+    if (buttons.request.valve[0] !== undefined) {
       header = ["valve_request", buttons.request.valve[0]];
       message = {
         valve_location: buttons.request.valve[1],
@@ -89,6 +87,7 @@ const socketConnection = (store) => {
       );
       sendMessage(header, message);
     }
+
     if (buttons.request.sensor[0] !== undefined) {
       header = ["sensor_request", buttons.request.sensor[0]];
       message = {
@@ -103,30 +102,26 @@ const socketConnection = (store) => {
       );
       sendMessage(header, message);
     }
+
     if (buttons.general.progress) {
       header = ["progress"];
       message = {};
       store.dispatch(generalPressed({ type: "progress", pressed: false }));
       sendMessage(header, message);
     }
+
     for (let valve in buttons.actuation) {
       let [type, priority] = buttons.actuation[valve];
-      if (
-        type === null ||
-        type === undefined ||
-        priority === null ||
-        priority === undefined
-      ) {
+      if (type == null || priority == null) {
         continue;
       }
+
       header = ["solenoid_actuate", valve, type];
-      message = {
-        priority: priority,
-      };
-      console.log(type + " " + priority);
+      message = { priority };
+      console.log(type, priority);
       console.log("Dispatching null");
       store.dispatch(
-        actuatePressed({ valve: valve, type: undefined, priority: undefined })
+        actuatePressed({ valve, type: undefined, priority: undefined })
       );
       console.log(store.getState());
       sendMessage(header, message);
@@ -136,16 +131,21 @@ const socketConnection = (store) => {
   store.subscribe(handleChange);
 };
 
-const heartbeatError = (store) => {
+export const updateHeartbeatStatus = (store) => {
   let general = store.getState().data.general;
-  let curr = Date.now();
 
-  if (general.heartbeat == undefined) store.dispatch(updateHeartbeatStatus(1));
-  else if (curr - general.heartbeat_recieved > 10000)
-    store.dispatch(updateHeartbeatStatus(1));
-  else if (curr - general.heartbeat_recieved > 6000)
-    store.dispatch(updateHeartbeatStatus(2));
-  else store.dispatch(updateHeartbeatStatus(3));
+  if (general.heartbeat === undefined) {
+    store.dispatch(updateHeartbeatStatusAction(1));
+  } else {
+    const timeSinceLastHeartbeatReceived =
+      Date.now() - general.heartbeat_recieved;
+
+    if (timeSinceLastHeartbeatReceived > 10000) {
+      store.dispatch(updateHeartbeatStatusAction(1));
+    } else if (timeSinceLastHeartbeatReceived > 6000) {
+      store.dispatch(updateHeartbeatStatusAction(2));
+    } else {
+      store.dispatch(updateHeartbeatStatusAction(3));
+    }
+  }
 };
-
-export { socketConnection, heartbeatError };
