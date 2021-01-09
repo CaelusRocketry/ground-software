@@ -118,13 +118,13 @@ const updateData = (state = createInitialState(), action) => {
       return state;
 
     case "ADD_RESPONSE":
+      console.log('action.data.header')
+      console.log(action.data.header)
       state.general.responses = [
         ...state.general.responses,
         {
           header:
-            "response" in action.data.header
-              ? message.header
-              : action.data.header,
+            "response" === action.data.header ? message.header : action.data.header,
           message,
           timestamp,
         },
