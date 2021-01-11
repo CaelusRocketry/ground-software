@@ -87,8 +87,9 @@ const updateData = (state = createInitialState(), action) => {
       return state;
 
     case "UPDATE_VALVE_DATA":
+      console.log(message);
       for (let [type, locations] of Object.entries(message)) {
-        for (let [location, valve] in Object.entries(locations)) {
+        for (let [location, valve] of Object.entries(locations)) {
           state.valveData[type][location] = valve;
         }
       }
