@@ -78,6 +78,7 @@ const Data = () => {
         {Object.keys(data.valveState).map((valve) => (
           <div>
             <h4 className={groupHeaderStyle}>{stylizeName(valve)}</h4>
+
             {valve === "timestamp" ? (
               <>
                 {"Timestamp: "}
@@ -86,10 +87,12 @@ const Data = () => {
             ) : (
               <>
                 <div className="font-mono">
+                { console.log(Object.keys(data.valveState[valve])) }
+                { console.log(data.valveState)}
                   {Object.keys(data.valveState[valve]).map((loc) => (
                     <p>
                       {stylizeName(loc)}:{" "}
-                      {VALVE_MAP[data.valveState.solenoid[loc]]}
+                      {data.valveState.solenoid[loc].state}
                     </p>
                   ))}
                 </div>
