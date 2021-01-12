@@ -108,8 +108,16 @@ const updateData = (state = createInitialState(), action) => {
       return state;
 
     case "UPDATE_STAGE":
+      console.log('Stage Updating!!!')
       state.general.stage = message.stage;
       state.general.percent_data = message.status;
+
+      if (typeof message.status === 'string') {
+        state.general.percent_data = parseInt(message.status)
+      }
+      else if (typeof message.status == 'number') {
+        state.general.percent_data = message.status
+      }
       return state;
 
     case "UPDATE_COUNTDOWN":
