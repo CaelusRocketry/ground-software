@@ -3,6 +3,8 @@ import heapq
 import socket
 import threading
 from packet import Packet, Log, LogPriority
+from flask_socketio import SocketIO, emit, Namespace
+
 
 BYTE_SIZE = 8192
 
@@ -18,15 +20,18 @@ f = open("black_box.txt", "w+")
 f.close()
 
 
-class Telemetry:
+class Handler(Namespace):
     """ Telemetry Class handles all communication """
 
-    def __init__(self, ip, port):
+    def init(self, ip, port, socketio):
         """ Based on given IP and port, create and connect a socket """
         self.queue_send = []
         self.connect(ip, port)
         self.start_time = time.time()
 
+        self.socketio = socketio
+
+    ## telemetry methods
 
     def connect(self, ip, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -96,16 +101,15 @@ class Telemetry:
                 log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
 #                print("Timestamp:", log.timestamp)
                 if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
-                    self.backend.update_general(log.__dict__)
+                    self.update_general(log.__dict__)
 
                 if "sensor_data" in log.header:
-                    self.backend.update_sensor_data(log.__dict__)
+                    self.update_sensor_data(log.__dict__)
 
                 if "valve_data" in log.header:
-                    self.backend.update_valve_data(log.__dict__)
+                    self.update_valve_data(log.__dict__)
                 
                 log.save()
-
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
@@ -114,3 +118,25 @@ class Telemetry:
             self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
+
+    ## backend methods
+
+    def update_general(self, log):
+        print("General:", log)
+        self.socketio.emit('general',  log)
+    
+    
+    def update_sensor_data(self, log):
+        print("Sensor:", log)
+        self.socketio.emit('sensor_data',  log)
+
+    
+    def update_valve_data(self, log):
+        print("Valve:", log)
+        self.socketio.emit('valve_data',  log)
+
+
+    def on_button_press(self, data):
+        print(data)
+        log = Log(header=data['header'], message=data['message'])
+        self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))

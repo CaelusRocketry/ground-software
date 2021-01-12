@@ -1,7 +1,5 @@
 import json
-from telemetry import Telemetry
-from backend import Backend
-
+from handler import Handler
 
 from flask import Flask, render_template
 from flask_cors import CORS
@@ -51,15 +49,11 @@ time.sleep(1)
 if __name__ == "__main__":
     print("listening and sending")
 
-    b = Backend('/')
+    h = Handler('/')
+    h.init(GS_IP, GS_PORT, socketio)
+    h.begin()
 
-    telem = Telemetry(GS_IP, GS_PORT)
-    telem.begin()
-
-    b.init(app, socketio, telem)
-    telem.init_backend(b)
-
-    socketio.on_namespace(b)
+    socketio.on_namespace(h)
     socketio.run(app, host=config["telemetry"]["SOCKETIO_HOST"], port=int(config["telemetry"]["SOCKETIO_PORT"]))
 
 
