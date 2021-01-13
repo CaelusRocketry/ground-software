@@ -41,13 +41,14 @@ export const actuationTypeNames = {
 
 export const sensors = config.sensors.list;
 
-export const sensorLocations = new Set();
+export const sensorLocations = {undefined: []};
 export const sensorTypes = new Set();
 
 for (let type in sensors) {
   sensorTypes.add(type);
+  sensorLocations[type] = new Set();
   for (let loc in sensors[type]) {
-    sensorLocations.add(loc);
+    sensorLocations[type].add(loc);
   }
 }
 

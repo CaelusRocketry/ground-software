@@ -243,11 +243,10 @@ const ButtonPane = () => {
           options={sensorTypes}
           optionName={sensorTypeNames}
         />
-        {/* {} */}
         <Select
           label="Sensor Location"
           name="requestSensorLocation"
-          options={sensorLocations}
+          options={sensorLocations[selectValues.requestSensor]}
           optionName={sensorLocationNames}
         />
         <button

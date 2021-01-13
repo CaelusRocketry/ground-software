@@ -99,7 +99,7 @@ export const createSocketIoCallbacks = (store) => {
 
     if (buttons.request.sensor[0] !== undefined) {
       // Create the Packet
-      header = ["sensor_request", buttons.request.sensor[0]];
+      header = "sensor_request";
       message = {
         sensor_type: buttons.request.sensor[0],
         sensor_location: buttons.request.sensor[1]
@@ -132,8 +132,12 @@ export const createSocketIoCallbacks = (store) => {
       }
 
       // Create / send the Packet for the corresponding button
-      header = ["solenoid_actuate", valve, type];
-      message = { priority };
+      header = "solenoid_actuate";
+      message = { 
+        valve_location: valve,
+        actuation_type: type,
+        priority: priority
+      };
       console.log(type, priority);
       console.log("Dispatching null");
       sendMessage(header, message);
