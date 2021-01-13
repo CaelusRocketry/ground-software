@@ -87,12 +87,10 @@ const Data = () => {
             ) : (
               <>
                 <div className="font-mono">
-                { console.log(Object.keys(data.valveState[valve])) }
-                { console.log(data.valveState)}
                   {Object.keys(data.valveState[valve]).map((loc) => (
                     <p>
                       {stylizeName(loc)}:{" "}
-                      {data.valveState.solenoid[loc].state}
+                      {VALVE_MAP[data.valveState.solenoid[loc]]}
                     </p>
                   ))}
                 </div>
