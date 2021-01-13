@@ -269,17 +269,17 @@ const ButtonPane = () => {
         </button>
       </div>
       <div className={views.valve ? "block mt-2" : "hidden"}>
-        <Select
-          label="Valve Location"
-          name="requestValveLocation"
-          options={valveLocations}
-          optionName={valveLocationNames}
-        />
-        <Select
+      <Select
           label="Valve Type"
           name="requestValve"
           options={valveTypes}
           optionName={valveTypeNames}
+        />
+        <Select
+          label="Valve Location"
+          name="requestValveLocation"
+          options={valveLocations[selectValues.requestValve]}
+          optionName={valveLocationNames}
         />
         <button
           onClick={() =>

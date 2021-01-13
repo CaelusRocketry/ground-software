@@ -12,12 +12,13 @@ export const stageNames = {
 export const valves = config.valves.list;
 
 export const valveTypes = new Set();
-export const valveLocations = new Set();
+export const valveLocations = {undefined: []};
 
 for (var type in valves) {
   valveTypes.add(type);
+  valveLocations[type] = new Set();
   for (var loc in valves[type]) {
-    valveLocations.add(loc);
+    valveLocations[type].add(loc);
   }
 }
 
