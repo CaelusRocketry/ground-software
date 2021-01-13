@@ -1,7 +1,7 @@
 const createInitialState = () => ({
   abort: {
     soft: false,
-    undosofty: false,
+    undosoft: false,
   },
   actuation: {
     // Actuation type, actuation priority
@@ -26,7 +26,7 @@ const buttonPressed = (state = createInitialState(), action) => {
       return state;
     case "ABORT_PRESSED":
       state.abort[action.data.type] = action.data.pressed;
-      state.abort.undosofty = false;
+      state.abort.undosoft = false;
       return state;
     case "REQUEST_PRESSED":
       state.request[action.data.type] = [
@@ -35,7 +35,7 @@ const buttonPressed = (state = createInitialState(), action) => {
       ];
       return state;
     case "UNDO_SOFT_ABORT":
-      state.abort.undosofty = true;
+      state.abort.undosoft = true;
       return state;
     case "ACTUATE_PRESSED":
       let { valve, actuation_type, priority } = action.data;

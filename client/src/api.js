@@ -54,30 +54,40 @@ export const createSocketIoCallbacks = (store) => {
     socket.emit("button_press", log);
   };
 
+// THE FORMAT FOR THESE MESSAGES SHOULD MATCH THE FORMAT LISTED IN FLIGHT SOFTWARE'S TELEMETRYCONTROL
+
   const handleChange = () => {
     let buttons = store.getState().buttonReducer;
-    let header = [];
+    let header = "";
     let message = {};
 
     if (buttons.abort.soft) {
-      header = ["soft_abort"];
+      // Create / send the Packet
+      header = "soft_abort";
       message = {};
       store.dispatch(abortPressed({ type: "soft", pressed: true }));
+      // Reset the button back to unclicked
       sendMessage(header, message);
     }
 
-    if (buttons.abort.undosofty) {
-      header = ["undo_soft_abort"];
+    if (buttons.abort.undosoft) {
+      // Create / send the Packet
+      header = "undo_soft_abort";
       message = {};
-      store.dispatch(undoSoftAbort({ pressed: true }));
       sendMessage(header, message);
+      // Reset the button back to unclicked
+      store.dispatch(undoSoftAbort({ pressed: true }));
     }
 
     if (buttons.request.valve[0] !== undefined) {
-      header = ["valve_request", buttons.request.valve[0]];
+      // Create / send the Packet
+      header = "valve_request";
       message = {
-        valve_location: buttons.request.valve[1],
+        valve_type: buttons.request.valve[0],
+        valve_location: buttons.request.valve[1]
       };
+      sendMessage(header, message);
+      // Reset the button back to unclicked
       store.dispatch(
         requestPressed({
           type: "valve",
@@ -85,14 +95,17 @@ export const createSocketIoCallbacks = (store) => {
           location: undefined,
         })
       );
-      sendMessage(header, message);
     }
 
     if (buttons.request.sensor[0] !== undefined) {
+      // Create the Packet
       header = ["sensor_request", buttons.request.sensor[0]];
       message = {
-        sensor_location: buttons.request.sensor[1],
+        sensor_type: buttons.request.sensor[0],
+        sensor_location: buttons.request.sensor[1]
       };
+      sendMessage(header, message);
+      // Reset the button back to unclicked
       store.dispatch(
         requestPressed({
           type: "sensor",
@@ -100,31 +113,35 @@ export const createSocketIoCallbacks = (store) => {
           location: undefined,
         })
       );
-      sendMessage(header, message);
     }
 
     if (buttons.general.progress) {
-      header = ["progress"];
+      // Create / send the Packet
+      header = "progress";
       message = {};
-      store.dispatch(generalPressed({ type: "progress", pressed: false }));
       sendMessage(header, message);
+      // Reset the button back to unclicked
+      store.dispatch(generalPressed({ type: "progress", pressed: false }));
     }
 
     for (let valve in buttons.actuation) {
+      // Loop through all the buttons
       let [type, priority] = buttons.actuation[valve];
       if (type == null || priority == null) {
         continue;
       }
 
+      // Create / send the Packet for the corresponding button
       header = ["solenoid_actuate", valve, type];
       message = { priority };
       console.log(type, priority);
       console.log("Dispatching null");
+      sendMessage(header, message);
+      // Reset the corresponding button back to unclicked
       store.dispatch(
         actuatePressed({ valve, type: undefined, priority: undefined })
       );
       console.log(store.getState());
-      sendMessage(header, message);
     }
   };
 

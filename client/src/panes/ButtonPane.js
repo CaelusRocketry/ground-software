@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
 import {
@@ -25,6 +25,7 @@ import {
 const ButtonPane = () => {
   const dispatch = useDispatch();
 
+  // Fonts used for the different buttons
   const btnBig =
     "mt-2 col-md-12 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded disabled:bg-gray-900";
   const btnSmall =
@@ -32,17 +33,21 @@ const ButtonPane = () => {
   const btnSmallMarginless =
     "col-md-12 bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded";
 
+  // Used to display the current stage and current progress on the stage
   const currentStage = useSelector((state) =>
     stages.indexOf(state.data.general.stage)
   );
-
   const currentProgress = useSelector(
     (state) => state.data.general.percent_data
   );
 
+  // Used to display the current countdown
   const currentCountdown = useSelector((state) => state.data.general.countdown);
+
+  // Used to check if the rocket is currently softabortable
   const mode = useSelector((state) => state.data.general.mode);
 
+  // Each of the different mini views that pop up when you click on the heading of the view
   const [views, setViews] = useState({
     abort: false,
     actuation: false,
@@ -101,19 +106,22 @@ const ButtonPane = () => {
     }
   };
 
-  const handleSelectChange = (e, name) =>
-    setSelectValues((selectValues) => ({
+  const handleSelectChange = (e, name) => {
+    setSelectValues({
       ...selectValues,
       [name]: e.target.value,
-    }));
+    });
+  }
 
   const Select = ({ label, name, options, optionName }) => {
+
     return (
       <div className="float-left">
         <b>
           <label>{label}: </label>
         </b>
         <select
+          value={selectValues[name]}
           onChange={(e) => {
             handleSelectChange(e, name);
           }}
@@ -128,8 +136,9 @@ const ButtonPane = () => {
     );
   };
 
-  const switchView = (name) =>
-    setViews((views) => ({ ...views, [name]: !views[name] }));
+  // If u click on a closed view, it opens. If it's already opened, it closes.
+  const switchView = (name) => 
+    setViews({ ...views, [name]: !views[name] });
 
   const round = (progress, places) => {
     if (typeof progress != "number") {
@@ -229,16 +238,17 @@ const ButtonPane = () => {
       </div>
       <div className={views.sensor ? "block mt-2" : "hidden"}>
         <Select
-          label="Sensor Location"
-          name="requestSensorLocation"
-          options={sensorLocations}
-          optionName={sensorLocationNames}
-        />
-        <Select
           label="Sensor Type"
           name="requestSensor"
           options={sensorTypes}
           optionName={sensorTypeNames}
+        />
+        {/* {} */}
+        <Select
+          label="Sensor Location"
+          name="requestSensorLocation"
+          options={sensorLocations}
+          optionName={sensorLocationNames}
         />
         <button
           onClick={() =>
