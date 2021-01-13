@@ -191,13 +191,10 @@ const ButtonPane = () => {
         Valve Actuation
       </button>
       <div className={views.actuation ? "block mt-2" : "hidden"}>
-        <b>
-          <label>Valve: </label>
-        </b>
         <Select
           label="Valve"
           name="actuationValve"
-          options={valveLocations}
+          options={valveLocations["solenoid"]}
           optionName={valveLocationNames}
         />
         <Select

@@ -4,9 +4,6 @@ import { sensors, valves } from "../../lib/locationNames";
 
 const dataCutoff = config.UI.data_cutoff;
 
-console.log(sensors);
-console.log(valves);
-
 const configToStore = (data, baseValue) => {
   let storeData = {};
   for (let i in data) {
@@ -87,7 +84,6 @@ const updateData = (state = createInitialState(), action) => {
       return state;
 
     case "UPDATE_VALVE_DATA":
-      console.log(message);
       for (let [type, locations] of Object.entries(message)) {
         for (let [location, valve] of Object.entries(locations)) {
           state.valveData[type][location] = valve;
@@ -108,7 +104,7 @@ const updateData = (state = createInitialState(), action) => {
       return state;
 
     case "UPDATE_STAGE":
-      console.log('Stage Updating!!!')
+      // console.log('Stage Updating!!!')
       state.general.stage = message.stage;
       state.general.percent_data = message.status;
 
@@ -129,13 +125,19 @@ const updateData = (state = createInitialState(), action) => {
     case "ADD_RESPONSE":
       console.log('action.data.header')
       console.log(action.data.header)
+      let header = action.data.header;
+      if(action.data.header == "response"){
+        header = message.header;
+        delete message.header;
+      }
+      console.log("Message:");
+      console.log(message);
       state.general.responses = [
         ...state.general.responses,
         {
-          header:
-            "response" === action.data.header ? message.header : action.data.header,
-          message,
-          timestamp,
+          header: header,
+          message: message,
+          timestamp: timestamp,
         },
       ];
       return state;
