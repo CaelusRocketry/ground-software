@@ -33,18 +33,7 @@ class NameForm extends React.Component {
           </div>
         </form>
       );
-    }/*
-    render() {
-        return (
-            <div>
-                <ul>
-                    {addresses.map(item => (
-                        <li key={item}>{item}</li>
-                    ))}
-                </ul>
-            </div>
-        );
-    }*/
+    }
 }
 
 const IpInput = ({ children }) => (
