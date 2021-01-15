@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-dropdown-select";
-
+import config from "./config.json";
+import * as ipinput from "./components/IpInput";
 import "./App.css";
 
 import StatisticsView from "./views/StatisticsView";
@@ -11,8 +12,9 @@ import Logo from "./images/logo.png";
 
 const App = () => {
   const [view, setView] = useState(<StatisticsView />);
-
-  const handleChange = (values) => {
+//  if(ipinput.addresses.includes("127.0.0.2"))
+    //alert(config["telemetry"]["GS_IP"]);
+    const handleChange = (values) => {
     console.log(values);
     setView(() => {
       return values[0].value === "statistics" ? (
@@ -24,12 +26,15 @@ const App = () => {
       );
     });
   };
-
-  const options = [
+  var options = [
     { label: "Statistics", value: "statistics" },
     { label: "Actions", value: "actions" },
     { label: "Countdown", value: "countdown" },
   ];
+  if(!ipinput.addresses.includes(config["telemetry"]["GS_IP"]))
+  {
+    var options = [];
+  }
   const select = (
     <Select
       options={options}

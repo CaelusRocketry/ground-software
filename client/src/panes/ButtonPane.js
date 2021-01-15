@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
+import IpInput from "../components/IpInput";
 import {
   actuationTypeNames,
   sensorLocationNames,
@@ -323,6 +324,9 @@ const ButtonPane = () => {
             </div>
           </div>
         </button>
+        <div>
+          <IpInput>IP Input</IpInput>
+        </div>
       </div>
     </div>
   );
