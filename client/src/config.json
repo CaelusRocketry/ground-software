@@ -10,51 +10,51 @@
     "list": {
       "thermocouple": {},
       "pressure": {
-        "PT-1": {
+        "PT-5": {
           "kalman_args": {
             "process_variance": 0.01,
             "measurement_variance": 0.02,
             "kalman_value": 1000
           },
           "boundaries": {
-            "safe": [0, 60],
-            "warn": [-500, 10000]
+            "safe": [0, 800],
+            "warn": [-500, 900]
           },
           "pin": 14
         },
-        "PT-2": {
+        "PT-7": {
           "kalman_args": {
             "process_variance": 0.01,
             "measurement_variance": 0.02,
             "kalman_value": 1000
           },
           "boundaries": {
-            "safe": [0, 700],
-            "warn": [-500, 800]
+            "safe": [0, 800],
+            "warn": [-500, 900]
           },
           "pin": 15
         },
-        "PT-3": {
+        "PT-P": {
           "kalman_args": {
             "process_variance": 0.01,
             "measurement_variance": 0.02,
             "kalman_value": 1000
           },
           "boundaries": {
-            "safe": [0, 700],
-            "warn": [-500, 800]
+            "safe": [0, 800],
+            "warn": [-500, 900]
           },
           "pin": 16
         },
-        "PT-4": {
+        "PT-8": {
           "kalman_args": {
             "process_variance": 0.01,
             "measurement_variance": 0.02,
             "kalman_value": 1000
           },
           "boundaries": {
-            "safe": [0, 700],
-            "warn": [-500, 800]
+            "safe": [0, 800],
+            "warn": [-500, 900]
           },
           "pin": 17
         }
