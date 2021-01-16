@@ -34,8 +34,8 @@ const buttonPressed = (state = createInitialState(), action) => {
         action.data.location,
       ];
       return state;
-    case "UNDO_SOFT_ABORT":
-      state.abort.undosoft = true;
+    case "UNDO_SOFT_ABORT_PRESSED":
+      state.abort.undosoft = action.data.pressed;
       return state;
     case "ACTUATE_PRESSED":
       let { valve, actuation_type, priority } = action.data;

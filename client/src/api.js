@@ -6,7 +6,7 @@ import {
   addResponse,
   generalPressed,
   requestPressed,
-  undoSoftAbort,
+  undoSoftAbortPressed,
   updateHeartbeat,
   updateHeartbeatStatus as updateHeartbeatStatusAction,
   updateMode,
@@ -50,7 +50,8 @@ export const createSocketIoCallbacks = (store) => {
 
   const sendMessage = (header, message) => {
     const log = { header, message };
-    console.log("Sending: " + log);
+    console.log("Sending: ");
+    console.log(log);
     socket.emit("button_press", log);
   };
 
@@ -65,7 +66,8 @@ export const createSocketIoCallbacks = (store) => {
       // Create / send the Packet
       header = "soft_abort";
       message = {};
-      store.dispatch(abortPressed({ type: "soft", pressed: true }));
+      console.log("Sent message that soft abort has been pressed");
+      store.dispatch(abortPressed({ type: "soft", pressed: false }));
       // Reset the button back to unclicked
       sendMessage(header, message);
     }
@@ -76,7 +78,7 @@ export const createSocketIoCallbacks = (store) => {
       message = {};
       sendMessage(header, message);
       // Reset the button back to unclicked
-      store.dispatch(undoSoftAbort({ pressed: true }));
+      store.dispatch(undoSoftAbortPressed({ pressed: false }));
     }
 
     if (buttons.request.valve[0] !== undefined) {

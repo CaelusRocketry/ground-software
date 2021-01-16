@@ -42,8 +42,9 @@ export const abortPressed = (data) => ({
   data,
 });
 
-export const undoSoftAbort = () => ({
-  type: "UNDO_SOFT_ABORT",
+export const undoSoftAbortPressed = (data) => ({
+  type: "UNDO_SOFT_ABORT_PRESSED",
+  data,
 });
 
 export const requestPressed = (data) => ({
