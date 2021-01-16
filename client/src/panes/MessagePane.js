@@ -29,13 +29,16 @@ const MessagePane = () => {
           .reverse()
           .map((data, i) => (
             <li key={i} className="list-group-item list-group-item-primary">
-              {/* {responses.length - i} */}
+              {responses.length - i}
 
               <h3 className="text-lg font-bold">
                 {data.header}
+<<<<<<< Updated upstream
                 { header=> (
                   <p key={index}>{element}</p>
                 )}
+=======
+>>>>>>> Stashed changes
               </h3>
               <p className="text-xs mb-2">
                 - {data.timestamp} {seconds}
