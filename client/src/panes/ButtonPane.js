@@ -19,7 +19,7 @@ import {
   actuatePressed,
   generalPressed,
   requestPressed,
-  undoSoftAbort as undoSoftAbortAction,
+  undoSoftAbortPressed,
 } from "../store/actions";
 
 const ButtonPane = () => {
@@ -59,11 +59,18 @@ const ButtonPane = () => {
 
   const abort = (type) => {
     if (window.confirm("Are you sure you want to " + type + " abort?")) {
+      console.log("Confirmed abort");
       dispatch(abortPressed({ type, pressed: true }));
     }
   };
 
-  const undoSoftAbort = () => dispatch(undoSoftAbortAction({ pressed: true }));
+  const undoSoftAbort = () => {
+    // TODO: If the current mode isn't Soft Abort, don't allow this (gray out the button, and if they somehow click on it then alert them that its a disallowed action)
+    if (window.confirm("Are you sure you want to undo soft abort?")) {
+      console.log("Confirmed undo abort");
+      dispatch(undoSoftAbortPressed({ pressed: true }));
+    }
+  };
 
   const actuateValve = (location, type, priority) => {
     console.log(selectValues);
