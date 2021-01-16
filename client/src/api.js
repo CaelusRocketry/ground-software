@@ -67,17 +67,17 @@ export const createSocketIoCallbacks = (store) => {
       header = "soft_abort";
       message = {};
       console.log("Sent message that soft abort has been pressed");
+      sendMessage(header, message);
       store.dispatch(abortPressed({ type: "soft", pressed: false }));
       // Reset the button back to unclicked
-      sendMessage(header, message);
     }
 
     if (buttons.abort.undosoft) {
       // Create / send the Packet
       header = "undo_soft_abort";
       message = {};
+      console.log("Sent message that soft abort has been undone");
       sendMessage(header, message);
-      // Reset the button back to unclicked
       store.dispatch(undoSoftAbortPressed({ pressed: false }));
     }
 
