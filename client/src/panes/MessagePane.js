@@ -30,6 +30,7 @@ const MessagePane = () => {
           .map((data, i) => (
             <li key={i} className="list-group-item list-group-item-primary">
               {responses.length - i}
+<<<<<<< Updated upstream
 
               <h3 className="text-lg font-bold">
                 {data.header}
@@ -40,8 +41,11 @@ const MessagePane = () => {
 =======
 >>>>>>> Stashed changes
               </h3>
+=======
+                <h3 class="text-lg font-bold">{messageArr(data).header}</h3>
+>>>>>>> Stashed changes
               <p className="text-xs mb-2">
-                - {data.timestamp} {seconds}
+                - {data.timestamp} seconds
               </p>
               {dictToArr(data.message).map((element, index) => (
                 <p key={index}>{element}</p>
