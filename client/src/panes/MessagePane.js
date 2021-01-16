@@ -33,12 +33,12 @@ const MessagePane = () => {
 
               <h3 className="text-lg font-bold">
                 {data.header}
-                {/* {messageArray(data).headerArr.map((element, index) => (
+                { header=> (
                   <p key={index}>{element}</p>
-                ))} */}
+                )}
               </h3>
               <p className="text-xs mb-2">
-                - {data.timestamp} seconds
+                - {data.timestamp} {seconds}
               </p>
               {dictToArr(data.message).map((element, index) => (
                 <p key={index}>{element}</p>
