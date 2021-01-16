@@ -1,3 +1,5 @@
 export default function duplicateJson(value) {
-  return JSON.parse(JSON.stringify(value));
+  let cloned = JSON.parse(JSON.stringify(value));
+  console.log("CLONE: " + cloned);
+  return cloned;
 }

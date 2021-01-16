@@ -19,7 +19,7 @@ import {
   actuatePressed,
   generalPressed,
   requestPressed,
-  undoSoftAbort as undoSoftAbortAction,
+  undoSoftAbort,
 } from "../store/actions";
 
 const ButtonPane = () => {
@@ -62,8 +62,6 @@ const ButtonPane = () => {
       dispatch(abortPressed({ type, pressed: true }));
     }
   };
-
-  const undoSoftAbort = () => dispatch(undoSoftAbortAction({ pressed: true }));
 
   const actuateValve = (location, type, priority) => {
     console.log(selectValues);
@@ -174,7 +172,7 @@ const ButtonPane = () => {
       <div className={views.abort ? "show" : "hidden"}>
         <button
           className={btnSmall}
-          onClick={() => undoSoftAbort()}
+          onClick={() => dispatch(undoSoftAbort())}
           disabled={mode === "Normal" ? true : false}
         >
           Undo Soft Abort

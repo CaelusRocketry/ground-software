@@ -65,7 +65,7 @@ export const createSocketIoCallbacks = (store) => {
       // Create / send the Packet
       header = "soft_abort";
       message = {};
-      store.dispatch(abortPressed({ type: "soft", pressed: true }));
+      store.dispatch(abortPressed({ type: "soft", pressed: false }));
       // Reset the button back to unclicked
       sendMessage(header, message);
     }
@@ -76,7 +76,7 @@ export const createSocketIoCallbacks = (store) => {
       message = {};
       sendMessage(header, message);
       // Reset the button back to unclicked
-      store.dispatch(undoSoftAbort({ pressed: true }));
+      store.dispatch(abortPressed({ type: "undosoft", pressed: false }));
     }
 
     if (buttons.request.valve[0] !== undefined) {
