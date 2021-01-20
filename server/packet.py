@@ -1,6 +1,7 @@
 import time
 import json
 from enum import IntEnum
+from typing import List
 
 
 class LogPriority(IntEnum):
@@ -48,14 +49,13 @@ class Log:
             timestamp=input_dict["timestamp"],
         )
         return log
-8
 
 class Packet:
     """ Packet class stores groups of messages, which are grouped by LogPriority. """
 
     def __init__(
         self,
-        logs: list = [],
+        logs: List[Log] = [],
         priority: LogPriority = LogPriority.INFO,
         timestamp: float = time.time(),
     ):
@@ -69,13 +69,11 @@ class Packet:
 
 
     def to_string(self):
-        return json.dumps(
-            {
-                "logs": [log.to_json() for log in self.logs],
-                "timestamp": self.timestamp,
-                "priority": self.priority
-            }
-        )
+        return json.dumps({
+            "logs": [log.to_json() for log in self.logs],
+            "timestamp": self.timestamp,
+            "priority": self.priority
+        })
 
 
     @staticmethod
