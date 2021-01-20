@@ -2,6 +2,7 @@ import time
 import heapq
 import socket
 import threading
+from typing import Any, List, Tuple
 from packet import Packet, Log, LogPriority
 from flask_socketio import SocketIO, emit, Namespace
 
@@ -21,44 +22,60 @@ f.close()
 
 
 class Handler(Namespace):
-    """ Telemetry Class handles all communication """
+    """ Handles all communication """
 
     def init(self, ip, port, socketio):
         """ Based on given IP and port, create and connect a socket """
+
+        """ A heapqueue of packets to send """
         self.queue_send = []
         self.connect(ip, port)
         self.start_time = time.time()
+        self.accepted_sockets: List[Tuple[socket.socket, Any]] = []
 
         self.socketio = socketio
-
-    ## telemetry methods
+        self.socketio.on_event(
+            'json',
+            self.send_to_flight_software
+        )
+        
 
     def connect(self, ip, port):
+        # Server-side socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+        # Binds to the provided IP and port
         print("IP:", ip, "PORT:", port)
         self.sock.bind((ip, port))
+
+        # Listens for connections, allowing at most 1 pending connection
         self.sock.listen(1)
-        self.conn, self.addr = self.sock.accept()
-        Log("Created socket")
-        print("finished running connect method")
 
-
-    def init_backend(self, b):
-        self.backend = b
+        # Accept a connection
+        self.accepted_sockets.append(self.sock.accept())
+        
+        print("Finished connecting")
 
 
     def begin(self):
         """ Starts the send and listen threads """
-        self.send_thread = threading.Thread(target=self.send)
-        self.send_thread.daemon = True
-        self.listen_thread = threading.Thread(target=self.listen)
-        self.listen_thread.daemon = True
-        self.heartbeat_thread = threading.Thread(target=self.heartbeat)
-        self.heartbeat_thread.daemon = True
+        self.send_thread = threading.Thread(target=self.send, daemon=True)
+        self.listen_thread = threading.Thread(target=self.listen, daemon=True)
+        self.heartbeat_thread = threading.Thread(target=self.heartbeat, daemon=True)
         self.send_thread.start()
         self.listen_thread.start()
         self.heartbeat_thread.start()
+
+
+    def send_to_flight_software(self, json):
+        self.enqueue(
+            Packet(logs=[Log(
+                header=json['header'],
+                message=json['message'],
+                timestamp=time.time())
+            ])
+        )
 
 
     def send(self):
@@ -123,17 +140,17 @@ class Handler(Namespace):
 
     def update_general(self, log):
         print("General:", log)
-        self.socketio.emit('general',  log)
+        self.socketio.emit('general', log, broadcast=True)
     
     
     def update_sensor_data(self, log):
         print("Sensor:", log)
-        self.socketio.emit('sensor_data',  log)
+        self.socketio.emit('sensor_data', log, broadcast=True)
 
     
     def update_valve_data(self, log):
         print("Valve:", log)
-        self.socketio.emit('valve_data',  log)
+        self.socketio.emit('valve_data', log, broadcast=True)
 
 
     def on_button_press(self, data):
