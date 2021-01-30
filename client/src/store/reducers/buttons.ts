@@ -1,26 +1,56 @@
 import caelusLogger from "../../lib/caelusLogger";
+import { ButtonAction } from "../actions";
 
-const createInitialState = () => ({
+export interface ButtonState {
+  abort: {
+    soft: boolean;
+    undosoft: boolean;
+  };
+  actuation: {
+    [valveName: string]: {
+      type?: string;
+      priority?: string;
+    };
+  };
+  request: {
+    valve: {
+      type?: string;
+      location?: string;
+    };
+    sensor: {
+      type?: string;
+      location?: string;
+    };
+  };
+  general: {
+    progress: boolean;
+  };
+}
+
+const createInitialState = (): ButtonState => ({
   abort: {
     soft: false,
     undosoft: false,
   },
   actuation: {
     // Actuation type, actuation priority
-    pressure_relief: [undefined, undefined],
-    pressurization: [undefined, undefined],
-    main_propellant_valve: [undefined, undefined],
+    pressure_relief: {},
+    pressurization: {},
+    main_propellant_valve: {},
   },
   request: {
-    valve: [undefined, undefined],
-    sensor: [undefined, undefined],
+    valve: {},
+    sensor: {},
   },
   general: {
     progress: false,
   },
 });
 
-const buttonPressed = (state = createInitialState(), action) => {
+const buttonPressed = (
+  state: ButtonState = createInitialState(),
+  action: ButtonAction
+) => {
   switch (action.type) {
     case "GENERAL_PRESSED":
       caelusLogger("button-debug", "General button was pressed");
@@ -31,17 +61,17 @@ const buttonPressed = (state = createInitialState(), action) => {
       state.abort.undosoft = false;
       return state;
     case "REQUEST_PRESSED":
-      state.request[action.data.type] = [
-        action.data.objectType,
-        action.data.location,
-      ];
+      state.request[action.data.type] = {
+        type: action.data.objectType,
+        location: action.data.location,
+      };
       return state;
     case "UNDO_SOFT_ABORT_PRESSED":
       state.abort.undosoft = action.data.pressed;
       return state;
     case "ACTUATE_PRESSED":
       let { valve, actuation_type, priority } = action.data;
-      state.actuation[valve] = [actuation_type, priority];
+      state.actuation[valve] = { type: actuation_type, priority };
       return state;
     default:
       return state;

@@ -1,5 +1,6 @@
 import io from "socket.io-client";
 import config from "./config.json";
+import caelusLogger from "./lib/caelusLogger";
 import {
   abortPressed,
   actuatePressed,
@@ -31,31 +32,30 @@ const generalUpdates = {
 };
 
 export const createSocketIoCallbacks = (store) => {
-  socket.on("general", function (log) {
+  socket.on("general", (log) => {
     const { header } = log;
     if (header in generalUpdates) {
       store.dispatch(generalUpdates[header](log));
     } else {
-      console.log("Unknown general header");
+      caelusLogger("sockets", "Unknown general header", "warn");
     }
   });
 
-  socket.on("sensor_data", function (log) {
+  socket.on("sensor_data", (log) => {
     store.dispatch(updateSensorData(log));
   });
 
-  socket.on("valve_data", function (log) {
+  socket.on("valve_data", (log) => {
     store.dispatch(updateValveData(log));
   });
 
-  const sendMessage = (header, message) => {
+  const sendMessage = (header, message = {}) => {
     const log = { header, message };
-    console.log("Sending: ");
-    console.log(log);
+    caelusLogger("send-message", log);
     socket.emit("button_press", log);
   };
 
-// THE FORMAT FOR THESE MESSAGES SHOULD MATCH THE FORMAT LISTED IN FLIGHT SOFTWARE'S TELEMETRYCONTROL
+  // THE FORMAT FOR THESE MESSAGES SHOULD MATCH THE FORMAT LISTED IN FLIGHT SOFTWARE'S TELEMETRYCONTROL
 
   const handleChange = () => {
     let buttons = store.getState().buttonReducer;
@@ -64,19 +64,14 @@ export const createSocketIoCallbacks = (store) => {
 
     if (buttons.abort.soft) {
       // Create / send the Packet
-      header = "soft_abort";
-      message = {};
-      console.log("Sent message that soft abort has been pressed");
       store.dispatch(abortPressed({ type: "soft", pressed: false }));
       // Reset the button back to unclicked
-      sendMessage(header, message);
+      sendMessage("soft_abort", {});
     }
 
     if (buttons.abort.undosoft) {
       // Create / send the Packet
-      header = "undo_soft_abort";
-      message = {};
-      sendMessage(header, message);
+      sendMessage("undo_soft_abort", {});
       // Reset the button back to unclicked
       store.dispatch(undoSoftAbortPressed({ pressed: false }));
     }
@@ -86,7 +81,7 @@ export const createSocketIoCallbacks = (store) => {
       header = "valve_request";
       message = {
         valve_type: buttons.request.valve[0],
-        valve_location: buttons.request.valve[1]
+        valve_location: buttons.request.valve[1],
       };
       sendMessage(header, message);
       // Reset the button back to unclicked
@@ -104,7 +99,7 @@ export const createSocketIoCallbacks = (store) => {
       header = "sensor_request";
       message = {
         sensor_type: buttons.request.sensor[0],
-        sensor_location: buttons.request.sensor[1]
+        sensor_location: buttons.request.sensor[1],
       };
       sendMessage(header, message);
       // Reset the button back to unclicked
@@ -135,10 +130,10 @@ export const createSocketIoCallbacks = (store) => {
 
       // Create / send the Packet for the corresponding button
       header = "solenoid_actuate";
-      message = { 
+      message = {
         valve_location: valve,
         actuation_type: type,
-        priority: priority
+        priority: priority,
       };
       console.log(type, priority);
       console.log("Dispatching null");
