@@ -8,12 +8,13 @@ import ActionsView from "./views/ActionsView";
 import CountdownView from "./views/CountdownView";
 
 import Logo from "./images/logo.png";
+import caelusLogger from "./lib/caelusLogger";
 
 const App = () => {
   const [view, setView] = useState(<StatisticsView />);
 
   const handleChange = (values) => {
-    console.log(values);
+    caelusLogger("handle-change", values, "debug");
     setView(() => {
       return values[0].value === "statistics" ? (
         <StatisticsView />

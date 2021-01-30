@@ -53,7 +53,7 @@ const Data = () => {
           </span>
         </div>
         {Object.entries(data.sensorState.sensors).map(([type, locations]) => (
-          <div>
+          <div key={type}>
             <h4 className={groupHeaderStyle}>{stylizeName(type)}</h4>
 
             <div className="font-mono">

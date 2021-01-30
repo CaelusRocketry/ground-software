@@ -211,10 +211,16 @@ export type ButtonAction =
 
 export type UpdateModeAction = {
   type: "UPDATE_MODE";
-  data: any;
+  data: {
+    message: {
+      mode: string;
+    };
+  };
 };
 
-export const updateMode = (data: any): UpdateModeAction => ({
+export const updateMode = (
+  data: UpdateModeAction["data"]
+): UpdateModeAction => ({
   type: "UPDATE_MODE",
   data,
 });

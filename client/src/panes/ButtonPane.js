@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
+import caelusLogger from "../lib/caelusLogger";
 import {
   actuationTypeNames,
   sensorLocationNames,
@@ -21,6 +22,14 @@ import {
   requestPressed,
   undoSoftAbortPressed,
 } from "../store/actions";
+
+const round = (progress, places) => {
+  if (typeof progress != "number") {
+    return 0;
+  } else {
+    return progress.toFixed(places);
+  }
+};
 
 const ButtonPane = () => {
   const dispatch = useDispatch();
@@ -57,24 +66,30 @@ const ButtonPane = () => {
 
   const [selectValues, setSelectValues] = useState({});
 
-  const abort = (type) => {
-    if (window.confirm("Are you sure you want to " + type + " abort?")) {
-      console.log("Confirmed abort");
-      dispatch(abortPressed({ type, pressed: true }));
-    }
-  };
+  const abort = useCallback(
+    (type) => {
+      if (window.confirm("Are you sure you want to " + type + " abort?")) {
+        console.log("Confirmed abort");
+        dispatch(abortPressed({ type, pressed: true }));
+      }
+    },
+    [dispatch]
+  );
 
-  const undoSoftAbort = () => {
+  const undoSoftAbort = useCallback(() => {
     // TODO: If the current mode isn't Soft Abort, don't allow this (gray out the button, and if they somehow click on it then alert them that its a disallowed action)
     if (window.confirm("Are you sure you want to undo soft abort?")) {
       console.log("Confirmed undo abort");
       dispatch(undoSoftAbortPressed({ pressed: true }));
     }
-  };
+  }, [dispatch]);
 
   const actuateValve = (location, type, priority) => {
-    console.log(selectValues);
-    console.log([location, type, priority]);
+    caelusLogger("button-clicked", {
+      button: "actuate_valves",
+      selectValues,
+      info: { location, type, priority },
+    });
 
     if ([location, type, priority].includes(undefined)) {
       alert("You haven't selected something for each dropdown.");
@@ -135,7 +150,9 @@ const ButtonPane = () => {
         >
           <option className="hidden" />
           {Array.from(options).map((option) => (
-            <option value={option}>{optionName[option]}</option>
+            <option value={option} key={option}>
+              {optionName[option]}
+            </option>
           ))}
         </select>
       </div>
@@ -145,13 +162,7 @@ const ButtonPane = () => {
   // If u click on a closed view, it opens. If it's already opened, it closes.
   const switchView = (name) => setViews({ ...views, [name]: !views[name] });
 
-  const round = (progress, places) => {
-    if (typeof progress != "number") {
-      return 0;
-    } else {
-      return progress.toFixed(places);
-    }
-  };
+  console.log({ mode });
 
   return (
     <div className="pane">

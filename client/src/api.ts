@@ -10,11 +10,14 @@ import {
   requestPressed,
   undoSoftAbortPressed,
   updateHeartbeat,
+  UpdateHeartbeatAction,
   updateHeartbeatStatus as updateHeartbeatStatusAction,
   updateMode,
+  UpdateModeAction,
   updateSensorData,
   UpdateSensorDataAction,
   updateStage,
+  UpdateStageAction,
   updateValveData,
   UpdateValveDataAction,
 } from "./store/actions";
@@ -28,6 +31,7 @@ const SOCKETIO_URL =
 
 const socket = io(SOCKETIO_URL);
 
+// eslint-disable-next-line
 const generalUpdates = {
   heartbeat: updateHeartbeat,
   stage: updateStage,
@@ -35,18 +39,48 @@ const generalUpdates = {
   response: addResponse,
 };
 
-export type Log = {
-  header: "heartbeat" | "stage" | "mode" | "response";
-  message: unknown;
+export type HeartbeatLog = {
+  header: "heartbeat";
+  message: UpdateHeartbeatAction["data"];
+  timestamp: number;
 };
+
+export type StageLog = {
+  header: "stage";
+  message: UpdateStageAction["data"];
+  timestamp: number;
+};
+
+export type ModeLog = {
+  header: "mode";
+  message: UpdateModeAction["data"];
+};
+
+export type ResponseLog = {
+  header: "response";
+  message: any;
+  timestamp: number;
+};
+
+export type Log = HeartbeatLog | StageLog | ModeLog | ResponseLog;
 
 export const createSocketIoCallbacks = (store: Store<CaelusState>) => {
   socket.on("general", (log: Log) => {
-    const { header } = log;
-    if (header in generalUpdates) {
-      store.dispatch(generalUpdates[header](log));
-    } else {
-      caelusLogger("sockets", "Unknown general header", "warn");
+    switch (log.header) {
+      case "heartbeat":
+        store.dispatch(updateHeartbeat(log.message));
+        break;
+      case "stage":
+        store.dispatch(updateStage(log.message));
+        break;
+      case "mode":
+        store.dispatch(updateMode(log.message));
+        break;
+      case "response":
+        store.dispatch(addResponse(log.message));
+        break;
+      default:
+        caelusLogger("sockets", "Unknown general header", "warn");
     }
   });
 
