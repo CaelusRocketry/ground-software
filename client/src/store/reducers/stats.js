@@ -1,28 +1,43 @@
 import config from "../../config.json";
+import caelusLogger from "../../lib/caelusLogger";
 import duplicateJson from "../../lib/duplicateJson";
 import { sensors, valves } from "../../lib/locationNames";
 
 const dataCutoff = config.UI.data_cutoff;
 
-const configToStore = (data, baseValue) => {
-  let storeData = {};
-  for (let i in data) {
-    storeData[i] = {};
-    for (let j in data[i]) {
-      if (Array.isArray(baseValue)) {
-        storeData[i][j] = baseValue.slice();
-      } else {
-        storeData[i][j] = baseValue;
-      }
+const createValveStore = (valveConfig) => {
+  let data = {};
+  for (let type in valveConfig) {
+    let typeData = {};
+    for (let location in valveConfig[type]) {
+      typeData[location] = undefined;
     }
+    data[type] = typeData;
   }
-  return storeData;
+  return data;
 };
 
-const initialSensorData = configToStore(sensors, []);
-initialSensorData.timestamp = [];
-const initialValveData = configToStore(valves, undefined);
-initialValveData.timestamp = undefined;
+const createSensorStore = (sensorConfig) => {
+  let data = {};
+  for (let type in sensorConfig) {
+    let typeData = {};
+    for (let location in sensorConfig[type]) {
+      typeData[location] = { x: [], y: [] };
+    }
+    data[type] = typeData;
+  }
+  return data;
+};
+
+const initialSensorData = {
+  ...createSensorStore(sensors),
+  timestamp: [],
+};
+
+const initialValveData = {
+  ...createValveStore(valves),
+  timestamp: undefined,
+};
 
 const createInitialState = () => ({
   sensorData: initialSensorData,
@@ -54,6 +69,8 @@ const updateData = (state = createInitialState(), action) => {
     timestamp = action.data.timestamp;
   }
 
+  caelusLogger("update-data", action);
+
   // Ensure we can safely modify the state
   state = duplicateJson(state);
 
@@ -61,15 +78,27 @@ const updateData = (state = createInitialState(), action) => {
     case "UPDATE_SENSOR_DATA":
       for (let [type, locations] of Object.entries(message)) {
         for (let [location, sensor] of Object.entries(locations)) {
+          // eslint-disable-next-line
           let measured = sensor.measured.toFixed(3);
           let kalman = sensor.kalman.toFixed(3);
           let status = sensor.status;
 
-          state.sensorData[type][location].push([kalman, status]);
+          if (!(type in state.sensorData)) {
+            state.sensorData[type] = {};
+          }
+          if (!(location in state.sensorData)) {
+            state.sensorData[type][location] = { x: [], y: [], entries: 0 };
+          }
+
+          state.sensorData[type][location].x.push(timestamp);
+          state.sensorData[type][location].y.push([kalman, status]);
+          state.sensorData[type][location].entries++;
 
           // Ensure that there are only dataCutoff values in the series
-          if (state.sensorData[type][location].length > dataCutoff) {
-            state.sensorData[type][location].shift();
+          if (state.sensorData[type][location].entries > dataCutoff) {
+            state.sensorData[type][location].x.shift();
+            state.sensorData[type][location].y.shift();
+            state.sensorData[type][location].entries--;
           }
         }
       }
@@ -89,7 +118,6 @@ const updateData = (state = createInitialState(), action) => {
           state.valveData[type][location] = valve;
         }
       }
-
       state.valveData.timestamp = timestamp;
       return state;
 
@@ -104,16 +132,8 @@ const updateData = (state = createInitialState(), action) => {
       return state;
 
     case "UPDATE_STAGE":
-      // console.log('Stage Updating!!!')
       state.general.stage = message.stage;
-      state.general.percent_data = message.status;
-
-      if (typeof message.status === 'string') {
-        state.general.percent_data = parseInt(message.status)
-      }
-      else if (typeof message.status == 'number') {
-        state.general.percent_data = message.status
-      }
+      state.general.percent_data = parseInt(message.status);
       return state;
 
     case "UPDATE_COUNTDOWN":
@@ -123,15 +143,11 @@ const updateData = (state = createInitialState(), action) => {
       return state;
 
     case "ADD_RESPONSE":
-      console.log('action.data.header')
-      console.log(action.data.header)
       let header = action.data.header;
-      if(action.data.header == "response"){
+      if (header === "response") {
         header = message.header;
         delete message.header;
       }
-      console.log("Message:");
-      console.log(message);
       state.general.responses = [
         ...state.general.responses,
         {

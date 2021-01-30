@@ -40,10 +40,10 @@ const Data = () => {
       <BlockHeader>Sensors</BlockHeader>
 
       <Block>
-        {Object.keys(data.sensorState).map((sensor) => (
+        {Object.keys(data.sensorState).map((type) => (
           <div>
-            <h4 className={groupHeaderStyle}>{stylizeName(sensor)}</h4>
-            {sensor === "timestamp" ? (
+            <h4 className={groupHeaderStyle}>{stylizeName(type)}</h4>
+            {type === "timestamp" ? (
               <>
                 {"Timestamp: "}
                 <span className="font-mono font-normal">
@@ -53,16 +53,19 @@ const Data = () => {
             ) : (
               <>
                 <div className="font-mono">
-                  {Object.keys(data.sensorState[sensor]).map((loc) => (
-                    <p
-                      style={{
-                        color: getColor(data.sensorState[sensor][loc]),
-                      }}
-                    >
-                      {stylizeName(loc)}:{" "}
-                      {getLast(data.sensorState[sensor][loc])} {units[sensor]}
-                    </p>
-                  ))}
+                  {Object.keys(data.sensorState[type]).map((loc) => {
+                    return (
+                      <p
+                        style={{
+                          color:
+                            "green" /*getColor(data.sensorState[sensor][loc])*/,
+                        }}
+                      >
+                        {stylizeName(loc) + " "}
+                        {getLast(data.sensorState[type][loc].x)} {units[type]}
+                      </p>
+                    );
+                  })}
                 </div>
                 <br></br>
               </>

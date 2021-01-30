@@ -36,7 +36,6 @@ else:
     config = json.loads(open("config.json").read())
 
 
-
 GS_IP = config["telemetry"]["GS_IP"]
 GS_PORT = config["telemetry"]["GS_PORT"]
 
@@ -49,11 +48,11 @@ time.sleep(1)
 if __name__ == "__main__":
     print("listening and sending")
 
-    h = Handler('/')
-    h.init(GS_IP, GS_PORT, socketio)
-    h.begin()
+    handler = Handler('/')
+    handler.init(GS_IP, GS_PORT, socketio)
+    handler.begin()
 
-    socketio.on_namespace(h)
+    socketio.on_namespace(handler)
     socketio.run(app, host=config["telemetry"]["SOCKETIO_HOST"], port=int(config["telemetry"]["SOCKETIO_PORT"]))
 
 

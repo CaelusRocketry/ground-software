@@ -1,3 +1,5 @@
+import caelusLogger from "../../lib/caelusLogger";
+
 const createInitialState = () => ({
   abort: {
     soft: false,
@@ -21,7 +23,7 @@ const createInitialState = () => ({
 const buttonPressed = (state = createInitialState(), action) => {
   switch (action.type) {
     case "GENERAL_PRESSED":
-      console.log("General button was pressed");
+      caelusLogger("button-debug", "General button was pressed");
       state.general[action.data.type] = action.data.pressed;
       return state;
     case "ABORT_PRESSED":

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Plot from "react-plotly.js";
 import { useSelector } from "react-redux";
+import caelusLogger from "../lib/caelusLogger";
 import { sensors } from "../lib/locationNames";
 import stylizeName from "../lib/stylizeName";
 
@@ -44,15 +45,22 @@ const Graph = (props) => {
     let y_values = [];
 
     let x = state.data.sensorData.timestamp;
-    let y = state.data.sensorData[metadata.type][metadata.location];
+    let y = state.data.sensorData[metadata.type][metadata.location].y;
+
     if (x.length !== y.length) {
-      console.log("X: " + x.length + ", Y: " + y.length);
+      caelusLogger(
+        "graph",
+        `Mismatch in X and Y data for graph. X was ${x.length}, Y was ${y.length}.`,
+        "error"
+      );
       alert("Mismatch in X and Y data for graph");
     }
+
     for (let i = 0; i < x.length; i++) {
       x_values.push(x[i]);
       y_values.push(y[i][0]);
     }
+
     return {
       x: x_values,
       y: y_values,
@@ -81,8 +89,9 @@ const Graph = (props) => {
     }
 
     return arr.map(([loc, type]) => {
+      let value = `${loc}.${type}`;
       return (
-        <option value={loc + "." + type}>
+        <option value={value} key={value}>
           {stylizeName(loc)}/{stylizeName(type)}
         </option>
       );

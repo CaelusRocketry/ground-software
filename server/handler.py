@@ -28,16 +28,22 @@ class Handler(Namespace):
         """ Based on given IP and port, create and connect a socket """
 
         """ A heapqueue of packets to send """
-        self.queue_send = []
-        self.connect(ip, port)
+        self.queue_send: List[Tuple[str, str]] = []
+        
+        self.send_thread = threading.Thread(target=self.send, daemon=True)
+        self.listen_thread = threading.Thread(target=self.listen, daemon=True)
+        self.heartbeat_thread = threading.Thread(target=self.heartbeat, daemon=True)
+
+        self.conn = None
         self.start_time = time.time()
-        self.accepted_sockets: List[Tuple[socket.socket, Any]] = []
 
         self.socketio = socketio
         self.socketio.on_event(
             'json',
             self.send_to_flight_software
         )
+        
+        self.connect(ip, port)
         
 
     def connect(self, ip, port):
@@ -53,17 +59,14 @@ class Handler(Namespace):
         self.sock.listen(1)
 
         # Accept a connection
-        self.accepted_sockets.append(self.sock.accept())
+        (self.conn, _addr) = self.sock.accept()
+        self.send_thread.start()
         
         print("Finished connecting")
 
 
     def begin(self):
         """ Starts the send and listen threads """
-        self.send_thread = threading.Thread(target=self.send, daemon=True)
-        self.listen_thread = threading.Thread(target=self.listen, daemon=True)
-        self.heartbeat_thread = threading.Thread(target=self.heartbeat, daemon=True)
-        self.send_thread.start()
         self.listen_thread.start()
         self.heartbeat_thread.start()
 
@@ -82,8 +85,9 @@ class Handler(Namespace):
         """ Constantly sends next packet from queue to ground station """
         while True:
             if self.queue_send and SEND_ALLOWED:
-                encoded = heapq.heappop(self.queue_send)[1]
+                _, encoded = heapq.heappop(self.queue_send)
                 self.conn.send(encoded)
+                print("Sending:", encoded)
             time.sleep(DELAY_SEND)
 
 
@@ -102,7 +106,7 @@ class Handler(Namespace):
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
         # TODO: This is implemented wrong. It should enqueue by finding packets that have similar priorities, not changing the priorities of current packets.
-        packet_str = (packet.to_string() + "END").encode()
+        packet_str = (packet.to_string() + "END").encode("ascii")
         heapq.heappush(self.queue_send, (packet.priority, packet_str))
 
 

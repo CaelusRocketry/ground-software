@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
 import {
@@ -118,10 +118,9 @@ const ButtonPane = () => {
       ...selectValues,
       [name]: e.target.value,
     });
-  }
+  };
 
   const Select = ({ label, name, options, optionName }) => {
-
     return (
       <div className="float-left">
         <b>
@@ -144,8 +143,7 @@ const ButtonPane = () => {
   };
 
   // If u click on a closed view, it opens. If it's already opened, it closes.
-  const switchView = (name) => 
-    setViews({ ...views, [name]: !views[name] });
+  const switchView = (name) => setViews({ ...views, [name]: !views[name] });
 
   const round = (progress, places) => {
     if (typeof progress != "number") {
@@ -273,7 +271,7 @@ const ButtonPane = () => {
         </button>
       </div>
       <div className={views.valve ? "block mt-2" : "hidden"}>
-      <Select
+        <Select
           label="Valve Type"
           name="requestValve"
           options={valveTypes}
