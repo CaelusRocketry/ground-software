@@ -57,6 +57,138 @@
             "warn": [-500, 900]
           },
           "pin": 17
+        },
+        "PT-1": {
+          "kalman_args": {
+            "process_variance": 0.01,
+            "measurement_variance": 0.02,
+            "kalman_value": 1000
+          },
+          "boundaries": {
+            "safe": [100, 500],
+            "warn": [50, 550],
+            "critical": [0, 600],
+            "waiting": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            },
+            "pressurization": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            },
+            "autosequence": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            },
+            "postburn": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            }
+          },
+          "pin": 14
+        },
+        "PT-2": {
+          "kalman_args": {
+            "process_variance": 0.01,
+            "measurement_variance": 0.02,
+            "kalman_value": 1000
+          },
+          "boundaries": {
+            "safe": [100, 500],
+            "warn": [50, 550],
+            "critical": [0, 600],
+            "waiting": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            },
+            "pressurization": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            },
+            "autosequence": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            },
+            "postburn": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            }
+          },
+          "pin": 15
+        },
+        "PT-3": {
+          "kalman_args": {
+            "process_variance": 0.01,
+            "measurement_variance": 0.02,
+            "kalman_value": 1000
+          },
+          "boundaries": {
+            "safe": [100, 500],
+            "warn": [50, 550],
+            "critical": [0, 600],
+            "waiting": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            },
+            "pressurization": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            },
+            "autosequence": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            },
+            "postburn": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            }
+          },
+          "pin": 16
+        },
+        "PT-4": {
+          "kalman_args": {
+            "process_variance": 0.01,
+            "measurement_variance": 0.02,
+            "kalman_value": 1000
+          },
+          "boundaries": {
+            "safe": [100, 500],
+            "warn": [50, 550],
+            "critical": [0, 600],
+            "waiting": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            },
+            "pressurization": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            },
+            "autosequence": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            },
+            "postburn": {
+              "safe": [100, 500],
+              "warn": [50, 550],
+              "critical": [0, 600]
+            }
+          },
+          "pin": 17
         }
       }
     },

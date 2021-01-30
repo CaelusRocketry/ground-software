@@ -6,7 +6,7 @@ import { DataAction } from "../actions";
 
 const dataCutoff = config.UI.data_cutoff;
 
-const createValveStore = (valveConfig: typeof valves) => {
+const createValveStore = (valveConfig: typeof valves): ValveStore["valves"] => {
   let data: any = {};
   for (let [type, locations] of Object.entries(valveConfig)) {
     let typeData: any = {};
@@ -18,12 +18,14 @@ const createValveStore = (valveConfig: typeof valves) => {
   return data;
 };
 
-const createSensorStore = (sensorConfig: typeof sensors) => {
+const createSensorStore = (
+  sensorConfig: typeof sensors
+): SensorStore["sensors"] => {
   let data: any = {};
   for (let [type, locations] of Object.entries(sensorConfig)) {
     let typeData: any = {};
     for (let location in locations) {
-      typeData[location] = { x: [], y: [] };
+      typeData[location] = [];
     }
     data[type] = typeData;
   }
@@ -67,7 +69,7 @@ export interface StatsState {
   general: {
     heartbeat?: number;
     heartbeat_received: number;
-    heartbeat_status?: string;
+    heartbeat_status?: 1 | 2 | 3;
     stage: "waiting" | string;
     countdown: number;
     responses: {
@@ -115,92 +117,100 @@ const updateData = (state = createInitialState(), action: DataAction) => {
 
   // Ensure we can safely modify the state
   state = duplicateJson(state);
+  try {
+    switch (action.type) {
+      case "UPDATE_SENSOR_DATA":
+        for (let [type, locations] of Object.entries(
+          action.data.message.sensors
+        )) {
+          for (let [location, sensor] of Object.entries(locations)) {
+            // eslint-disable-next-line
+            const { measured, kalman, status } = sensor;
 
-  switch (action.type) {
-    case "UPDATE_SENSOR_DATA":
-      for (let [type, locations] of Object.entries(action.data.sensors)) {
-        for (let [location, sensor] of Object.entries(locations)) {
-          // eslint-disable-next-line
-          const { measured, kalman, status } = sensor;
+            if (!(type in state.sensorData.sensors)) {
+              state.sensorData.sensors[type] = {};
+            }
+            if (!(location in state.sensorData.sensors[type])) {
+              state.sensorData.sensors[type][location] = [];
+            }
 
-          if (!(type in state.sensorData)) {
-            state.sensorData.sensors[type] = {};
-          }
-          if (!(location in state.sensorData)) {
-            state.sensorData.sensors[type][location] = [];
-          }
+            let sensorStored = state.sensorData.sensors[type][location];
 
-          let sensorStored = state.sensorData.sensors[type][location];
+            sensorStored.push({ measured, kalman });
 
-          sensorStored.push({ measured, kalman });
-
-          // Ensure that there are only dataCutoff values in the series
-          if (sensorStored.length > dataCutoff) {
-            sensorStored.shift();
+            // Ensure that there are only dataCutoff values in the series
+            if (sensorStored.length > dataCutoff) {
+              sensorStored.shift();
+            }
           }
         }
-      }
 
-      state.sensorData.timestamps.push(action.data.timestamp);
+        state.sensorData.timestamps.push(action.data.timestamp);
 
-      // Ensure that there are only dataCutoff values in the series
-      if (state.sensorData.timestamps.length > dataCutoff) {
-        state.sensorData.timestamps.shift();
-      }
-
-      return state;
-
-    case "UPDATE_VALVE_DATA":
-      for (let [type, locations] of Object.entries(action.data.valves)) {
-        for (let [location, valve] of Object.entries(locations)) {
-          state.valveData.valves[type][location] = valve;
+        // Ensure that there are only dataCutoff values in the series
+        if (state.sensorData.timestamps.length > dataCutoff) {
+          state.sensorData.timestamps.shift();
         }
-      }
-      state.valveData.timestamp = action.data.timestamp;
-      return state;
 
-    case "UPDATE_HEARTBEAT":
-      state.general.heartbeat_received = Date.now();
-      state.general.heartbeat = action.data.timestamp;
-      state.general.mode = action.data.mode;
-      return state;
+        return state;
 
-    case "UPDATE_HEARTBEAT_STATUS":
-      state.general.heartbeat_status = action.data.heartbeat_status;
-      return state;
+      case "UPDATE_VALVE_DATA":
+        for (let [type, locations] of Object.entries(
+          action.data.message.valves
+        )) {
+          for (let [location, valve] of Object.entries(locations)) {
+            state.valveData.valves[type][location] = valve;
+          }
+        }
+        state.valveData.timestamp = action.data.timestamp;
+        return state;
 
-    case "UPDATE_STAGE":
-      state.general.stage = action.data.stage;
-      state.general.percent_data = action.data.status;
-      return state;
+      case "UPDATE_HEARTBEAT":
+        state.general.heartbeat_received = Date.now();
+        state.general.heartbeat = action.data.timestamp;
+        state.general.mode = action.data.message.mode;
+        return state;
 
-    case "UPDATE_COUNTDOWN":
-      if (state.general.countdown > 0) {
-        state.general.countdown -= 1;
-      }
-      return state;
+      case "UPDATE_HEARTBEAT_STATUS":
+        state.general.heartbeat_status = action.data.heartbeat_status;
+        return state;
 
-    case "ADD_RESPONSE":
-      let header = action.data.header;
-      if (header === "response") {
-        header = action.data.message.header;
-        delete action.data.message.header;
-      }
+      case "UPDATE_STAGE":
+        state.general.stage = action.data.stage;
+        state.general.percent_data = action.data.status;
+        return state;
 
-      state.general.responses.push({
-        header,
-        message: action.data.message,
-        timestamp: action.data.timestamp,
-      });
+      case "UPDATE_COUNTDOWN":
+        if (state.general.countdown > 0) {
+          state.general.countdown -= 1;
+        }
+        return state;
 
-      return state;
+      case "ADD_RESPONSE":
+        let header = action.data.header;
+        if (header === "response") {
+          header = action.data.message.header;
+          delete action.data.message.header;
+        }
 
-    case "UPDATE_MODE":
-      state.general.mode = action.data.message.mode;
-      return state;
+        state.general.responses.push({
+          header,
+          message: action.data.message,
+          timestamp: action.data.timestamp,
+        });
 
-    default:
-      return state;
+        return state;
+
+      case "UPDATE_MODE":
+        state.general.mode = action.data.message.mode;
+        return state;
+
+      default:
+        return state;
+    }
+  } catch (err) {
+    caelusLogger("redux-update-data", { err, state, action }, "error");
+    return state;
   }
 };
 

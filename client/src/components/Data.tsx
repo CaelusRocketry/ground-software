@@ -30,7 +30,7 @@ const Data = () => {
   const abortStyle = "animate-ping rounded-lg m-1 p-4 bg-pink-300";
   const groupHeaderStyle = "font-bold mb-1";
 
-  const getLast = (arr: any[]) =>
+  const getLast: <T>(arr: T[]) => T | undefined = (arr) =>
     arr.length > 0 ? arr[arr.length - 1] : undefined;
 
   const units = {
@@ -57,16 +57,17 @@ const Data = () => {
             <h4 className={groupHeaderStyle}>{stylizeName(type)}</h4>
 
             <div className="font-mono">
-              {Object.keys(data.sensorState.sensors[type]).map((loc) => {
+              {Object.keys(locations).map((loc) => {
                 return (
                   <p
                     style={{
                       color:
                         "green" /*getColor(data.sensorState[sensor][loc])*/,
                     }}
+                    key={type + "." + loc}
                   >
                     {stylizeName(loc) + " "}
-                    {getLast(data.sensorState.sensors[type][loc])}{" "}
+                    {getLast(locations[loc])?.kalman}{" "}
                     {
                       //@ts-ignore
                       units[type]
@@ -89,21 +90,22 @@ const Data = () => {
 
           {"Timestamp: "}
           <span className="font-mono">{data.valveState.timestamp} s</span>
-          {Object.keys(data.valveState.valves).map((valve) => (
-            <>
-              <h4 className={groupHeaderStyle}>{stylizeName(valve)}</h4>
-              <div className="font-mono">
-                {Object.keys(data.valveState.valves[valve]).map((loc) => (
-                  <p>
-                    {stylizeName(loc)}:{" "}
-                    {VALVE_MAP[data.valveState.valves.solenoid[loc]]}
-                  </p>
-                ))}
-              </div>
-              <br />
-            </>
-          ))}
         </div>
+
+        {Object.keys(data.valveState.valves).map((valve, idx) => (
+          <div key={idx}>
+            <h4 className={groupHeaderStyle}>{stylizeName(valve)}</h4>
+            <div className="font-mono">
+              {Object.keys(data.valveState.valves[valve]).map((loc) => (
+                <p>
+                  {stylizeName(loc)}:{" "}
+                  {VALVE_MAP[data.valveState.valves.solenoid[loc]]}
+                </p>
+              ))}
+            </div>
+            <br />
+          </div>
+        ))}
       </Block>
 
       <BlockHeader>Heartbeat</BlockHeader>

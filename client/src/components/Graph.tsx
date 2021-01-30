@@ -62,6 +62,7 @@ const Graph = (props: GraphProps) => {
         "error"
       );
       alert("Mismatch in X and Y data for graph");
+      setMetadata({ type: "undefined", location: "undefined" });
     }
 
     for (let i = 0; i < x.length; i++) {
@@ -92,10 +93,7 @@ const Graph = (props: GraphProps) => {
   // DROPDOWN OPTIONS
   const DropdownOptions = () => {
     let arr: { loc: string; type: string }[] = [
-      {
-        loc: "undefined",
-        type: "undefined",
-      },
+      { loc: "undefined", type: "undefined" },
     ];
 
     for (let [type, locs] of Object.entries(sensors)) {

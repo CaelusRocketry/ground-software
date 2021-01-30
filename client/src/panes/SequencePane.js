@@ -63,6 +63,7 @@ const SequencePane = () => {
             interval={calculateTitle(idx)}
             title={stageNames[stage]}
             intervalBackground={calculateColor(idx)}
+            key={idx}
           >
             <Progress percentage={calculatePercentage(idx)} />
           </Event>
