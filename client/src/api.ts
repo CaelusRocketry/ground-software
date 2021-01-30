@@ -1,3 +1,4 @@
+import { Store } from "redux";
 import io from "socket.io-client";
 import config from "./config.json";
 import caelusLogger from "./lib/caelusLogger";
@@ -12,9 +13,12 @@ import {
   updateHeartbeatStatus as updateHeartbeatStatusAction,
   updateMode,
   updateSensorData,
+  UpdateSensorDataAction,
   updateStage,
   updateValveData,
+  UpdateValveDataAction,
 } from "./store/actions";
+import { CaelusState } from "./store/reducers";
 
 const SOCKETIO_URL =
   "http://" +
@@ -31,8 +35,13 @@ const generalUpdates = {
   response: addResponse,
 };
 
-export const createSocketIoCallbacks = (store) => {
-  socket.on("general", (log) => {
+export type Log = {
+  header: "heartbeat" | "stage" | "mode" | "response";
+  message: unknown;
+};
+
+export const createSocketIoCallbacks = (store: Store<CaelusState>) => {
+  socket.on("general", (log: Log) => {
     const { header } = log;
     if (header in generalUpdates) {
       store.dispatch(generalUpdates[header](log));
@@ -41,15 +50,15 @@ export const createSocketIoCallbacks = (store) => {
     }
   });
 
-  socket.on("sensor_data", (log) => {
+  socket.on("sensor_data", (log: UpdateSensorDataAction["data"]) => {
     store.dispatch(updateSensorData(log));
   });
 
-  socket.on("valve_data", (log) => {
+  socket.on("valve_data", (log: UpdateValveDataAction["data"]) => {
     store.dispatch(updateValveData(log));
   });
 
-  const sendMessage = (header, message = {}) => {
+  const sendMessage = (header: string, message: any = {}) => {
     const log = { header, message };
     caelusLogger("send-message", log);
     socket.emit("button_press", log);
@@ -59,8 +68,6 @@ export const createSocketIoCallbacks = (store) => {
 
   const handleChange = () => {
     let buttons = store.getState().buttonReducer;
-    let header = "";
-    let message = {};
 
     if (buttons.abort.soft) {
       // Create / send the Packet
@@ -76,12 +83,12 @@ export const createSocketIoCallbacks = (store) => {
       store.dispatch(undoSoftAbortPressed({ pressed: false }));
     }
 
-    if (buttons.request.valve[0] !== undefined) {
+    if (buttons.request.valve.type != null) {
       // Create / send the Packet
-      header = "valve_request";
-      message = {
-        valve_type: buttons.request.valve[0],
-        valve_location: buttons.request.valve[1],
+      const header = "valve_request";
+      const message = {
+        valve_type: buttons.request.valve.type,
+        valve_location: buttons.request.valve.location,
       };
       sendMessage(header, message);
       // Reset the button back to unclicked
@@ -94,12 +101,12 @@ export const createSocketIoCallbacks = (store) => {
       );
     }
 
-    if (buttons.request.sensor[0] !== undefined) {
+    if (buttons.request.sensor.location !== undefined) {
       // Create the Packet
-      header = "sensor_request";
-      message = {
-        sensor_type: buttons.request.sensor[0],
-        sensor_location: buttons.request.sensor[1],
+      const header = "sensor_request";
+      const message = {
+        sensor_type: buttons.request.sensor.type,
+        sensor_location: buttons.request.sensor.location,
       };
       sendMessage(header, message);
       // Reset the button back to unclicked
@@ -114,49 +121,45 @@ export const createSocketIoCallbacks = (store) => {
 
     if (buttons.general.progress) {
       // Create / send the Packet
-      header = "progress";
-      message = {};
-      sendMessage(header, message);
+      sendMessage("progress");
       // Reset the button back to unclicked
       store.dispatch(generalPressed({ type: "progress", pressed: false }));
     }
 
-    for (let valve in buttons.actuation) {
+    for (let valveName in buttons.actuation) {
       // Loop through all the buttons
-      let [type, priority] = buttons.actuation[valve];
+      let { type, priority } = buttons.actuation[valveName];
       if (type == null || priority == null) {
         continue;
       }
 
       // Create / send the Packet for the corresponding button
-      header = "solenoid_actuate";
-      message = {
-        valve_location: valve,
+      const header = "solenoid_actuate";
+      const message = {
+        valve_location: valveName,
         actuation_type: type,
         priority: priority,
       };
-      console.log(type, priority);
-      console.log("Dispatching null");
+
+      caelusLogger("valve-actuation", `Actuating valve @${valveName}`);
+
       sendMessage(header, message);
       // Reset the corresponding button back to unclicked
-      store.dispatch(
-        actuatePressed({ valve, type: undefined, priority: undefined })
-      );
-      console.log(store.getState());
+      store.dispatch(actuatePressed({ valve: valveName }));
     }
   };
 
   store.subscribe(handleChange);
 };
 
-export const updateHeartbeatStatus = (store) => {
+export const updateHeartbeatStatus = (store: Store<CaelusState>) => {
   let general = store.getState().data.general;
 
   if (general.heartbeat === undefined) {
     store.dispatch(updateHeartbeatStatusAction(1));
   } else {
     const timeSinceLastHeartbeatReceived =
-      Date.now() - general.heartbeat_recieved;
+      Date.now() - general.heartbeat_received;
 
     if (timeSinceLastHeartbeatReceived > 10000) {
       store.dispatch(updateHeartbeatStatusAction(1));

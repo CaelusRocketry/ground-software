@@ -66,7 +66,7 @@ export interface StatsState {
   valveData: ValveStore;
   general: {
     heartbeat?: number;
-    heartbeat_received?: number;
+    heartbeat_received: number;
     heartbeat_status?: string;
     stage: "waiting" | string;
     countdown: number;
@@ -85,7 +85,7 @@ const createInitialState = (): StatsState => ({
   valveData: initialValveData,
   general: {
     heartbeat: undefined,
-    heartbeat_received: undefined,
+    heartbeat_received: 0,
     heartbeat_status: undefined,
     stage: "waiting", // value should be undefined, but is set to 'autosequence' for testing purposes
     countdown: 10,

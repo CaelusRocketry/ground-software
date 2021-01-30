@@ -62,15 +62,17 @@ export const updateHeartbeat = (
 export type UpdateHeartbeatStatusAction = {
   type: "UPDATE_HEARTBEAT_STATUS";
   data: {
-    heartbeat_status: string;
+    heartbeat_status: 1 | 2 | 3;
   };
 };
 
 export const updateHeartbeatStatus = (
-  heartbeat_status: string
+  heartbeat_status: 1 | 2 | 3
 ): UpdateHeartbeatStatusAction => ({
   type: "UPDATE_HEARTBEAT_STATUS",
-  data: { heartbeat_status },
+  data: {
+    heartbeat_status,
+  },
 });
 
 export type UpdateStageAction = {
@@ -168,8 +170,8 @@ export const undoSoftAbortPressed = (
 
 export type RequestPressedActionData = {
   type: "valve" | "sensor";
-  objectType: string;
-  location: string;
+  objectType?: string;
+  location?: string;
 };
 
 export type RequestPressedAction = {
