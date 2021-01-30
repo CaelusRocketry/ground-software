@@ -45,40 +45,37 @@ const Data = () => {
       <BlockHeader>Sensors</BlockHeader>
 
       <Block>
+        <div>
+          <h4 className={groupHeaderStyle}>Timestamp</h4>
+          Timestamp:{" "}
+          <span className="font-mono font-normal">
+            {getLast(data.sensorState.timestamps)} s
+          </span>
+        </div>
         {Object.entries(data.sensorState.sensors).map(([type, locations]) => (
           <div>
             <h4 className={groupHeaderStyle}>{stylizeName(type)}</h4>
-            {type === "timestamp" ? (
-              <>
-                {"Timestamp: "}
-                <span className="font-mono font-normal">
-                  {getLast(data.sensorState.timestamps)} s
-                </span>
-              </>
-            ) : (
-              <>
-                <div className="font-mono">
-                  {Object.keys(data.sensorState.sensors[type]).map((loc) => {
-                    return (
-                      <p
-                        style={{
-                          color:
-                            "green" /*getColor(data.sensorState[sensor][loc])*/,
-                        }}
-                      >
-                        {stylizeName(loc) + " "}
-                        {getLast(data.sensorState.sensors[type][loc])}{" "}
-                        {
-                          //@ts-ignore
-                          units[type]
-                        }
-                      </p>
-                    );
-                  })}
-                </div>
-                <br></br>
-              </>
-            )}
+
+            <div className="font-mono">
+              {Object.keys(data.sensorState.sensors[type]).map((loc) => {
+                return (
+                  <p
+                    style={{
+                      color:
+                        "green" /*getColor(data.sensorState[sensor][loc])*/,
+                    }}
+                  >
+                    {stylizeName(loc) + " "}
+                    {getLast(data.sensorState.sensors[type][loc])}{" "}
+                    {
+                      //@ts-ignore
+                      units[type]
+                    }
+                  </p>
+                );
+              })}
+            </div>
+            <br />
           </div>
         ))}
       </Block>
@@ -87,30 +84,26 @@ const Data = () => {
 
       <BlockHeader>Valves</BlockHeader>
       <Block>
-        {Object.keys(data.valveState).map((valve) => (
-          <div>
-            <h4 className={groupHeaderStyle}>{stylizeName(valve)}</h4>
+        <div>
+          <h4 className={groupHeaderStyle}>Timestamp</h4>
 
-            {valve === "timestamp" ? (
-              <>
-                {"Timestamp: "}
-                <span className="font-mono">{data.valveState.timestamp} s</span>
-              </>
-            ) : (
-              <>
-                <div className="font-mono">
-                  {Object.keys(data.valveState.valves[valve]).map((loc) => (
-                    <p>
-                      {stylizeName(loc)}:{" "}
-                      {VALVE_MAP[data.valveState.valves.solenoid[loc]]}
-                    </p>
-                  ))}
-                </div>
-                <br></br>
-              </>
-            )}
-          </div>
-        ))}
+          {"Timestamp: "}
+          <span className="font-mono">{data.valveState.timestamp} s</span>
+          {Object.keys(data.valveState.valves).map((valve) => (
+            <>
+              <h4 className={groupHeaderStyle}>{stylizeName(valve)}</h4>
+              <div className="font-mono">
+                {Object.keys(data.valveState.valves[valve]).map((loc) => (
+                  <p>
+                    {stylizeName(loc)}:{" "}
+                    {VALVE_MAP[data.valveState.valves.solenoid[loc]]}
+                  </p>
+                ))}
+              </div>
+              <br />
+            </>
+          ))}
+        </div>
       </Block>
 
       <BlockHeader>Heartbeat</BlockHeader>

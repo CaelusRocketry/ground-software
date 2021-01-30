@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import caelusLogger from "../lib/caelusLogger";
 import { sensors } from "../lib/locationNames";
 import stylizeName from "../lib/stylizeName";
+import { CaelusState } from "../store/reducers";
 
 const properties = {
   thermocouple: {
@@ -28,14 +29,21 @@ const properties = {
   },
 };
 
-const Graph = (props) => {
+export type SensorType = "thermocouple" | "pressure" | "load" | "undefined";
+
+export type GraphProps = {
+  type: SensorType;
+  location: string;
+};
+
+const Graph = (props: GraphProps) => {
   const [metadata, setMetadata] = useState({
     type: props.type,
     location: props.location,
   });
 
   // RETRIEVE DATA
-  const data = useSelector((state) => {
+  const data = useSelector((state: CaelusState) => {
     // Graph type hasn't been selected yet
     if (metadata.type === "undefined" || metadata.location === "undefined") {
       return { x: [], y: [] };
@@ -44,8 +52,8 @@ const Graph = (props) => {
     let x_values = [];
     let y_values = [];
 
-    let x = state.data.sensorData.timestamp;
-    let y = state.data.sensorData[metadata.type][metadata.location].y;
+    let x = state.data.sensorData.timestamps;
+    let y = state.data.sensorData.sensors[metadata.type][metadata.location];
 
     if (x.length !== y.length) {
       caelusLogger(
@@ -58,7 +66,7 @@ const Graph = (props) => {
 
     for (let i = 0; i < x.length; i++) {
       x_values.push(x[i]);
-      y_values.push(y[i][0]);
+      y_values.push(y[i].kalman);
     }
 
     return {
@@ -68,34 +76,46 @@ const Graph = (props) => {
   });
 
   // RETURN RANGE FOR SENSOR/VALVE READINGS
-  const findRange = (type, loc) => {
+  const findRange = (type: SensorType, loc: string) => {
     if (type === "undefined" || loc === "undefined") {
       return [0, 0];
     } else {
       return [
+        // @ts-ignore
         sensors[type][loc].boundaries.safe[0],
+        // @ts-ignore
         sensors[type][loc].boundaries.warn[1],
       ];
     }
   };
 
   // DROPDOWN OPTIONS
-  const getOptions = () => {
-    let arr = [["undefined", "undefined"]];
-    for (let sensorType in sensors) {
-      for (let sensorLoc in sensors[sensorType]) {
-        arr.push([sensorLoc, sensorType]);
+  const DropdownOptions = () => {
+    let arr: { loc: string; type: string }[] = [
+      {
+        loc: "undefined",
+        type: "undefined",
+      },
+    ];
+
+    for (let [type, locs] of Object.entries(sensors)) {
+      for (let loc in locs) {
+        arr.push({ loc, type });
       }
     }
 
-    return arr.map(([loc, type]) => {
-      let value = `${loc}.${type}`;
-      return (
-        <option value={value} key={value}>
-          {stylizeName(loc)}/{stylizeName(type)}
-        </option>
-      );
-    });
+    return (
+      <>
+        {arr.map(({ loc, type }) => {
+          let value = `${loc}.${type}`;
+          return (
+            <option value={value} key={value}>
+              {stylizeName(loc)}/{stylizeName(type)}
+            </option>
+          );
+        })}
+      </>
+    );
   };
 
   const axisTitleFont = {
@@ -109,12 +129,12 @@ const Graph = (props) => {
     <div>
       <select
         onChange={(e) => {
-          const [curLocation, curType] = e.target.value.split(".");
-          setMetadata({ type: curType, location: curLocation });
+          const [location, type] = e.target.value.split(".");
+          setMetadata({ type: type as SensorType, location });
         }}
         value={metadata.location + "." + metadata.type}
       >
-        {getOptions()}
+        <DropdownOptions />
       </select>
       <Plot
         style={{
