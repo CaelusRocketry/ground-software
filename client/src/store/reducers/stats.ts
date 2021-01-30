@@ -45,7 +45,7 @@ export type SensorStore = {
 export type ValveStore = {
   valves: {
     [type: string]: {
-      [location: string]: unknown;
+      [location: string]: 0 | 1;
     };
   };
   timestamp?: number;

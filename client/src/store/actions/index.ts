@@ -23,7 +23,7 @@ export const updateSensorData = (
   data,
 });
 
-export type ValveData = unknown;
+export type ValveData = 0 | 1;
 
 export type UpdateValveDataAction = {
   type: "UPDATE_VALVE_DATA";
