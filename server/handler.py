@@ -31,8 +31,11 @@ class Handler(Namespace):
         self.queue_send: List[Tuple[str, str]] = []
         
         self.send_thread = threading.Thread(target=self.send, daemon=True)
+        self.send_thread.daemon = True
         self.listen_thread = threading.Thread(target=self.listen, daemon=True)
+        self.listen_thread.daemon = True
         self.heartbeat_thread = threading.Thread(target=self.heartbeat, daemon=True)
+        self.heartbeat_thread.daemon = True
 
         self.conn = None
         self.start_time = time.time()
@@ -116,6 +119,7 @@ class Handler(Namespace):
         packet_str = packet_str.decode()
         packet_strs = packet_str.split("END")[:-1]
         packets = [Packet.from_string(p_str) for p_str in packet_strs]
+        # print(packets)
         #packet = Packet.from_string(packet_str)
         for packet in packets:
             for log in packet.logs:
