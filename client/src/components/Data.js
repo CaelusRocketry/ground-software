@@ -6,6 +6,8 @@ import stylizeName from "../lib/stylizeName";
 import Block from "./Block";
 import BlockHeader from "./BlockHeader";
 
+import PandidBoxed from "../images/pandidboxed.png";
+
 const VALVE_MAP = { 1: "OPEN", 0: "CLOSED" };
 
 const Data = () => {
@@ -37,6 +39,12 @@ const Data = () => {
 
   return (
     <center>
+      <BlockHeader><span style={{color: "#0c1f6d"}}>Sensors</span> and <span style={{color: "#8e0004"}}>Valves</span> Diagram</BlockHeader>
+
+      <img src={PandidBoxed} id="pandidboxed" alt="pandidboxed" style={{padding: "10px 20px"}}/>
+      <br></br>
+      <hr></hr>
+      <br></br>
       <BlockHeader>Sensors</BlockHeader>
 
       <Block>
