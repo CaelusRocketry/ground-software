@@ -36,6 +36,8 @@ const Data = () => {
   };
 
   return (
+    //Object.keys(data.sensorState[sensor]).map(loc) for just sensor state, do *if [sensor] = name, do this*
+    //Object.keys(data.valveState[valve]).map(loc) except for valves, same thing **NO HARDCODING**  ---- What does {VALVE_MAP[data.valveState.solenoid[loc]]} mean??
     <center>
       <BlockHeader>Sensors</BlockHeader>
 
