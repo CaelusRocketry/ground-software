@@ -2,7 +2,7 @@ import time
 import heapq
 import socket
 import threading
-from typing import Any, List, Tuple
+from typing import Any, List, Tuple, Union
 from packet import Packet, Log, LogPriority
 from flask_socketio import Namespace
 
@@ -38,6 +38,7 @@ class Handler(Namespace):
         self.heartbeat_thread.daemon = True
 
         self.conn = None
+        self.running = False
         self.start_time = time.time()
 
         self.socketio = socketio
@@ -72,6 +73,7 @@ class Handler(Namespace):
         """ Starts the send and listen threads """
         self.listen_thread.start()
         self.heartbeat_thread.start()
+        self.running = True
 
 
     def send_to_flight_software(self, json):
@@ -86,24 +88,27 @@ class Handler(Namespace):
 
     def send(self):
         """ Constantly sends next packet from queue to ground station """
-        while True:
-            if self.queue_send and SEND_ALLOWED:
-                _, encoded = heapq.heappop(self.queue_send)
-                self.conn.send(encoded)
-                print("Sending:", encoded)
-            time.sleep(DELAY_SEND)
+        while self.running:
+            try:
+                if self.queue_send and SEND_ALLOWED:
+                    _, encoded = heapq.heappop(self.queue_send)
+                    self.conn.send(encoded)
+                    print("Sending:", encoded)
+                time.sleep(DELAY_SEND)
+            except Exception as e:
+                print("ERROR:", e)
+                self.running = False
 
 
     def listen(self):
         """ Constantly listens for any from ground station """
-        while True:
+        while self.running:
             data = self.conn.recv(BYTE_SIZE)
             if data:
                 self.ingest_thread = threading.Thread(
                     target=self.ingest, args=(data,))
                 self.ingest_thread.daemon = True
                 self.ingest_thread.start()
-                # time.sleep(DELAY_LISTEN)
 
 
     def enqueue(self, packet):
@@ -115,16 +120,13 @@ class Handler(Namespace):
 
     def ingest(self, packet_str):
         """ Prints any packets received """
-#        print("Ingesting:", packet_str)
         packet_str = packet_str.decode()
         packet_strs = packet_str.split("END")[:-1]
         packets = [Packet.from_string(p_str) for p_str in packet_strs]
-        # print(packets)
-        #packet = Packet.from_string(packet_str)
         for packet in packets:
             for log in packet.logs:
                 log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
-#                print("Timestamp:", log.timestamp)
+
                 if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
                     self.update_general(log.__dict__)
 
@@ -138,7 +140,7 @@ class Handler(Namespace):
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
-        while True:
+        while self.running:
             log = Log(header="heartbeat", message="AT")
             self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
             print("Sent heartbeat")
@@ -147,21 +149,26 @@ class Handler(Namespace):
     ## backend methods
 
     def update_general(self, log):
-        print("General:", log)
+        log_send('general', log)
         self.socketio.emit('general', log, broadcast=True)
     
     
     def update_sensor_data(self, log):
-        print("Sensor:", log)
+        log_send('sensor', log)
         self.socketio.emit('sensor_data', log, broadcast=True)
 
     
     def update_valve_data(self, log):
-        print("Valve:", log)
+        log_send('valve', log)
         self.socketio.emit('valve_data', log, broadcast=True)
 
 
     def on_button_press(self, data):
-        print(data)
+        log_send('button', data)
         log = Log(header=data['header'], message=data['message'])
         self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
+
+hidden_log_types = set() # {"general", "sensor", "valve", "button"}
+def log_send(type, log):
+    if type not in hidden_log_types:
+        print(f"Sending [{type}] {log}")
