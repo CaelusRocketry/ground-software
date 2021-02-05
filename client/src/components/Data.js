@@ -9,6 +9,8 @@ import BlockHeader from "./BlockHeader";
 import PandidBoxed from "../images/pandidboxed.png";
 
 const VALVE_MAP = { 1: "OPEN", 0: "CLOSED" };
+const SENSOR_TEXT_PADDING = {"PT-5":{x: (420/784), y: 22/850}, "PT-P":{x: 635/784, y:262/850}, "PT-7":{x:101/784, y:385/850}, "PT-8":{x:548/784, y:757/850}};
+const VALVE_TEXT_PADDING = {"pressurization_valve":{x: 404/784, y: 210/850}, "vent_valve":{x: 33/784, y:95/850}, "remote_drain_valve":{x:19/784, y:598/850}, "main_propellant_valve":{x:317/784, y:736/850}};
 
 const Data = () => {
   const data = useSelector((state) => {
@@ -40,8 +42,28 @@ const Data = () => {
   return (
     <center>
       <BlockHeader><span style={{color: "#0c1f6d"}}>Sensors</span> and <span style={{color: "#8e0004"}}>Valves</span> Diagram</BlockHeader>
-
-      <img src={PandidBoxed} id="pandidboxed" alt="pandidboxed" style={{padding: "10px 20px"}}/>
+      <div style={{padding: "",position: "relative",textAlign:"center"}} className="flexFont">
+        <img src={PandidBoxed} id="pandidboxed" alt="pandidboxed" style={{padding: "",width: "100%"}}/>
+        {Object.keys(SENSOR_TEXT_PADDING).map((sensor) => (
+          <p style={{
+            position: "absolute",
+            left: SENSOR_TEXT_PADDING[sensor]["x"]*100+"%",
+            top: SENSOR_TEXT_PADDING[sensor]["y"]*100+"%",
+          }} className={"diagram"+sensor}>
+            {getLast(data.sensorState["pressure"][sensor])}
+          </p>
+        ))}
+        {Object.keys(VALVE_TEXT_PADDING).map((valve) => (
+          <p style={{
+            position: "absolute",
+            left: VALVE_TEXT_PADDING[valve]["x"]*100+"%",
+            top: VALVE_TEXT_PADDING[valve]["y"]*100+"%",
+          }} className={"diagram"+valve}>
+            {VALVE_MAP[data.valveState.solenoid[valve]]}
+          </p>
+        ))}
+      </div>
+      
       <br></br>
       <hr></hr>
       <br></br>
