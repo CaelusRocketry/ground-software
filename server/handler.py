@@ -64,16 +64,16 @@ class Handler(Namespace):
 
         # Accept a connection
         (self.conn, _addr) = self.sock.accept()
-        self.send_thread.start()
         
         print("Finished connecting")
 
 
     def begin(self):
         """ Starts the send and listen threads """
+        self.running = True
         self.listen_thread.start()
         self.heartbeat_thread.start()
-        self.running = True
+        self.send_thread.start()
 
 
     def send_to_flight_software(self, json):
