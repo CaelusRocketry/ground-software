@@ -1,23 +1,28 @@
 import config from "../config.json";
 
-export const stages = config.stages.list;
-
 export const stageNames = {
   waiting: "Waiting",
   pressurization: "Pressurization",
   autosequence: "Autosequence",
   postburn: "Postburn",
 };
+export const stages = config.stages.list as (keyof typeof stageNames)[];
 
 export const valves = config.valves.list;
-
 export const valveTypes = new Set();
-export const valveLocations = {undefined: []};
+export type ValveLocations = {
+  [key in keyof typeof valves]: Set<string>;
+};
+// @ts-ignore
+export const valveLocations: ValveLocations = {};
 
-for (var type in valves) {
+for (let type in valves) {
   valveTypes.add(type);
+  // @ts-ignore
   valveLocations[type] = new Set();
-  for (var loc in valves[type]) {
+  // @ts-ignore
+  for (let loc in valves[type]) {
+    // @ts-ignore
     valveLocations[type].add(loc);
   }
 }
@@ -41,14 +46,20 @@ export const actuationTypeNames = {
 };
 
 export const sensors = config.sensors.list;
-
-export const sensorLocations = {undefined: []};
+export type SensorLocations = {
+  [key in keyof typeof sensors]: Set<string>;
+};
+// @ts-ignore
+export const sensorLocations: SensorLocations = {};
 export const sensorTypes = new Set();
 
-for (let type in sensors) {
+for (let type of Object.keys(sensors)) {
   sensorTypes.add(type);
+  // @ts-ignore
   sensorLocations[type] = new Set();
+  // @ts-ignore
   for (let loc in sensors[type]) {
+    // @ts-ignore
     sensorLocations[type].add(loc);
   }
 }
@@ -60,7 +71,7 @@ export const sensorLocationNames = {
   "PT-1": "PT-1",
   "PT-2": "PT-2",
   "PT-3": "PT-3",
-  "PT-4": "PT-4"
+  "PT-4": "PT-4",
 };
 
 export const sensorTypeNames = {

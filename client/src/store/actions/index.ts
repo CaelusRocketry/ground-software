@@ -84,7 +84,7 @@ export const updateHeartbeatStatus = (
 export type UpdateStageAction = {
   type: "UPDATE_STAGE";
   data: {
-    stage: string;
+    stage: "waiting" | "pressurization" | "autosequence" | "postburn";
     status: number;
   };
 };

@@ -3,12 +3,7 @@ import io from "socket.io-client";
 import config from "./config.json";
 import caelusLogger from "./lib/caelusLogger";
 import {
-  abortPressed,
-  actuatePressed,
   addResponse,
-  generalPressed,
-  requestPressed,
-  undoSoftAbortPressed,
   updateHeartbeat,
   UpdateHeartbeatAction,
   updateHeartbeatStatus as updateHeartbeatStatusAction,
@@ -64,7 +59,7 @@ export type ResponseLog = {
 
 export type Log = HeartbeatLog | StageLog | ModeLog | ResponseLog;
 
-export const createSocketIoCallbacks = (store: Store<CaelusState>) => {
+export function createSocketIoCallbacks(store: Store<CaelusState>) {
   socket.on("general", (log: Log) => {
     switch (log.header) {
       case "heartbeat":
@@ -80,7 +75,7 @@ export const createSocketIoCallbacks = (store: Store<CaelusState>) => {
         store.dispatch(addResponse(log.message));
         break;
       default:
-        caelusLogger("sockets", "Unknown general header", "warn");
+        caelusLogger("telemetry", "Unknown general header", "warn");
     }
   });
 
@@ -91,100 +86,73 @@ export const createSocketIoCallbacks = (store: Store<CaelusState>) => {
   socket.on("valve_data", (log: UpdateValveDataAction["data"]) => {
     store.dispatch(updateValveData(log));
   });
+}
 
-  const sendMessage = (header: string, message: any = {}) => {
-    const log = { header, message };
-    caelusLogger("send-message", log);
-    socket.emit("button_press", log);
-  };
+export function sendMessage(header: string, message: any = "") {
+  const log = { header, message };
+  caelusLogger("telemetry/send", log);
+  socket.emit("button_press", log);
+}
 
-  // THE FORMAT FOR THESE MESSAGES SHOULD MATCH THE FORMAT LISTED IN FLIGHT SOFTWARE'S TELEMETRYCONTROL
+export function softAbort() {
+  sendMessage("soft_abort");
+}
 
-  const handleChange = () => {
-    let buttons = store.getState().buttonReducer;
+export function undoSoftAbort() {
+  sendMessage("undo_soft_abort");
+}
 
-    if (buttons.abort.soft) {
-      // Create / send the Packet
-      store.dispatch(abortPressed({ type: "soft", pressed: false }));
-      // Reset the button back to unclicked
-      sendMessage("soft_abort", {});
-    }
+export function progressStage() {
+  sendMessage("progress");
+}
 
-    if (buttons.abort.undosoft) {
-      // Create / send the Packet
-      sendMessage("undo_soft_abort", {});
-      // Reset the button back to unclicked
-      store.dispatch(undoSoftAbortPressed({ pressed: false }));
-    }
+export function actuateValve({
+  valveType,
+  valveLocation,
+  actuationType,
+  actuationPriority,
+}: {
+  valveType: string;
+  valveLocation: string;
+  actuationType: string;
+  actuationPriority: string;
+}) {
+  caelusLogger("valves/actuation", `Actuating valve at ${valveLocation}`);
 
-    if (buttons.request.valve.type != null) {
-      // Create / send the Packet
-      const header = "valve_request";
-      const message = {
-        valve_type: buttons.request.valve.type,
-        valve_location: buttons.request.valve.location,
-      };
-      sendMessage(header, message);
-      // Reset the button back to unclicked
-      store.dispatch(
-        requestPressed({
-          type: "valve",
-          objectType: undefined,
-          location: undefined,
-        })
-      );
-    }
+  sendMessage("solenoid_actuate", {
+    valve_type: valveType,
+    valve_location: valveLocation,
+    actuation_type: actuationType,
+    actuation_priority: actuationPriority,
+  });
+}
 
-    if (buttons.request.sensor.location !== undefined) {
-      // Create the Packet
-      const header = "sensor_request";
-      const message = {
-        sensor_type: buttons.request.sensor.type,
-        sensor_location: buttons.request.sensor.location,
-      };
-      sendMessage(header, message);
-      // Reset the button back to unclicked
-      store.dispatch(
-        requestPressed({
-          type: "sensor",
-          objectType: undefined,
-          location: undefined,
-        })
-      );
-    }
+export function requestValveData({
+  type,
+  location,
+}: {
+  type: string;
+  location: string;
+}) {
+  sendMessage("valve_request", {
+    valve_type: type,
+    valve_location: location,
+  });
+}
 
-    if (buttons.general.progress) {
-      // Create / send the Packet
-      sendMessage("progress");
-      // Reset the button back to unclicked
-      store.dispatch(generalPressed({ type: "progress", pressed: false }));
-    }
-
-    for (let valveName in buttons.actuation) {
-      // Loop through all the buttons
-      let { type, priority } = buttons.actuation[valveName];
-      if (type == null || priority == null) {
-        continue;
-      }
-
-      // Create / send the Packet for the corresponding button
-      const header = "solenoid_actuate";
-      const message = {
-        valve_location: valveName,
-        actuation_type: type,
-        priority: priority,
-      };
-
-      caelusLogger("valve-actuation", `Actuating valve @${valveName}`);
-
-      sendMessage(header, message);
-      // Reset the corresponding button back to unclicked
-      store.dispatch(actuatePressed({ valve: valveName }));
-    }
-  };
-
-  store.subscribe(handleChange);
-};
+export function requestSensorData({
+  type,
+  location,
+}: {
+  type: string;
+  location: string;
+}) {
+  const header = "sensor_request";
+  sendMessage(header, {
+    sensor_type: type,
+    sensor_location: location,
+  });
+}
 
 export const updateHeartbeatStatus = (store: Store<CaelusState>) => {
   let general = store.getState().data.general;
@@ -195,12 +163,15 @@ export const updateHeartbeatStatus = (store: Store<CaelusState>) => {
     const timeSinceLastHeartbeatReceived =
       Date.now() - general.heartbeat_received;
 
+    let status: 1 | 2 | 3;
     if (timeSinceLastHeartbeatReceived > 10000) {
-      store.dispatch(updateHeartbeatStatusAction(1));
+      status = 1;
     } else if (timeSinceLastHeartbeatReceived > 6000) {
-      store.dispatch(updateHeartbeatStatusAction(2));
+      status = 2;
     } else {
-      store.dispatch(updateHeartbeatStatusAction(3));
+      status = 3;
     }
+
+    store.dispatch(updateHeartbeatStatusAction(status));
   }
 };

@@ -70,14 +70,14 @@ export interface StatsState {
     heartbeat?: number;
     heartbeat_received: number;
     heartbeat_status?: 1 | 2 | 3;
-    stage: "waiting" | string;
+    stage: "waiting" | "pressurization" | "autosequence" | "postburn";
     countdown: number;
     responses: {
       header: string;
       message: any;
       timestamp: number;
     }[];
-    percent_data?: number;
+    percent_data: number;
     mode: string;
   };
 }
@@ -92,7 +92,7 @@ const createInitialState = (): StatsState => ({
     stage: "waiting", // value should be undefined, but is set to 'autosequence' for testing purposes
     countdown: 10,
     responses: [],
-    percent_data: undefined,
+    percent_data: 0,
     mode: "Normal",
   },
 });
@@ -209,7 +209,7 @@ const updateData = (state = createInitialState(), action: DataAction) => {
         return state;
     }
   } catch (err) {
-    caelusLogger("redux-update-data", { err, state, action }, "error");
+    caelusLogger("update-data", { err, state, action }, "error");
     return state;
   }
 };

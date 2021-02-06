@@ -53,7 +53,7 @@ const buttonPressed = (
 ) => {
   switch (action.type) {
     case "GENERAL_PRESSED":
-      caelusLogger("button-debug", "General button was pressed");
+      caelusLogger("button-press", "General button was pressed");
       state.general[action.data.type] = action.data.pressed;
       return state;
     case "ABORT_PRESSED":
