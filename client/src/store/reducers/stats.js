@@ -65,6 +65,12 @@ const updateData = (state = createInitialState(), action) => {
           let kalman = sensor.kalman.toFixed(3);
           let status = sensor.status;
 
+          console.log("SENSOR DATA");
+          console.log(type);
+          console.log(location);
+          console.log(state.sensorData[type]);
+          console.log(state.sensorData[type][location])
+          
           state.sensorData[type][location].push([kalman, status]);
 
           // Ensure that there are only dataCutoff values in the series

@@ -193,7 +193,6 @@ const ButtonPane = () => {
           switchView("actuation");
         }}
         className={btnBig}
-        disabled={mode === "Normal" ? false : true}
       >
         Valve Actuation
       </button>
@@ -225,6 +224,7 @@ const ButtonPane = () => {
             )
           }
           className={btnSmallMarginless}
+          disabled={mode === "Normal" ? false : true}
         >
           Actuate Solenoid
         </button>
