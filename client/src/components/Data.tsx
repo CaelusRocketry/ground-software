@@ -97,7 +97,7 @@ const Data = () => {
             <h4 className={groupHeaderStyle}>{stylizeName(valve)}</h4>
             <div className="font-mono">
               {Object.keys(data.valveState.valves[valve]).map((loc) => (
-                <p>
+                <p key={valve + "." + loc}>
                   {stylizeName(loc)}:{" "}
                   {VALVE_MAP[data.valveState.valves.solenoid[loc]]}
                 </p>
