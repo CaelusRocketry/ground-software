@@ -9,12 +9,13 @@ export const stageNames = {
 export const stages = config.stages.list as (keyof typeof stageNames)[];
 
 export const valves = config.valves.list;
-export const valveTypes = new Set();
+export const valveTypes = new Set<keyof typeof valves>();
 export type ValveLocations = Record<keyof typeof valves, Set<string>>;
 // @ts-ignore
 export const valveLocations: ValveLocations = {};
 
 for (let type in valves) {
+  // @ts-ignore
   valveTypes.add(type);
   // @ts-ignore
   valveLocations[type] = new Set();
@@ -47,9 +48,10 @@ export const sensors = config.sensors.list;
 export type SensorLocations = Record<keyof typeof sensors, Set<string>>;
 // @ts-ignore
 export const sensorLocations: SensorLocations = {};
-export const sensorTypes = new Set();
+export const sensorTypes = new Set<keyof typeof sensors>();
 
 for (let type of Object.keys(sensors)) {
+  // @ts-ignore
   sensorTypes.add(type);
   // @ts-ignore
   sensorLocations[type] = new Set();

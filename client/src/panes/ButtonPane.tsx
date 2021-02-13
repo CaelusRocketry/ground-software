@@ -217,7 +217,7 @@ const ButtonPane = () => {
           label="Actuation Priority"
           ref={actuationPriorityRef}
           options={[1, 2, 3]}
-          optionNames={{ 1: 1, 2: 2, 3: 3 }}
+          optionNames={{ 1: "1", 2: "2", 3: "3" }}
         />
         <button
           onClick={() =>
