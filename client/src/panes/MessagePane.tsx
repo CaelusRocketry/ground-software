@@ -27,7 +27,7 @@ const MessagePane = () => {
             <li key={i} className="list-group-item list-group-item-primary">
               <h3 className="text-lg font-bold">{data.header}</h3>
               <p className="text-xs mb-2">- {data.timestamp} seconds</p>
-              {Object.entries(data.message).map(([key, value]) => (
+              {Object.entries(data.message ?? {}).map(([key, value]) => (
                 <p key={key}>
                   {key}: {value}
                 </p>

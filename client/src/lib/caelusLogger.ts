@@ -8,7 +8,8 @@ export type LogCategory =
   | "valves/actuation"
   | "button-press"
   | "heartbeat-status"
-  | "graph";
+  | "graph"
+  | "handle-change";
 export type LogSeverity = "debug" | "error" | "warn" | "info";
 
 export default function caelusLogger(
