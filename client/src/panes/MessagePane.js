@@ -2,14 +2,14 @@ import React from "react";
 import Header from "../components/Header";
 import { useSelector } from "react-redux";
 
-const MessagePane = () => {
-  const style = {
-    background: "#F5F5F5",
-    padding: "5px",
-    marginLeft: "35px",
-    overflowY: "scroll",
-  };
+const style = {
+  background: "#F5F5F5",
+  padding: "5px",
+  marginLeft: "35px",
+  overflowY: "scroll",
+};
 
+const MessagePane = () => {
   const responses = useSelector((state) => state.data.general.responses);
 
   const dictToArr = (message) => {
@@ -37,9 +37,7 @@ const MessagePane = () => {
                   <p key={index}>{element}</p>
                 ))} */}
               </h3>
-              <p className="text-xs mb-2">
-                - {data.timestamp} seconds
-              </p>
+              <p className="text-xs mb-2">- {data.timestamp} seconds</p>
               {dictToArr(data.message).map((element, index) => (
                 <p key={index}>{element}</p>
               ))}

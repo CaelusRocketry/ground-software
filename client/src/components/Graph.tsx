@@ -22,30 +22,30 @@ const properties = {
     yaxis: "Force (N)",
     title: "Load vs. Time",
   },
-  undefined: {
-    xaxis: "Undefined",
-    yaxis: "Undefined",
-    title: "Undefined",
-  },
 };
 
-export type SensorType = "thermocouple" | "pressure" | "load" | "undefined";
+const axisTitleFont = {
+  family: "Courier New, monospace",
+  size: 17,
+  color: "#7f7f7f",
+};
 
-export type GraphProps = {
+export type SensorType = keyof typeof properties;
+
+export type GraphProps = SensorLocation | {};
+
+export type SensorLocation = {
   type: SensorType;
   location: string;
 };
 
 const Graph = (props: GraphProps) => {
-  const [metadata, setMetadata] = useState({
-    type: props.type,
-    location: props.location,
-  });
+  const [metadata, setMetadata] = useState<SensorLocation | {}>(props);
 
   // RETRIEVE DATA
   const data = useSelector((state: CaelusState) => {
     // Graph type hasn't been selected yet
-    if (metadata.type === "undefined" || metadata.location === "undefined") {
+    if (!("type" in metadata)) {
       return { x: [], y: [] };
     }
 
@@ -62,7 +62,8 @@ const Graph = (props: GraphProps) => {
         "error"
       );
       alert("Mismatch in X and Y data for graph");
-      setMetadata({ type: "undefined", location: "undefined" });
+      setMetadata({});
+      return { x: [], y: [] };
     }
 
     for (let i = 0; i < x.length; i++) {
@@ -77,38 +78,31 @@ const Graph = (props: GraphProps) => {
   });
 
   // RETURN RANGE FOR SENSOR/VALVE READINGS
-  const findRange = (type: SensorType, loc: string) => {
-    if (type === "undefined" || loc === "undefined") {
-      return [0, 0];
-    } else {
-      return [
-        // @ts-ignore
-        sensors[type][loc].boundaries.safe[0],
-        // @ts-ignore
-        sensors[type][loc].boundaries.warn[1],
-      ];
-    }
-  };
+  const findRange = (type: SensorType, loc: string) => [
+    // @ts-ignore
+    sensors[type][loc].boundaries.safe[0],
+    // @ts-ignore
+    sensors[type][loc].boundaries.warn[1],
+  ];
 
   // DROPDOWN OPTIONS
   const DropdownOptions = () => {
-    let arr: { loc: string; type: string }[] = [
-      { loc: "undefined", type: "undefined" },
-    ];
+    let arr: SensorLocation[] = [];
 
-    for (let [type, locs] of Object.entries(sensors)) {
-      for (let loc in locs) {
-        arr.push({ loc, type });
+    for (let [type, locations] of Object.entries(sensors)) {
+      for (let location in locations) {
+        arr.push({ location, type: type as SensorType });
       }
     }
 
     return (
       <>
-        {arr.map(({ loc, type }) => {
-          let value = `${loc}.${type}`;
+        <option value="none">(No sensor selected)</option>
+        {arr.map(({ location, type }) => {
+          let value = `${location}.${type}`;
           return (
             <option value={value} key={value}>
-              {stylizeName(loc)}/{stylizeName(type)}
+              {stylizeName(location)}/{stylizeName(type)}
             </option>
           );
         })}
@@ -116,57 +110,63 @@ const Graph = (props: GraphProps) => {
     );
   };
 
-  const axisTitleFont = {
-    family: "Courier New, monospace",
-    size: 17,
-    color: "#7f7f7f",
-  };
-
   // DROPDOWN + GRAPH
   return (
     <div>
       <select
         onChange={(e) => {
-          const [location, type] = e.target.value.split(".");
-          setMetadata({ type: type as SensorType, location });
+          if (e.target.value === "none") {
+            setMetadata({});
+          } else {
+            const [location, type] = e.target.value.split(".");
+            setMetadata({ type: type as SensorType, location });
+          }
         }}
-        value={metadata.location + "." + metadata.type}
+        value={
+          "type" in metadata
+            ? metadata.location + "." + metadata.type
+            : "(None selected)"
+        }
       >
         <DropdownOptions />
       </select>
-      <Plot
-        style={{
-          width: "100vh",
-          height: "43vh",
-        }}
-        data={[
-          {
-            x: data.x,
-            y: data.y,
-            type: "scatter",
-            mode: "lines+markers",
-            marker: { color: "red" },
-          },
-        ]}
-        layout={{
-          title: metadata.location + "/" + metadata.type,
-          titlefont: {
-            family: "Courier New, monospace",
-            size: 22,
-          },
-          xaxis: {
-            title: properties[metadata.type].xaxis,
-            titlefont: axisTitleFont,
-            autorange: true,
-          },
-          yaxis: {
-            title: properties[metadata.type].yaxis,
-            titlefont: axisTitleFont,
-            range: findRange(metadata.type, metadata.location),
-            autorange: true,
-          },
-        }}
-      />
+      {"type" in metadata ? (
+        <Plot
+          style={{
+            width: "100vh",
+            height: "43vh",
+          }}
+          data={[
+            {
+              x: data.x,
+              y: data.y,
+              type: "scatter",
+              mode: "lines+markers",
+              marker: { color: "red" },
+            },
+          ]}
+          layout={{
+            title: metadata.location + "/" + metadata.type,
+            titlefont: {
+              family: "Courier New, monospace",
+              size: 22,
+            },
+            xaxis: {
+              title: properties[metadata.type].xaxis,
+              titlefont: axisTitleFont,
+              autorange: true,
+            },
+            yaxis: {
+              title: properties[metadata.type].yaxis,
+              titlefont: axisTitleFont,
+              range: findRange(metadata.type, metadata.location),
+              autorange: true,
+            },
+          }}
+        />
+      ) : (
+        <h1>Choose a sensor to see data</h1>
+      )}
     </div>
   );
 };
