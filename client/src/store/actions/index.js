@@ -37,8 +37,18 @@ export const generalPressed = (data) => ({
   data,
 });
 
-export const abortPressed = (data) => ({
+export const abortPressed = () => ({
   type: "ABORT_PRESSED",
+  data,
+});
+
+export const updateReduxBackend = (data) => ({
+  type: "UPDATE_REDUX_BACKEND",
+  data,
+});
+
+export const updateReduxWithBackend = (data) => ({
+  type: "UPDATE_REDUX_WITH_BACKEND",
   data,
 });
 

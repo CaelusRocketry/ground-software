@@ -13,7 +13,11 @@ import {
   updateSensorData,
   updateStage,
   updateValveData,
+  updateReduxBackend,
+  updateReduxWithBackend,
 } from "./store/actions";
+
+const connection = false;
 
 const SOCKETIO_URL =
   "http://" +
@@ -42,10 +46,12 @@ export const createSocketIoCallbacks = (store) => {
 
   socket.on("sensor_data", function (log) {
     store.dispatch(updateSensorData(log));
+    store.dispatch(updateReduxBackend(log));
   });
 
   socket.on("valve_data", function (log) {
     store.dispatch(updateValveData(log));
+    store.dispatch(updateReduxBackend(log));
   });
 
   const sendMessage = (header, message) => {
@@ -69,6 +75,7 @@ export const createSocketIoCallbacks = (store) => {
       console.log("Sent message that soft abort has been pressed");
       sendMessage(header, message);
       store.dispatch(abortPressed({ type: "soft", pressed: false }));
+      store.dispatch(updateReduxBackend());
       // Reset the button back to unclicked
     }
 
@@ -79,6 +86,7 @@ export const createSocketIoCallbacks = (store) => {
       console.log("Sent message that soft abort has been undone");
       sendMessage(header, message);
       store.dispatch(undoSoftAbortPressed({ pressed: false }));
+      store.dispatch(updateReduxBackend());
     }
 
     if (buttons.request.valve[0] !== undefined) {
@@ -97,6 +105,7 @@ export const createSocketIoCallbacks = (store) => {
           location: undefined,
         })
       );
+      store.dispatch(updateReduxBackend());
     }
 
     if (buttons.request.sensor[0] !== undefined) {
@@ -115,6 +124,7 @@ export const createSocketIoCallbacks = (store) => {
           location: undefined,
         })
       );
+      store.dispatch(updateReduxBackend());
     }
 
     if (buttons.general.progress) {
@@ -124,6 +134,7 @@ export const createSocketIoCallbacks = (store) => {
       sendMessage(header, message);
       // Reset the button back to unclicked
       store.dispatch(generalPressed({ type: "progress", pressed: false }));
+      store.dispatch(updateReduxBackend());
     }
 
     for (let valve in buttons.actuation) {
@@ -147,6 +158,7 @@ export const createSocketIoCallbacks = (store) => {
       store.dispatch(
         actuatePressed({ valve, type: undefined, priority: undefined })
       );
+      store.dispatch(updateReduxBackend());
       console.log(store.getState());
     }
   };
@@ -171,4 +183,5 @@ export const updateHeartbeatStatus = (store) => {
       store.dispatch(updateHeartbeatStatusAction(3));
     }
   }
+  store.dispatch(updateReduxBackend());
 };
