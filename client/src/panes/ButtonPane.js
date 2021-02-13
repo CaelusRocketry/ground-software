@@ -21,7 +21,7 @@ import {
   requestPressed,
   undoSoftAbortPressed,
 } from "../store/actions";
-
+import { countDownStart } from "../index.js";
 const ButtonPane = () => {
   const dispatch = useDispatch();
 
@@ -109,6 +109,9 @@ const ButtonPane = () => {
     if (
       window.confirm(`Are you sure you want to progress to ${nextStageName}?`)
     ) {
+      if(nextStageName === "Autosequence") {
+        countDownStart();
+      }
       dispatch(generalPressed({ type: "progress", pressed: true }));
     }
   };
