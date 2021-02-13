@@ -28,7 +28,7 @@ import {
 import { CaelusState } from "../store/reducers";
 import ButtonPaneSelector from "./ButtonPaneSelector";
 
-const round = (progress: number, places: number) => progress.toFixed(places);
+const round = (progress: number, places: number) => Number(progress).toFixed(places);
 
 // Fonts used for the different buttons
 const buttonStyles = {
