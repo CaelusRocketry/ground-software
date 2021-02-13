@@ -2,6 +2,7 @@ import config from "../../config.json";
 import caelusLogger from "../../lib/caelusLogger";
 import duplicateJson from "../../lib/duplicateJson";
 import { sensors, valves } from "../../lib/locationNames";
+import { HeartbeatStatus, Stage, TelemetryResponse } from "../../types";
 import { DataAction } from "../actions";
 
 const dataCutoff = config.UI.data_cutoff;
@@ -63,23 +64,21 @@ const initialValveData: ValveStore = {
   timestamp: undefined,
 };
 
+export interface GeneralStore {
+  heartbeat?: number;
+  heartbeat_received: number;
+  heartbeat_status?: HeartbeatStatus;
+  stage: Stage;
+  countdown: number;
+  responses: TelemetryResponse[];
+  percent_data: number;
+  mode: string;
+}
+
 export interface StatsState {
   sensorData: SensorStore;
   valveData: ValveStore;
-  general: {
-    heartbeat?: number;
-    heartbeat_received: number;
-    heartbeat_status?: 1 | 2 | 3;
-    stage: "waiting" | "pressurization" | "autosequence" | "postburn";
-    countdown: number;
-    responses: {
-      header: string;
-      message: any;
-      timestamp: number;
-    }[];
-    percent_data: number;
-    mode: string;
-  };
+  general: GeneralStore;
 }
 
 const createInitialState = (): StatsState => ({

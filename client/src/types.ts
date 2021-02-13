@@ -17,3 +17,13 @@ export type ControlTask =
   | "telemetry"
   | "valve"
   | "sensor";
+
+export type Stage = "waiting" | "pressurization" | "autosequence" | "postburn";
+
+export type HeartbeatStatus = 1 | 2 | 3;
+
+export type TelemetryResponse = {
+  header: string;
+  message: any;
+  timestamp: number;
+};
