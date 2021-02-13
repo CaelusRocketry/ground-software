@@ -1,13 +1,7 @@
 import React, { forwardRef } from "react";
 
 const ButtonPaneSelector = (
-  {
-    label,
-    options,
-    optionName: optionNames,
-    onChange = undefined,
-    value = undefined,
-  },
+  { label, options, optionNames, onChange = undefined, value = undefined },
   ref
 ) => (
   <div className="float-left">

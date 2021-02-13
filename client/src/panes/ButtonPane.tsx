@@ -205,19 +205,19 @@ const ButtonPane = () => {
           label="Valve"
           ref={actuateValveLocationRef}
           options={valveLocations.solenoid}
-          optionName={valveLocationNames}
+          optionNames={valveLocationNames}
         />
         <ButtonPaneSelector
           label="Actuation Type"
           ref={actuationTypeRef}
           options={[4, 3, 2, 1]}
-          optionName={actuationTypeNames}
+          optionNames={actuationTypeNames}
         />
         <ButtonPaneSelector
           label="Actuation Priority"
           ref={actuationPriorityRef}
           options={[1, 2, 3]}
-          optionName={{ 1: 1, 2: 2, 3: 3 }}
+          optionNames={{ 1: 1, 2: 2, 3: 3 }}
         />
         <button
           onClick={() =>
@@ -250,13 +250,13 @@ const ButtonPane = () => {
           onChange={(ev: any) => setRequestSensorType(ev.target.value)}
           value={requestSensorType}
           options={sensorTypes}
-          optionName={sensorTypeNames}
+          optionNames={sensorTypeNames}
         />
         <ButtonPaneSelector
           label="Sensor Location"
           ref={requestSensorLocationRef}
           options={sensorLocations[requestSensorType]}
-          optionName={sensorLocationNames}
+          optionNames={sensorLocationNames}
         />
         <button
           onClick={() =>
@@ -284,13 +284,13 @@ const ButtonPane = () => {
           label="Valve Type"
           onChange={(ev: any) => setRequestValveType(ev.target.value)}
           options={valveTypes}
-          optionName={valveTypeNames}
+          optionNames={valveTypeNames}
         />
         <ButtonPaneSelector
           label="Valve Location"
           ref={requestValveLocationRef}
           options={valveLocations[requestValveType]}
-          optionName={valveLocationNames}
+          optionNames={valveLocationNames}
         />
         <button
           onClick={() =>
