@@ -1,3 +1,4 @@
+from queue import Empty, Queue
 import time
 import heapq
 import socket
@@ -36,6 +37,11 @@ class Handler(Namespace):
         self.listen_thread.daemon = True
         self.heartbeat_thread = threading.Thread(target=self.heartbeat, daemon=True)
         self.heartbeat_thread.daemon = True
+        # This is a queue of arguments to be sent to self.ingest()
+        self.ingest_queue = Queue()
+        # This thread reads from the ingest queue
+        self.ingest_thread = threading.Thread(target=self.ingest_loop, daemon=True)
+        self.ingest_thread.daemon = True
 
         self.conn = None
         self.running = False
@@ -74,6 +80,7 @@ class Handler(Namespace):
         self.listen_thread.start()
         self.heartbeat_thread.start()
         self.send_thread.start()
+        self.ingest_thread.start()
 
 
     def send_to_flight_software(self, json):
@@ -105,10 +112,7 @@ class Handler(Namespace):
         while self.running:
             data = self.conn.recv(BYTE_SIZE)
             if data:
-                self.ingest_thread = threading.Thread(
-                    target=self.ingest, args=(data,))
-                self.ingest_thread.daemon = True
-                self.ingest_thread.start()
+                self.ingest_queue.put(data)
 
 
     def enqueue(self, packet):
@@ -116,6 +120,18 @@ class Handler(Namespace):
         # TODO: This is implemented wrong. It should enqueue by finding packets that have similar priorities, not changing the priorities of current packets.
         packet_str = (packet.to_string() + "END").encode("ascii")
         heapq.heappush(self.queue_send, (packet.priority, packet_str))
+
+    
+    def ingest_loop(self):
+        """ Constantly ingests queue data, blocking until an item is available from the queue """
+        while self.running:
+            # block=True waits until an item is available
+            # We add a timeout so the loop can stop
+            try:
+                data = self.ingest_queue.get(block=True, timeout=1)
+                self.ingest(data)
+            except Empty:
+                pass
 
 
     def ingest(self, packet_str):
