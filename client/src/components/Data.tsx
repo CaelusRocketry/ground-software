@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import getColor from "../lib/getColor";
-import stylizeName from "../lib/stylizeName";
+import stylizeName from "../lib/camelize";
 import { CaelusState } from "../store/reducers";
 
 import Block from "./Block";

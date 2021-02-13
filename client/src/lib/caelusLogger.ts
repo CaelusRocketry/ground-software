@@ -7,6 +7,7 @@ export type LogCategory =
   | "telemetry/send"
   | "valves/actuation"
   | "button-press"
+  | "heartbeat-status"
   | "graph";
 export type LogSeverity = "debug" | "error" | "warn" | "info";
 

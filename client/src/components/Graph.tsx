@@ -3,7 +3,7 @@ import Plot from "react-plotly.js";
 import { useSelector } from "react-redux";
 import caelusLogger from "../lib/caelusLogger";
 import { sensors } from "../lib/locationNames";
-import stylizeName from "../lib/stylizeName";
+import stylizeName from "../lib/camelize";
 import { CaelusState } from "../store/reducers";
 
 const properties = {
