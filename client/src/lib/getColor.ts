@@ -1,4 +1,3 @@
-import { HeartbeatStatus } from "../types";
 import caelusLogger from "./caelusLogger";
 
 const getColor = (status: any) => {
