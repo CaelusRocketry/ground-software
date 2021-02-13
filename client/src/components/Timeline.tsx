@@ -1,6 +1,5 @@
 // Adapted from https://github.com/tverdohleb/react-trivial-timeline [MIT]
 
-import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
 
@@ -19,17 +18,17 @@ const StyledItem = styled.li`
 `;
 
 const StyledIcon = styled.div<{
-  lineColor: string | null;
-  iconFill: string | null;
+  lineColor?: string;
+  iconFill?: string;
 }>`
   border: ${(props) => {
-    if (props.lineColor === null) {
+    if (props.lineColor == null) {
       return "none";
     }
     return `2px solid ${props.lineColor}`;
   }};
   padding: ${(props) => {
-    if (props.lineColor === null) {
+    if (props.lineColor == null) {
       return "2px";
     }
     return "0px";
@@ -81,7 +80,7 @@ const Interval = ({ interval, separator }: IntervalProps) => {
   return null;
 };
 
-const StyledContent = styled.div<{ lineColor: string }>`
+const StyledContent = styled.div<{ lineColor?: string }>`
   position: relative;
   margin-left: 2.5em;
   :before {
@@ -95,6 +94,7 @@ const StyledContent = styled.div<{ lineColor: string }>`
     height: 100%;
   }
 `;
+
 const StyledInterval = styled.p<{ background: string }>`
   margin: 0 0 0 1em;
   padding: 0.25em 1em;
@@ -103,23 +103,17 @@ const StyledInterval = styled.p<{ background: string }>`
   border-radius: 5px;
 `;
 
-const StyledTitle = styled(({ tag, children, ...props }) =>
+const StyledTitle = styled(({ tag = "h1", children, ...props }) =>
   e(tag, props, children)
 )`
   margin-top: 0;
 `;
 
-StyledTitle.defaultProps = {
-  tag: "h1",
-};
-
 const StyledDescription = styled.div``;
-const StyledSubtitle = styled(({ tag, children, ...props }) =>
+const StyledSubtitle = styled(({ tag = "h4", children, ...props }) =>
   e(tag, props, children)
 )``;
-StyledSubtitle.defaultProps = {
-  tag: "h4",
-};
+
 const StyledIntervalContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -128,15 +122,15 @@ const StyledIntervalContainer = styled.div`
 `;
 
 type TimelineProps = {
-  lineColor: string;
-  intervalSeparator: React.ReactNode;
-  children: React.ReactNode;
+  lineColor?: string;
+  intervalSeparator?: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 export const Timeline = ({
-  lineColor,
-  intervalSeparator,
-  children,
+  lineColor = "#eeeeee",
+  intervalSeparator = <>&nbsp;&mdash; </>,
+  children = null,
 }: TimelineProps) => {
   const childrenWithProps = React.Children.map(children, (child) =>
     // @ts-expect-error
@@ -153,29 +147,20 @@ export const Timeline = ({
     </StyledContainer>
   );
 };
-Timeline.propTypes = {
-  lineColor: PropTypes.string,
-  intervalSeparator: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  children: PropTypes.node,
-};
-Timeline.defaultProps = {
-  intervalSeparator: <>&nbsp;&mdash; </>,
-  children: null,
-};
 
 type EventProps = {
   title: string;
-  subtitle: string;
-  interval: string | { start: string; end: string };
-  intervalSeparator: string | React.ReactNode;
-  children: React.ReactNode;
-  lineColor: string;
-  titleTag: string;
-  subtitleTag: string;
-  intervalColor: string;
+  subtitle?: string;
+  interval?: string | { start: string; end: string };
+  intervalSeparator?: string | React.ReactNode;
+  children?: React.ReactNode;
+  lineColor?: string;
+  titleTag?: string;
+  subtitleTag?: string;
+  intervalColor?: string;
   intervalBackground: string;
-  iconFill: string;
-  iconOutline: string | null | undefined;
+  iconFill?: string;
+  iconOutline?: string | null;
 };
 
 export const Event = ({
@@ -190,14 +175,11 @@ export const Event = ({
   intervalSeparator = <>&nbsp;&mdash; </>,
   intervalBackground,
   iconFill = "transparent",
-  iconOutline = undefined,
+  iconOutline = null,
 }: EventProps) => (
   <StyledItem>
     <StyledIntervalContainer>
-      <StyledIcon
-        lineColor={iconOutline === null ? null : iconOutline || lineColor}
-        iconFill={iconFill}
-      />
+      <StyledIcon lineColor={iconOutline ?? lineColor} iconFill={iconFill} />
       <StyledInterval color={intervalColor} background={intervalBackground}>
         <Interval interval={interval} separator={intervalSeparator} />
       </StyledInterval>

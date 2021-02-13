@@ -24,6 +24,6 @@ export type HeartbeatStatus = 1 | 2 | 3;
 
 export type TelemetryResponse = {
   header: string;
-  message: any;
+  message: Record<string, any>;
   timestamp: number;
 };
