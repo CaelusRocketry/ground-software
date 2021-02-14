@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-dropdown-select";
-
+import config from "./config.json";
+import * as ipinput from "./components/IpInput";
 import "./App.css";
 
 import StatisticsView from "./views/StatisticsView";
@@ -25,11 +26,14 @@ const App = () => {
     });
   };
 
-  const options = [
+  var options = [
     { label: "Statistics", value: "statistics" },
     { label: "Actions", value: "actions" },
     { label: "Countdown", value: "countdown" },
   ];
+  if(!ipinput.addresses.includes(config["telemetry"]["GS_IP"])) {
+    var options = [];
+  }
   const select = (
     <Select
       options={options}
