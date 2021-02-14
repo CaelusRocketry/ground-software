@@ -42,16 +42,19 @@ export const createSocketIoCallbacks = (store) => {
     } else {
       console.log("Unknown general header");
     }
+    connection = true;
   });
 
   socket.on("sensor_data", function (log) {
     store.dispatch(updateSensorData(log));
     store.dispatch(updateReduxBackend(log));
+    connection = true;
   });
 
   socket.on("valve_data", function (log) {
     store.dispatch(updateValveData(log));
     store.dispatch(updateReduxBackend(log));
+    connection = true;
   });
 
   const sendMessage = (header, message) => {
@@ -59,6 +62,12 @@ export const createSocketIoCallbacks = (store) => {
     console.log("Sending: ");
     console.log(log);
     socket.emit("button_press", log);
+  };
+
+  const checkConnection = () => {
+    if (socket.connected == false) {
+      connection = false;
+    }
   };
 
 // THE FORMAT FOR THESE MESSAGES SHOULD MATCH THE FORMAT LISTED IN FLIGHT SOFTWARE'S TELEMETRYCONTROL
