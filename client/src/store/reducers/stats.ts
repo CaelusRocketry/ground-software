@@ -126,6 +126,14 @@ const updateData = (state = createInitialState(), action: DataAction) => {
             // eslint-disable-next-line
             const { measured, kalman, status } = sensor;
 
+            console.log("SENSOR DATA");
+            console.log(type);
+            console.log(location);
+            // @ts-expect-error
+            console.log(state.sensorData[type]);
+            // @ts-expect-error
+            console.log(state.sensorData[type][location]);
+
             if (!(type in state.sensorData.sensors)) {
               state.sensorData.sensors[type] = {};
             }

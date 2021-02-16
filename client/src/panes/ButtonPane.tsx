@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef } from "react";
 import { useSelector } from "react-redux";
+import { countDownStart } from "..";
 import {
   actuateValve,
   progressStage,
@@ -28,7 +29,8 @@ import {
 import { CaelusState } from "../store/reducers";
 import ButtonPaneSelector from "./ButtonPaneSelector";
 
-const round = (progress: number, places: number) => Number(progress).toFixed(places);
+const round = (progress: number, places: number) =>
+  Number(progress).toFixed(places);
 
 // Fonts used for the different buttons
 const buttonStyles = {
@@ -137,6 +139,9 @@ const ButtonPane = () => {
     if (
       window.confirm(`Are you sure you want to progress to ${nextStageName}?`)
     ) {
+      if (nextStageName === "Autosequence") {
+        countDownStart();
+      }
       progressStage();
     }
   }, [currentStage]);
@@ -196,7 +201,6 @@ const ButtonPane = () => {
           switchView("actuation");
         }}
         className={buttonStyles.big}
-        disabled={mode === "Normal" ? false : true}
       >
         Valve Actuation
       </button>
@@ -229,6 +233,7 @@ const ButtonPane = () => {
             )
           }
           className={buttonStyles.smallMarginless}
+          disabled={mode === "Normal" ? false : true}
         >
           Actuate Solenoid
         </button>

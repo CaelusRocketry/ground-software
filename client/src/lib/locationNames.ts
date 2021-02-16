@@ -66,10 +66,10 @@ export const sensorLocationNames = {
   chamber: "Chamber",
   tank: "Tank",
   injector: "Injector",
-  "PT-1": "PT-1",
-  "PT-2": "PT-2",
-  "PT-3": "PT-3",
-  "PT-4": "PT-4",
+  "PT-5": "PT-5",
+  "PT-P": "PT-P",
+  "PT-7": "PT-7",
+  "PT-8": "PT-8",
 };
 
 export const sensorTypeNames = {
