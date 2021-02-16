@@ -34,6 +34,16 @@ const generalUpdates = {
   response: addResponse,
 };
 
+io.on('connection', function(socket) {
+  connection = true;
+  store.dispatch(updateReduxWithBackend())
+});
+
+io.on('disconnect', function(socket) {
+  connection = false;
+  store.dispatch(updateReduxBackend())
+});
+
 export const createSocketIoCallbacks = (store) => {
   socket.on("general", function (log) {
     const { header } = log;
@@ -47,13 +57,13 @@ export const createSocketIoCallbacks = (store) => {
 
   socket.on("sensor_data", function (log) {
     store.dispatch(updateSensorData(log));
-    store.dispatch(updateReduxBackend(log));
+    store.dispatch(updateReduxBackend());
     connection = true;
   });
 
   socket.on("valve_data", function (log) {
     store.dispatch(updateValveData(log));
-    store.dispatch(updateReduxBackend(log));
+    store.dispatch(updateReduxBackend());
     connection = true;
   });
 
@@ -64,12 +74,7 @@ export const createSocketIoCallbacks = (store) => {
     socket.emit("button_press", log);
   };
 
-  const checkConnection = () => {
-    if (socket.connected == false) {
-      connection = false;
-    }
-  };
-
+  
 // THE FORMAT FOR THESE MESSAGES SHOULD MATCH THE FORMAT LISTED IN FLIGHT SOFTWARE'S TELEMETRYCONTROL
 
   const handleChange = () => {
