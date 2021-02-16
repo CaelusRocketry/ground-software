@@ -106,12 +106,6 @@ const actionsWithMessageAndTimestamp = [
 ];
 
 const updateData = (state = createInitialState(), action: DataAction) => {
-  // let message, timestamp;
-  // if (actionsWithMessageAndTimestamp.includes(action.type)) {
-  //   message = action.data.message;
-  //   timestamp = action.data.timestamp;
-  // }
-
   caelusLogger("update-data", action);
 
   // Ensure we can safely modify the state
@@ -129,10 +123,8 @@ const updateData = (state = createInitialState(), action: DataAction) => {
             console.log("SENSOR DATA");
             console.log(type);
             console.log(location);
-            // @ts-expect-error
-            console.log(state.sensorData[type]);
-            // @ts-expect-error
-            console.log(state.sensorData[type][location]);
+            console.log(state.sensorData.sensors[type]);
+            console.log(state.sensorData.sensors[type][location]);
 
             if (!(type in state.sensorData.sensors)) {
               state.sensorData.sensors[type] = {};
