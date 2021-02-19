@@ -42,13 +42,13 @@ export const abortPressed = () => ({
   data,
 });
 
-export const updateReduxBackend = (data) => ({
-  type: "UPDATE_REDUX_BACKEND",
+export const copyRedux = (data) => ({
+  type: "COPY_REDUX",
   data,
 });
 
-export const updateReduxWithBackend = (data) => ({
-  type: "UPDATE_REDUX_WITH_BACKEND",
+export const updateRedux = (data) => ({
+  type: "UPDATE_REDUX",
   data,
 });
 

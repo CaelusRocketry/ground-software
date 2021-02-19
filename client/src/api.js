@@ -17,8 +17,6 @@ import {
   updateReduxWithBackend,
 } from "./store/actions";
 
-const connection = false;
-
 const SOCKETIO_URL =
   "http://" +
   config.telemetry.SOCKETIO_HOST +
@@ -34,14 +32,12 @@ const generalUpdates = {
   response: addResponse,
 };
 
-io.on('connection', function(socket) {
-  connection = true;
-  store.dispatch(updateReduxWithBackend())
+socket.on('connect', () => {
+  store.dispatch(updateRedux())
 });
 
-io.on('disconnect', function(socket) {
-  connection = false;
-  store.dispatch(updateReduxBackend())
+socket.on('disconnect', (reason) => {
+  store.dispatch(copyRedux())
 });
 
 export const createSocketIoCallbacks = (store) => {
