@@ -43,15 +43,15 @@ const buttonPressed = (state = createInitialState(), action) => {
       reduxcopy = duplicateJson(state);
       return reduxcopy
     case "UPDATE_REDUX": 
-      let { rabort, ractuation, rrequest, rgeneral } = action.data;
-      state.abort.soft = rabort.soft;
-      state.abort.undosoft = rabort.undosoft;
-      state.general.progress = rgeneral.progress;
-      state.actuation.pressure_relief = ractuation.pressure_relief;
-      state.actuation.pressurization = ractuation.pressurization;
-      state.actuation.main_propellant_valve = ractuation.main_propellant_valve;
-      state.request.valve = rrequest.valve;
-      state.request.sensor = rrequest.sensor;
+      let { reduxcopy } = action.data;
+      state.abort.soft = reduxcopy.abort.soft;
+      state.abort.undosoft = reduxcopy.abort.undosoft;
+      state.general.progress = reduxcopy.general.progress;
+      state.actuation.pressure_relief = reduxcopy.actuation.pressure_relief;
+      state.actuation.pressurization = reduxcopy.actuation.pressurization;
+      state.actuation.main_propellant_valve = reduxcopy.actuation.main_propellant_valve;
+      state.request.valve = reduxcopy.request.valve;
+      state.request.sensor = reduxcopy.request.sensor;
     case "ACTUATE_PRESSED":
       let { valve, actuation_type, priority } = action.data;
       state.actuation[valve] = [actuation_type, priority];
