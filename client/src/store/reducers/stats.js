@@ -79,7 +79,6 @@ const updateData = (state = createInitialState(), action) => {
           }
         }
       }
-
       state.sensorData.timestamp.push(timestamp);
 
       // Ensure that there are only dataCutoff values in the series
@@ -102,7 +101,6 @@ const updateData = (state = createInitialState(), action) => {
     case "UPDATE_HEARTBEAT":
       state.general.heartbeat_recieved = Date.now();
       state.general.heartbeat = timestamp;
-      state.general.mode = action.data.message.mode;
       return state;
 
     case "UPDATE_HEARTBEAT_STATUS":
@@ -150,6 +148,7 @@ const updateData = (state = createInitialState(), action) => {
 
     case "UPDATE_MODE":
       state.general.mode = action.data.message.mode;
+      console.log('MODE IS BEING UPDATED TO ' + action.data.message.mode)
       return state;
 
     default:

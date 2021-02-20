@@ -125,10 +125,14 @@ export const createSocketIoCallbacks = (store) => {
       // Reset the button back to unclicked
       store.dispatch(generalPressed({ type: "progress", pressed: false }));
     }
-
+    
+    console.log('In button.actuations!')
     for (let valve in buttons.actuation) {
       // Loop through all the buttons
+      console.log('Valve: ' + valve)
       let [type, priority] = buttons.actuation[valve];
+      console.log(type)
+      console.log(priority)
       if (type == null || priority == null) {
         continue;
       }
