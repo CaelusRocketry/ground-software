@@ -20,7 +20,7 @@ const createInitialState = () => ({
   },
 });
 
-const buttonPressed = (state = createInitialState(), action, backend = reduxBackend()) => {
+const buttonPressed = (state = createInitialState(), action) => {
   switch (action.type) {
     case "GENERAL_PRESSED":
       console.log("General button was pressed");
@@ -40,11 +40,18 @@ const buttonPressed = (state = createInitialState(), action, backend = reduxBack
       state.abort.undosoft = action.data.pressed;
       return state;
     case "COPY_REDUX":
-      //put shit here
-      
-    case "UPDATE_REDUX":
-      //put shit here
-
+      reduxcopy = duplicateJson(state);
+      return reduxcopy
+    case "UPDATE_REDUX": 
+      let { rabort, ractuation, rrequest, rgeneral } = action.data;
+      state.abort.soft = rabort.soft;
+      state.abort.undosoft = rabort.undosoft;
+      state.general.progress = rgeneral.progress;
+      state.actuation.pressure_relief = ractuation.pressure_relief;
+      state.actuation.pressurization = ractuation.pressurization;
+      state.actuation.main_propellant_valve = ractuation.main_propellant_valve;
+      state.request.valve = rrequest.valve;
+      state.request.sensor = rrequest.sensor;
     case "ACTUATE_PRESSED":
       let { valve, actuation_type, priority } = action.data;
       state.actuation[valve] = [actuation_type, priority];

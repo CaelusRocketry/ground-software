@@ -42,9 +42,8 @@ export const abortPressed = (data) => ({
   data
 });
 
-export const copyRedux = (data) => ({
+export const copyRedux = () => ({
   type: "COPY_REDUX",
-  data,
 });
 
 export const updateRedux = (data) => ({
