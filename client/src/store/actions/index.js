@@ -37,9 +37,9 @@ export const generalPressed = (data) => ({
   data,
 });
 
-export const abortPressed = () => ({
+export const abortPressed = (data) => ({
   type: "ABORT_PRESSED",
-  data,
+  data
 });
 
 export const copyRedux = (data) => ({
