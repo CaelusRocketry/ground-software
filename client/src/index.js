@@ -18,20 +18,17 @@ setInterval(() => {
   updateHeartbeatStatus(store);
 }, 5000);
 
-const countDownStart = setInterval(() => {
+export function countDownStart() {
   const { general } = store.getState().data;
-
-  if (general.stage === "autosequence") {
-    const countDownInterval = setInterval(() => {
-      if (general.countdown > 0) {
-        store.dispatch(updateCountdown());
-      } else {
-        clearInterval(countDownInterval);
-      }
-    }, 1000);
-    clearInterval(countDownStart);
-  }
-}, 1000);
+  const countDownInterval = setInterval(() => {
+    if (general.countdown > 0) {
+      store.dispatch(updateCountdown());
+    } else {
+      clearInterval(countDownInterval);
+    }
+  }, 1000);
+  clearInterval(countDownStart);
+};
 
 ReactDOM.render(
   <Provider store={store}>
