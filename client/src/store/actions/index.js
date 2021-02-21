@@ -27,9 +27,19 @@ export const updateCountdown = () => ({
   type: "UPDATE_COUNTDOWN",
 });
 
-export const updateStats = (stats) => ({
-  type: "UPDATE_STATS",
-  stats
+export const updateGeneralCopy = (data) => ({
+  type: "UPDATE_GENERAL_COPY",
+  data
+});
+
+export const updateSensorCopy = (data) => ({
+  type: "UPDATE_SENSOR_COPY",
+  data
+});
+
+export const updateValveCopy = (data) => ({
+  type: "UPDATE_VALVE_COPY",
+  data
 });
 
 export const updateButtons = (buttons) => ({

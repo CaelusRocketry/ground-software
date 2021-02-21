@@ -1,6 +1,5 @@
 import io from "socket.io-client";
 import config from "./config.json";
-import duplicateJson from "./lib/duplicateJson";
 import {
   abortPressed,
   actuatePressed,
@@ -9,13 +8,15 @@ import {
   requestPressed,
   undoSoftAbortPressed,
   updateButtons,
-  updateStats,
   updateHeartbeat,
   updateHeartbeatStatus as updateHeartbeatStatusAction,
   updateMode,
   updateSensorData,
   updateStage,
   updateValveData,
+  updateGeneralCopy,
+  updateSensorCopy,
+  updateValveCopy,
 } from "./store/actions";
 
 const SOCKETIO_URL =
@@ -40,12 +41,12 @@ const sendMessage = (header, message) => {
   socket.emit("button_press", log);
 };
 
-socket.on('connect', () => {
-  sendMessage("store_data", {});
-});
-
-var storeClone;
 export const createSocketIoCallbacks = (store) => {
+  socket.on('connect', () => {
+    sendMessage("store_data", {});
+  });
+
+  // UPDATES BACKEND REDUX STORE COPY UPON RECEIVING DATA
   socket.on("general", function (log) {
     const { header } = log;
     if (header in generalUpdates) {
@@ -53,26 +54,34 @@ export const createSocketIoCallbacks = (store) => {
     } else {
       console.log("Unknown general header");
     }
-    sendMessage('update_stats', store.getState().data);
+    sendMessage('update_general', store.getState().data.general);
   });
-
   socket.on("sensor_data", function (log) {
     store.dispatch(updateSensorData(log));
-    sendMessage('update_stats', store.getState().data);
+    sendMessage('update_sensors', store.getState().data.sensorData);
   });
-
   socket.on("valve_data", function (log) {
     store.dispatch(updateValveData(log));
-    sendMessage('update_stats', store.getState().data);
+    sendMessage('update_valves', store.getState().data.valveData);
   });
 
-  socket.on('stats_data', function (log) {
-    if (log != undefined) {
-      store.dispatch(updateStats(log));
+  // INSERTS SAVED VALUES BACK INTO STORE UPON RECONNECT
+  socket.on('general_copy', function (log) {
+    if (log) {
+      store.dispatch(updateGeneralCopy(log));
     }
   });
-
-  socket.on('buttons_data', function (log) {
+  socket.on('sensors_copy', function (log) {
+    if (log) {
+      store.dispatch(updateSensorCopy(log));
+    }
+  });
+  socket.on('valves_copy', function (log) {
+    if (log) {
+      store.dispatch(updateValveCopy(log));
+    }
+  });
+  socket.on('buttons_copy', function (log) {
     if (log) {
       store.dispatch(updateButtons(log));
     }

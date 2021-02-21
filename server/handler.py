@@ -30,7 +30,9 @@ class Handler(Namespace):
         self.start_time = time.time()
 
         self.socketio = socketio
-        self.stats_copy = None
+        self.general_copy = None
+        self.sensors_copy = None
+        self.valves_copy = None
         self.buttons_copy = None
 
     ## telemetry methods
@@ -138,20 +140,34 @@ class Handler(Namespace):
         self.socketio.emit('valve_data',  log)
 
     def update_store_data(self):
-        self.socketio.emit('stats_data', self.stats_copy)
-        self.socketio.emit('buttons_data', self.buttons_copy)
+        self.socketio.emit('general_copy', self.general_copy)
+        self.socketio.emit('sensors_copy', self.sensors_copy)
+        self.socketio.emit('valves_copy', self.valves_copy)
+        self.socketio.emit('buttons_copy', self.buttons_copy)
 
     ## store copy methods
-    def update_stats_copy(self, stats):
-        self.stats_copy = stats
+    def update_general_copy(self, general):
+        self.general_copy = general
+
+    def update_sensors_copy(self, sensors):
+        self.sensors_copy = sensors
+
+    def update_valves_copy(self, valves):
+        self.valves_copy = valves
 
     def update_buttons_copy(self, buttons):
         self.buttons_copy = buttons
 
     def on_button_press(self, data):
         print(data)
-        if data['header'] == 'update_stats':
-            self.update_stats_copy(data['message'])
+        if data['header'] == 'update_general':
+            self.update_general_copy(data['message'])
+            return
+        elif data['header'] == 'update_sensors':
+            self.update_sensors_copy(data['message'])
+            return
+        elif data['header'] == 'update_valves':
+            self.update_valves_copy(data['message'])
             return
         elif data['header'] == 'update_buttons':
             self.update_buttons_copy(data['message'])
