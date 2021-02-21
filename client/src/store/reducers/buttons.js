@@ -1,5 +1,3 @@
-import duplicateJson from "./duplicateJson";
-
 const createInitialState = () => ({
   abort: {
     soft: false,
@@ -39,22 +37,12 @@ const buttonPressed = (state = createInitialState(), action) => {
     case "UNDO_SOFT_ABORT_PRESSED":
       state.abort.undosoft = action.data.pressed;
       return state;
-    case "COPY_REDUX":
-      reduxcopy = duplicateJson(state);
-      return reduxcopy
-    case "UPDATE_REDUX": 
-      let { reduxcopy } = action.data;
-      state.abort.soft = reduxcopy.abort.soft;
-      state.abort.undosoft = reduxcopy.abort.undosoft;
-      state.general.progress = reduxcopy.general.progress;
-      state.actuation.pressure_relief = reduxcopy.actuation.pressure_relief;
-      state.actuation.pressurization = reduxcopy.actuation.pressurization;
-      state.actuation.main_propellant_valve = reduxcopy.actuation.main_propellant_valve;
-      state.request.valve = reduxcopy.request.valve;
-      state.request.sensor = reduxcopy.request.sensor;
     case "ACTUATE_PRESSED":
       let { valve, actuation_type, priority } = action.data;
       state.actuation[valve] = [actuation_type, priority];
+      return state;
+    case "UPDATE_BUTTONS":
+      state = action.buttons;
       return state;
     default:
       return state;

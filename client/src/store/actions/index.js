@@ -27,6 +27,16 @@ export const updateCountdown = () => ({
   type: "UPDATE_COUNTDOWN",
 });
 
+export const updateStats = (stats) => ({
+  type: "UPDATE_STATS",
+  stats
+});
+
+export const updateButtons = (buttons) => ({
+  type: "UPDATE_BUTTONS",
+  buttons
+});
+
 export const addResponse = (data) => ({
   type: "ADD_RESPONSE",
   data,
@@ -40,15 +50,6 @@ export const generalPressed = (data) => ({
 export const abortPressed = (data) => ({
   type: "ABORT_PRESSED",
   data
-});
-
-export const copyRedux = () => ({
-  type: "COPY_REDUX",
-});
-
-export const updateRedux = (data) => ({
-  type: "UPDATE_REDUX",
-  data,
 });
 
 export const undoSoftAbortPressed = (data) => ({

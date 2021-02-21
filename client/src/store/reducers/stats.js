@@ -152,6 +152,12 @@ const updateData = (state = createInitialState(), action) => {
       state.general.mode = action.data.message.mode;
       return state;
 
+    case "UPDATE_STATS":
+      console.log("HERE ARE THE STATS:");
+      console.log(action.stats);
+      state = action.stats;
+      return state;
+
     default:
       return state;
   }

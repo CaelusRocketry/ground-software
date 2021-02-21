@@ -30,6 +30,8 @@ class Handler(Namespace):
         self.start_time = time.time()
 
         self.socketio = socketio
+        self.stats_copy = None
+        self.buttons_copy = None
 
     ## telemetry methods
 
@@ -135,8 +137,28 @@ class Handler(Namespace):
         print("Valve:", log)
         self.socketio.emit('valve_data',  log)
 
+    def update_store_data(self):
+        self.socketio.emit('stats_data', self.stats_copy)
+        self.socketio.emit('buttons_data', self.buttons_copy)
+
+    ## store copy methods
+    def update_stats_copy(self, stats):
+        self.stats_copy = stats
+
+    def update_buttons_copy(self, buttons):
+        self.buttons_copy = buttons
 
     def on_button_press(self, data):
         print(data)
+        if data['header'] == 'update_stats':
+            self.update_stats_copy(data['message'])
+            return
+        elif data['header'] == 'update_buttons':
+            self.update_buttons_copy(data['message'])
+            return
+        elif data['header'] == 'store_data':
+            self.update_store_data()
+            return
+
         log = Log(header=data['header'], message=data['message'])
         self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))

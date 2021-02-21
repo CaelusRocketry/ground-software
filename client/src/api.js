@@ -1,5 +1,6 @@
 import io from "socket.io-client";
 import config from "./config.json";
+import duplicateJson from "./lib/duplicateJson";
 import {
   abortPressed,
   actuatePressed,
@@ -7,17 +8,15 @@ import {
   generalPressed,
   requestPressed,
   undoSoftAbortPressed,
+  updateButtons,
+  updateStats,
   updateHeartbeat,
   updateHeartbeatStatus as updateHeartbeatStatusAction,
   updateMode,
   updateSensorData,
   updateStage,
   updateValveData,
-  updateRedux,
-  copyRedux,
 } from "./store/actions";
-
-var reduxcopy;
 
 const SOCKETIO_URL =
   "http://" +
@@ -34,15 +33,18 @@ const generalUpdates = {
   response: addResponse,
 };
 
+const sendMessage = (header, message) => {
+  const log = { header, message };
+  console.log("Sending: ");
+  console.log(log);
+  socket.emit("button_press", log);
+};
+
 socket.on('connect', () => {
-  store.dispatch(updateRedux(reduxcopy));
+  sendMessage("store_data", {});
 });
 
-socket.on('disconnect', (reason) => {
-  store.dispatch(copyRedux());
-  reduxcopy = copyRedux();
-});
-
+var storeClone;
 export const createSocketIoCallbacks = (store) => {
   socket.on("general", function (log) {
     const { header } = log;
@@ -51,26 +53,30 @@ export const createSocketIoCallbacks = (store) => {
     } else {
       console.log("Unknown general header");
     }
-    connection = true;
+    sendMessage('update_stats', store.getState().data);
   });
 
   socket.on("sensor_data", function (log) {
     store.dispatch(updateSensorData(log));
-    connection = true;
+    sendMessage('update_stats', store.getState().data);
   });
 
   socket.on("valve_data", function (log) {
     store.dispatch(updateValveData(log));
-    connection = true;
+    sendMessage('update_stats', store.getState().data);
   });
 
-  const sendMessage = (header, message) => {
-    const log = { header, message };
-    console.log("Sending: ");
-    console.log(log);
-    socket.emit("button_press", log);
-  };
+  socket.on('stats_data', function (log) {
+    if (log != undefined) {
+      store.dispatch(updateStats(log));
+    }
+  });
 
+  socket.on('buttons_data', function (log) {
+    if (log) {
+      store.dispatch(updateButtons(log));
+    }
+  });
   
 // THE FORMAT FOR THESE MESSAGES SHOULD MATCH THE FORMAT LISTED IN FLIGHT SOFTWARE'S TELEMETRYCONTROL
 
@@ -166,8 +172,8 @@ export const createSocketIoCallbacks = (store) => {
       );
       console.log(store.getState());
     }
+    sendMessage('update_buttons', store.getState().buttonReducer);
   };
-
   store.subscribe(handleChange);
 };
 
