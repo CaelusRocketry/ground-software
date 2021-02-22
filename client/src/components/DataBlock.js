@@ -2,15 +2,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import getColor from "../lib/getColor";
 import stylizeName from "../lib/stylizeName";
+import {VALVE_MAP} from "../lib/pid"
 
 import Block from "./Block";
 import BlockHeader from "./BlockHeader";
-
-// CONSTANTS
-const VALVE_MAP = { 
-  1: "OPEN", 
-  0: "CLOSED" 
-};
 
 const DataBlock = () => {
   const data = useSelector((state) => (
