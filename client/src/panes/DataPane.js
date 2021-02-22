@@ -1,5 +1,6 @@
 import React from "react";
-import Data from "../components/Data";
+import PID from "../components/PID";
+import DataBlock from "../components/DataBlock";
 import Header from "../components/Header";
 import "../index.css";
 
@@ -7,7 +8,8 @@ const DataPane = () => (
   <div>
     <Header>Data</Header>
     <div className="view">
-      <Data />
+      <PID />
+      <DataBlock />
     </div>
   </div>
 );
