@@ -73,6 +73,7 @@ const ButtonPane = () => {
   };
 
   const actuateValve = (location, type, priority) => {
+    console.log('ACTUATING VALVE!')
     console.log(selectValues);
     console.log([location, type, priority]);
 

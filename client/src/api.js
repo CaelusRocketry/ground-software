@@ -130,9 +130,14 @@ export const createSocketIoCallbacks = (store) => {
     for (let valve in buttons.actuation) {
       // Loop through all the buttons
       console.log('Valve: ' + valve)
+   
       let [type, priority] = buttons.actuation[valve];
-      console.log(type)
-      console.log(priority)
+      if (type != undefined && priority != undefined)
+      {
+        console.log('BUTTON WORKED')
+        console.log(type)
+        console.log(priority)
+      }
       if (type == null || priority == null) {
         continue;
       }
@@ -140,9 +145,9 @@ export const createSocketIoCallbacks = (store) => {
       // Create / send the Packet for the corresponding button
       header = "solenoid_actuate";
       message = { 
-        valve_location: valve,
-        actuation_type: type,
-        priority: priority
+        valve_location: String(valve),
+        actuation_type: String(type),
+        priority: String(priority)
       };
       console.log(type, priority);
       console.log("Dispatching null");
