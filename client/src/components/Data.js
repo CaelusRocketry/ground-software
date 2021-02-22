@@ -243,7 +243,7 @@ const Data = () => {
             }} 
             className={"diagram"+sensor}
           >
-            {getLast(data.sensorState["pressure"][sensor])}{"hi"}
+            {getLast(data.sensorState["pressure"][sensor])}
           </p>
         ))}
         {Object.keys(PADDING[diagram.type]["VALVE"]).map((valve) => (
@@ -255,7 +255,7 @@ const Data = () => {
             }} 
             className={"diagram"+valve}
           >
-            {VALVE_MAP[data.valveState.solenoid[valve]]}{"hi"}
+            {VALVE_MAP[data.valveState.solenoid[valve]]}
           </p>
         ))}
       </div>
