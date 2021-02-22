@@ -126,17 +126,17 @@ class Handler(Namespace):
     ## backend methods
 
     def update_general(self, log):
-        print("General:", log)
+        # print("General:", log)
         self.socketio.emit('general',  log)
     
     
     def update_sensor_data(self, log):
-        print("Sensor:", log)
+        # print("Sensor:", log)
         self.socketio.emit('sensor_data',  log)
 
     
     def update_valve_data(self, log):
-        print("Valve:", log)
+        # print("Valve:", log)
         self.socketio.emit('valve_data',  log)
 
     def update_store_data(self):
@@ -159,7 +159,6 @@ class Handler(Namespace):
         self.buttons_copy = buttons
 
     def on_button_press(self, data):
-        print(data)
         if data['header'] == 'update_general':
             self.update_general_copy(data['message'])
             return
@@ -176,5 +175,6 @@ class Handler(Namespace):
             self.update_store_data()
             return
 
+        print(data)
         log = Log(header=data['header'], message=data['message'])
         self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))

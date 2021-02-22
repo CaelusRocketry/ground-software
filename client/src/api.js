@@ -36,7 +36,8 @@ const generalUpdates = {
 
 const sendMessage = (header, message) => {
   const log = { header, message };
-  console.log("Sending: ");
+  console.log("Sending data to backend!");
+  console.log("Header: " + header);
   console.log(log);
   socket.emit("button_press", log);
 };
@@ -113,7 +114,9 @@ export const createSocketIoCallbacks = (store) => {
       store.dispatch(undoSoftAbortPressed({ pressed: false }));
     }
 
-    if (buttons.request.valve[0] !== undefined) {
+    if (buttons.request.valve[0] != undefined) {
+      console.log("VALVE REQUEST BUTTON WAS CLICKED!!!");
+      console.log(buttons.request.valve[0]);
       // Create / send the Packet
       header = "valve_request";
       message = {
@@ -131,7 +134,7 @@ export const createSocketIoCallbacks = (store) => {
       );
     }
 
-    if (buttons.request.sensor[0] !== undefined) {
+    if (buttons.request.sensor[0] != undefined) {
       // Create the Packet
       header = "sensor_request";
       message = {
