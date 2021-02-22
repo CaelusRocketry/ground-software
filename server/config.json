@@ -8,7 +8,6 @@
   },
   "sensors": {
     "list": {
-      "thermocouple": {},
       "pressure": {
         "PT-5": {
           "kalman_args": {
