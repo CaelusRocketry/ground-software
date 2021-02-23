@@ -48,8 +48,10 @@ export const sensorTypes = new Set();
 for (let type in sensors) {
   sensorTypes.add(type);
   sensorLocations[type] = new Set();
+  console.log("Added type: " + type);
   for (let loc in sensors[type]) {
     sensorLocations[type].add(loc);
+    console.log("Added location: " + loc);
   }
 }
 

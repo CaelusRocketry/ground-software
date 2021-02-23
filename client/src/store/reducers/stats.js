@@ -3,6 +3,7 @@ import duplicateJson from "../../lib/duplicateJson";
 import { sensors, valves } from "../../lib/locationNames";
 
 const dataCutoff = config.UI.data_cutoff;
+const messageCutoff = config.UI.message_cutoff;
 
 const configToStore = (data, baseValue) => {
   let storeData = {};
@@ -146,10 +147,25 @@ const updateData = (state = createInitialState(), action) => {
           timestamp: timestamp,
         },
       ];
+      if (state.general.responses.length > messageCutoff) {
+        state.general.responses.shift();
+      }
       return state;
 
     case "UPDATE_MODE":
       state.general.mode = action.data.message.mode;
+      return state;
+
+    case "UPDATE_GENERAL_COPY":
+      state.general = action.data;
+      return state;
+
+    case "UPDATE_SENSOR_COPY":
+      state.sensorData = action.data;
+      return state;
+
+    case "UPDATE_VALVE_COPY":
+      state.valveData = action.data;
       return state;
 
     default:

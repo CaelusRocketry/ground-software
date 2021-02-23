@@ -41,6 +41,9 @@ const buttonPressed = (state = createInitialState(), action) => {
       let { valve, actuation_type, priority } = action.data;
       state.actuation[valve] = [actuation_type, priority];
       return state;
+    case "UPDATE_BUTTONS":
+      state = action.buttons;
+      return state;
     default:
       return state;
   }

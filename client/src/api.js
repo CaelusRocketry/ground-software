@@ -7,12 +7,16 @@ import {
   generalPressed,
   requestPressed,
   undoSoftAbortPressed,
+  updateButtons,
   updateHeartbeat,
   updateHeartbeatStatus as updateHeartbeatStatusAction,
   updateMode,
   updateSensorData,
   updateStage,
   updateValveData,
+  updateGeneralCopy,
+  updateSensorCopy,
+  updateValveCopy,
 } from "./store/actions";
 
 const SOCKETIO_URL =
@@ -30,7 +34,20 @@ const generalUpdates = {
   response: addResponse,
 };
 
+const sendMessage = (header, message) => {
+  const log = { header, message };
+  console.log("Sending data to backend!");
+  console.log("Header: " + header);
+  console.log(log);
+  socket.emit("button_press", log);
+};
+
 export const createSocketIoCallbacks = (store) => {
+  socket.on('connect', () => {
+    sendMessage("store_data", {});
+  });
+
+  // UPDATES BACKEND REDUX STORE COPY UPON RECEIVING DATA
   socket.on("general", function (log) {
     const { header } = log;
     if (header in generalUpdates) {
@@ -38,23 +55,39 @@ export const createSocketIoCallbacks = (store) => {
     } else {
       console.log("Unknown general header");
     }
+    sendMessage('update_general', store.getState().data.general);
   });
-
   socket.on("sensor_data", function (log) {
     store.dispatch(updateSensorData(log));
+    sendMessage('update_sensors', store.getState().data.sensorData);
   });
-
   socket.on("valve_data", function (log) {
     store.dispatch(updateValveData(log));
+    sendMessage('update_valves', store.getState().data.valveData);
   });
 
-  const sendMessage = (header, message) => {
-    const log = { header, message };
-    console.log("Sending: ");
-    console.log(log);
-    socket.emit("button_press", log);
-  };
-
+  // INSERTS SAVED VALUES BACK INTO STORE UPON RECONNECT
+  socket.on('general_copy', function (log) {
+    if (log) {
+      store.dispatch(updateGeneralCopy(log));
+    }
+  });
+  socket.on('sensors_copy', function (log) {
+    if (log) {
+      store.dispatch(updateSensorCopy(log));
+    }
+  });
+  socket.on('valves_copy', function (log) {
+    if (log) {
+      store.dispatch(updateValveCopy(log));
+    }
+  });
+  socket.on('buttons_copy', function (log) {
+    if (log) {
+      store.dispatch(updateButtons(log));
+    }
+  });
+  
 // THE FORMAT FOR THESE MESSAGES SHOULD MATCH THE FORMAT LISTED IN FLIGHT SOFTWARE'S TELEMETRYCONTROL
 
   const handleChange = () => {
@@ -67,21 +100,23 @@ export const createSocketIoCallbacks = (store) => {
       header = "soft_abort";
       message = {};
       console.log("Sent message that soft abort has been pressed");
+      sendMessage(header, message);
       store.dispatch(abortPressed({ type: "soft", pressed: false }));
       // Reset the button back to unclicked
-      sendMessage(header, message);
     }
 
     if (buttons.abort.undosoft) {
       // Create / send the Packet
       header = "undo_soft_abort";
       message = {};
+      console.log("Sent message that soft abort has been undone");
       sendMessage(header, message);
-      // Reset the button back to unclicked
       store.dispatch(undoSoftAbortPressed({ pressed: false }));
     }
 
-    if (buttons.request.valve[0] !== undefined) {
+    if (buttons.request.valve[0] != undefined) {
+      console.log("VALVE REQUEST BUTTON WAS CLICKED!!!");
+      console.log(buttons.request.valve[0]);
       // Create / send the Packet
       header = "valve_request";
       message = {
@@ -99,7 +134,7 @@ export const createSocketIoCallbacks = (store) => {
       );
     }
 
-    if (buttons.request.sensor[0] !== undefined) {
+    if (buttons.request.sensor[0] != undefined) {
       // Create the Packet
       header = "sensor_request";
       message = {
@@ -149,8 +184,8 @@ export const createSocketIoCallbacks = (store) => {
       );
       console.log(store.getState());
     }
+    sendMessage('update_buttons', store.getState().buttonReducer);
   };
-
   store.subscribe(handleChange);
 };
 

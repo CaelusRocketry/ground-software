@@ -182,6 +182,7 @@
     "control_tasks": ["sensor", "telemetry", "valve", "stage", "pressure"]
   },
   "UI": {
-    "data_cutoff": 30
-  }  
+    "data_cutoff": 30,
+    "message_cutoff": 10
+  }
 }

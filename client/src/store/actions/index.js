@@ -27,6 +27,26 @@ export const updateCountdown = () => ({
   type: "UPDATE_COUNTDOWN",
 });
 
+export const updateGeneralCopy = (data) => ({
+  type: "UPDATE_GENERAL_COPY",
+  data
+});
+
+export const updateSensorCopy = (data) => ({
+  type: "UPDATE_SENSOR_COPY",
+  data
+});
+
+export const updateValveCopy = (data) => ({
+  type: "UPDATE_VALVE_COPY",
+  data
+});
+
+export const updateButtons = (buttons) => ({
+  type: "UPDATE_BUTTONS",
+  buttons
+});
+
 export const addResponse = (data) => ({
   type: "ADD_RESPONSE",
   data,
@@ -39,7 +59,7 @@ export const generalPressed = (data) => ({
 
 export const abortPressed = (data) => ({
   type: "ABORT_PRESSED",
-  data,
+  data
 });
 
 export const undoSoftAbortPressed = (data) => ({
