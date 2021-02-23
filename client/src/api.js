@@ -84,6 +84,8 @@ export const createSocketIoCallbacks = (store) => {
   socket.on('buttons_copy', function (log) {
     if (log) {
       store.dispatch(updateButtons(log));
+      console.log("BUTTONS STUFF: ");
+      console.log(log);
     }
   });
   
