@@ -160,7 +160,7 @@
         }
       }
     },
-    "address": "COM3",
+    "address": "/dev/ttyACM1",
     "baud": 115200,
     "send_interval": 0.5
   },
@@ -179,5 +179,8 @@
   "task_config": {
     "tasks": ["sensor", "telemetry", "valve"],
     "control_tasks": ["sensor", "telemetry", "valve", "stage", "pressure"]
-  }
+  },
+  "UI": {
+    "data_cutoff": 30
+  }  
 }

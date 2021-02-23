@@ -2,57 +2,12 @@ import React from "react";
 import { useSelector } from "react-redux";
 import getColor from "../lib/getColor";
 import stylizeName from "../lib/stylizeName";
+import {VALVE_MAP} from "../lib/pid"
 
 import Block from "./Block";
 import BlockHeader from "./BlockHeader";
 
-import PandidBoxed from "../images/pandidboxed.png";
-
-// CONSTANTS
-const VALVE_MAP = { 
-  1: "OPEN", 
-  0: "CLOSED" 
-};
-
-const SENSOR_TEXT_PADDING = {
-  "PT-5": {
-    x: (420/784) * 100 + '%', 
-    y: (22/850) * 100 + '%'
-  }, 
-  "PT-P": {
-    x: (635/784) * 100 + '%', 
-    y: (262/850) * 100 + '%'
-  }, 
-  "PT-7": {
-    x: (101/784) * 100 + '%', 
-    y: (385/850) * 100 + '%'
-  }, 
-  "PT-8": {
-    x: (548/784) * 100 + '%', 
-    y: (757/850) * 100 + '%'
-  }
-};
-
-const VALVE_TEXT_PADDING = {
-  "pressurization_valve": {
-    x: (404/784) * 100 + '%', 
-    y: (210/850) * 100 + '%'
-  }, 
-  "vent_valve": {
-    x: (33/784) * 100 + '%', 
-    y: (95/850) * 100 + '%'
-  }, 
-  "remote_drain_valve": {
-    x: (19/784) * 100 + '%', 
-    y: (598/850) * 100 + '%'
-  }, 
-  "main_propellant_valve": {
-    x: (317/784) * 100 + '%', 
-    y: (736/850) * 100 + '%'
-  }
-};
-
-const Data = () => {
+const DataBlock = () => {
   const data = useSelector((state) => (
     {
       sensorState: state.data.sensorData,
@@ -79,41 +34,9 @@ const Data = () => {
     timestamp: "s",
   };
 
+
   return (
     <center>
-      <BlockHeader colors={["#0c1f6d", 'black', "#8e0004", 'black']}>Sensors and Valves Diagram</BlockHeader>
-      <div style={{position: "relative", textAlign: "center"}} className="flexFont">
-        <img src={PandidBoxed} id="pandidboxed" alt="pandidboxed" style={{width: "100%"}}/>
-        {Object.keys(SENSOR_TEXT_PADDING).map((sensor) => (
-          <p 
-            style={{
-              position: "absolute",
-              left: SENSOR_TEXT_PADDING[sensor]["x"],
-              top: SENSOR_TEXT_PADDING[sensor]["y"],
-            }} 
-            className={"diagram"+sensor}
-          >
-            {getLast(data.sensorState["pressure"][sensor])}
-          </p>
-        ))}
-        {Object.keys(VALVE_TEXT_PADDING).map((valve) => (
-          <p 
-            style={{
-              position: "absolute",
-              left: VALVE_TEXT_PADDING[valve]["x"],
-              top: VALVE_TEXT_PADDING[valve]["y"],
-            }} 
-            className={"diagram"+valve}
-          >
-            {VALVE_MAP[data.valveState.solenoid[valve]]}
-          </p>
-        ))}
-      </div>
-      
-      <br />
-      <hr />
-      <br />
-
       <BlockHeader colors={['black']}>Sensors</BlockHeader>
 
       <Block>
@@ -194,4 +117,4 @@ const Data = () => {
   );
 };
 
-export default Data;
+export default DataBlock;
