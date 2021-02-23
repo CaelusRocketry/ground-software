@@ -116,3 +116,4 @@ node_modules/
 
 server/blackbox.txt
 server/config.json
+client/config.json
