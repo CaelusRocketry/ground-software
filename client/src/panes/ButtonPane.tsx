@@ -152,7 +152,7 @@ const ButtonPane = () => {
 
   const actuationTypeRef = useRef<HTMLSelectElement>(null);
   const actuationPriorityRef = useRef<HTMLSelectElement>(null);
-  const actuateValveTypeRef = useRef<HTMLSelectElement>(null);
+  // const actuateValveTypeRef = useRef<HTMLSelectElement>(null);
   const actuateValveLocationRef = useRef<HTMLSelectElement>(null);
   const [requestSensorType, setRequestSensorType] = useState<
     keyof SensorLocations
@@ -227,7 +227,7 @@ const ButtonPane = () => {
           onClick={() =>
             onClickedActuateValve(
               actuateValveLocationRef.current?.value,
-              actuateValveTypeRef.current?.value,
+              "solenoid", // actuateValveTypeRef.current?.value,
               actuationTypeRef.current?.value,
               actuationPriorityRef.current?.value
             )

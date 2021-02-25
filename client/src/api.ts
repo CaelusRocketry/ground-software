@@ -154,7 +154,7 @@ export function actuateValve({
     valve_type: valveType,
     valve_location: valveLocation,
     actuation_type: actuationType,
-    actuation_priority: actuationPriority,
+    priority: actuationPriority,
   });
 }
 
