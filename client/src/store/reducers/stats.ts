@@ -106,7 +106,7 @@ const actionsWithMessageAndTimestamp = [
   "ADD_RESPONSE",
 ];
 
-const consoleLogSensorData = true;
+const consoleLogSensorData = false;
 
 const updateData = (state = createInitialState(), action: DataAction) => {
   caelusLogger("update-data", action);
@@ -116,9 +116,7 @@ const updateData = (state = createInitialState(), action: DataAction) => {
   try {
     switch (action.type) {
       case "UPDATE_SENSOR_DATA":
-        for (let [type, locations] of Object.entries(
-          action.data.message.sensors
-        )) {
+        for (let [type, locations] of Object.entries(action.data.message)) {
           for (let [location, sensor] of Object.entries(locations)) {
             // eslint-disable-next-line
             const { measured, kalman, status } = sensor;
@@ -161,9 +159,7 @@ const updateData = (state = createInitialState(), action: DataAction) => {
         return state;
 
       case "UPDATE_VALVE_DATA":
-        for (let [type, locations] of Object.entries(
-          action.data.message.valves
-        )) {
+        for (let [type, locations] of Object.entries(action.data.message)) {
           for (let [location, valve] of Object.entries(locations)) {
             state.valveData.valves[type][location] = valve;
           }
@@ -173,8 +169,6 @@ const updateData = (state = createInitialState(), action: DataAction) => {
 
       case "UPDATE_HEARTBEAT":
         state.general.heartbeat_received = Date.now();
-        state.general.heartbeat = action.data.timestamp;
-        state.general.mode = action.data.message.mode;
         return state;
 
       case "UPDATE_HEARTBEAT_STATUS":
@@ -201,7 +195,7 @@ const updateData = (state = createInitialState(), action: DataAction) => {
 
         state.general.responses.push({
           header,
-          message: action.data.message,
+          message: action.data,
           timestamp: action.data.timestamp,
         });
 
@@ -224,13 +218,15 @@ const updateData = (state = createInitialState(), action: DataAction) => {
         return state;
 
       case "UPDATE_MODE":
-        state.general.mode = action.data.message.mode;
+        state.general.mode = action.data.mode;
         return state;
 
       default:
         return state;
     }
   } catch (err) {
+    console.error("UPDATE DATA ERROR: ", err);
+
     caelusLogger("update-data", { err, state, action }, "error");
     return state;
   }

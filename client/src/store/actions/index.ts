@@ -11,10 +11,8 @@ export type UpdateSensorDataAction = {
   data: {
     timestamp: number;
     message: {
-      sensors: {
-        [type: string]: {
-          [location: string]: SensorData;
-        };
+      [type: string]: {
+        [location: string]: SensorData;
       };
     };
   };
@@ -33,10 +31,8 @@ export type UpdateValveDataAction = {
   type: "UPDATE_VALVE_DATA";
   data: {
     message: {
-      valves: {
-        [type: string]: {
-          [location: string]: ValveData;
-        };
+      [type: string]: {
+        [location: string]: ValveData;
       };
     };
     timestamp: number;
@@ -53,10 +49,8 @@ export const updateValveData = (
 export type UpdateHeartbeatAction = {
   type: "UPDATE_HEARTBEAT";
   data: {
-    timestamp: number;
-    message: {
-      mode: string;
-    };
+    header: "heartbeat";
+    status: "ok";
   };
 };
 
@@ -247,9 +241,8 @@ export type ButtonAction =
 export type UpdateModeAction = {
   type: "UPDATE_MODE";
   data: {
-    message: {
-      mode: string;
-    };
+    header: string;
+    mode: string;
   };
 };
 

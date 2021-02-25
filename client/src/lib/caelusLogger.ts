@@ -1,4 +1,8 @@
-const silencedCategories = new Set(["duplicate-json", "update-data"]);
+const silencedCategories = new Set([
+  "duplicate-json",
+  "update-data",
+  "telemetry/send",
+]);
 
 export type LogCategory =
   | "duplicate-json"
