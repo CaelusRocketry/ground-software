@@ -1,5 +1,5 @@
 import { Store } from "redux";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 import config from "./config.json";
 import caelusLogger from "./lib/caelusLogger";
 import {
