@@ -6,6 +6,7 @@ import { HeartbeatStatus, Stage, TelemetryResponse } from "../../types";
 import { DataAction } from "../actions";
 
 const dataCutoff = config.UI.data_cutoff;
+const messageCutoff = config.UI.message_cutoff;
 
 const createValveStore = (valveConfig: typeof valves): ValveStore["valves"] => {
   let data: any = {};
@@ -105,6 +106,8 @@ const actionsWithMessageAndTimestamp = [
   "ADD_RESPONSE",
 ];
 
+const consoleLogSensorData = false;
+
 const updateData = (state = createInitialState(), action: DataAction) => {
   caelusLogger("update-data", action);
 
@@ -120,11 +123,13 @@ const updateData = (state = createInitialState(), action: DataAction) => {
             // eslint-disable-next-line
             const { measured, kalman, status } = sensor;
 
-            console.log("SENSOR DATA");
-            console.log(type);
-            console.log(location);
-            console.log(state.sensorData.sensors[type]);
-            console.log(state.sensorData.sensors[type][location]);
+            if (consoleLogSensorData) {
+              console.log("SENSOR DATA");
+              console.log(type);
+              console.log(location);
+              console.log(state.sensorData.sensors[type]);
+              console.log(state.sensorData.sensors[type][location]);
+            }
 
             if (!(type in state.sensorData.sensors)) {
               state.sensorData.sensors[type] = {};
@@ -198,6 +203,22 @@ const updateData = (state = createInitialState(), action: DataAction) => {
           timestamp: action.data.timestamp,
         });
 
+        if (state.general.responses.length > messageCutoff) {
+          state.general.responses.shift();
+        }
+
+        return state;
+
+      case "UPDATE_GENERAL_COPY":
+        state.general = action.data;
+        return state;
+
+      case "UPDATE_SENSOR_COPY":
+        state.sensorData = action.data;
+        return state;
+
+      case "UPDATE_VALVE_COPY":
+        state.valveData = action.data;
         return state;
 
       case "UPDATE_MODE":

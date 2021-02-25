@@ -1,0 +1,98 @@
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+
+import BlockHeader from "./BlockHeader";
+import { VALVE_MAP, PADDING } from "../lib/pid";
+import { CaelusState } from "../store/reducers";
+
+const PID = () => {
+  const data = useSelector((state: CaelusState) => ({
+    sensorState: state.data.sensorData,
+    valveState: state.data.valveData,
+    heartbeatState: state.data.general.heartbeat,
+    heartbeatStatus:
+      state.data.general.heartbeat_status === undefined
+        ? []
+        : [["", state.data.general.heartbeat_status]],
+    mode: state.data.general.mode,
+  }));
+
+  const getLast: <T>(arr: T[]) => T | undefined = (arr) =>
+    arr.length > 0 ? arr[arr.length - 1] : undefined;
+  const sensorExists = (
+    sensorType: keyof typeof data.sensorState.sensors,
+    sensorLoc: string
+  ) =>
+    sensorType in data.sensorState &&
+    sensorLoc in data.sensorState.sensors[sensorType];
+  const valveExists = (valveLoc: string) =>
+    valveLoc in data.valveState.valves.solenoid;
+
+  const [diagram, setDiagram] = useState<{ type: keyof typeof PADDING }>({
+    type: "NITROUS",
+  });
+
+  return (
+    <div style={{ textAlign: "center" }}>
+      <BlockHeader colors={["#0c1f6d", "black", "#8e0004", "black"]}>
+        Sensors and Valves Diagram
+      </BlockHeader>
+      <select
+        onChange={(e) => {
+          // @ts-expect-error
+          setDiagram({ type: e.target.value });
+        }}
+      >
+        <option value="NITROUS">Nitrous</option>
+        <option value="ETHANOL">Ethanol</option>
+        <option value="FULL">Full</option>
+      </select>
+
+      <div
+        style={{ position: "relative", textAlign: "center" }}
+        className="flexFont"
+      >
+        <img
+          src={PADDING[diagram.type]["IMAGE"]["SRC"]}
+          id={PADDING[diagram.type]["IMAGE"]["ALT"]}
+          alt={PADDING[diagram.type]["IMAGE"]["ALT"]}
+          style={{ width: "100%" }}
+        />
+        {Object.keys(PADDING[diagram.type]["SENSOR"]).map((sensor) => (
+          <p
+            style={{
+              position: "absolute",
+              // @ts-expect-error
+              left: PADDING[diagram.type].SENSOR[sensor]["x"] * 100 + "%",
+              // @ts-expect-error
+              top: PADDING[diagram.type].SENSOR[sensor]["y"] * 100 + "%",
+            }}
+            className={"diagram" + sensor}
+          >
+            {sensorExists("pressure", sensor)
+              ? getLast(data.sensorState.sensors.pressure[sensor])
+              : ""}
+          </p>
+        ))}
+        {Object.entries(PADDING[diagram.type].VALVE).map(([loc, valve]) => (
+          <p
+            style={{
+              position: "absolute",
+              left: valve.x * 100 + "%",
+              top: valve.y * 100 + "%",
+            }}
+            className={"diagram" + valve}
+          >
+            {valveExists(loc) &&
+              // @ts-expect-error
+              VALVE_MAP[data.valveState.valves.solenoid[valve]]}
+          </p>
+        ))}
+      </div>
+      <br />
+      <br />
+    </div>
+  );
+};
+
+export default PID;

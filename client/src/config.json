@@ -17,22 +17,28 @@
             "kalman_value": 1000
           },
           "boundaries": {
-            "safe": [0, 800],
-            "warn": [-500, 900]
+            "waiting": {
+              "safe": [-20, 50],
+              "warn": [-30, 75],
+              "critical": [-50, 100]
+            },
+            "pressurization": {
+              "safe": [693, 806],
+              "warn": [637, 862],
+              "critical": [0, 1000]
+            },
+            "autosequence": {
+              "safe": [100, 500],
+              "warn": [50, 600],
+              "critical": [0, 800]
+            },
+            "postburn": {
+              "safe": [0, 1000],
+              "warn": [0, 1001],
+              "critical": [0, 1002]
+            }
           },
           "pin": 14
-        },
-        "PT-7": {
-          "kalman_args": {
-            "process_variance": 0.01,
-            "measurement_variance": 0.02,
-            "kalman_value": 1000
-          },
-          "boundaries": {
-            "safe": [0, 800],
-            "warn": [-500, 900]
-          },
-          "pin": 15
         },
         "PT-P": {
           "kalman_args": {
@@ -41,8 +47,56 @@
             "kalman_value": 1000
           },
           "boundaries": {
-            "safe": [0, 800],
-            "warn": [-500, 900]
+            "waiting": {
+              "safe": [693, 806],
+              "warn": [637, 862],
+              "critical": [0, 1000]
+            },
+            "pressurization": {
+              "safe": [693, 806],
+              "warn": [637, 862],
+              "critical": [0, 1000]
+            },
+            "autosequence": {
+              "safe": [100, 500],
+              "warn": [50, 600],
+              "critical": [0, 800]
+            },
+            "postburn": {
+              "safe": [0, 1000],
+              "warn": [0, 1001],
+              "critical": [0, 1002]
+            }
+          },
+          "pin": 15
+        },
+        "PT-7": {
+          "kalman_args": {
+            "process_variance": 0.01,
+            "measurement_variance": 0.02,
+            "kalman_value": 1000
+          },
+          "boundaries": {
+            "waiting": {
+              "safe": [-20, 50],
+              "warn": [-30, 75],
+              "critical": [-50, 100]
+            },
+            "pressurization": {
+              "safe": [693, 806],
+              "warn": [637, 862],
+              "critical": [0, 1000]
+            },
+            "autosequence": {
+              "safe": [100, 500],
+              "warn": [50, 600],
+              "critical": [0, 800]
+            },
+            "postburn": {
+              "safe": [0, 1000],
+              "warn": [0, 1001],
+              "critical": [0, 1002]
+            }
           },
           "pin": 16
         },
@@ -53,8 +107,26 @@
             "kalman_value": 1000
           },
           "boundaries": {
-            "safe": [0, 800],
-            "warn": [-500, 900]
+            "waiting": {
+              "safe": [-20, 50],
+              "warn": [-30, 75],
+              "critical": [-50, 100]
+            },
+            "pressurization": {
+              "safe": [-20, 50],
+              "warn": [-30, 75],
+              "critical": [-50, 100]
+            },
+            "autosequence": {
+              "safe": [100, 800],
+              "warn": [50, 900],
+              "critical": [0, 1000]
+            },
+            "postburn": {
+              "safe": [0, 1000],
+              "warn": [0, 1001],
+              "critical": [0, 1002]
+            }
           },
           "pin": 17
         },
@@ -199,13 +271,23 @@
   "valves": {
     "list": {
       "solenoid": {
-        "pressure_relief": {
-          "pin": 4,
+        "pressurization_valve": {
+          "pin": 5,
+          "natural": "CLOSED",
+          "special": true
+        },
+        "vent_valve": {
+          "pin": 6,
           "natural": "OPEN",
           "special": false
         },
+        "remote_drain_valve": {
+          "pin": 7,
+          "natural": "OPEN",
+          "special": true
+        },
         "main_propellant_valve": {
-          "pin": 5,
+          "pin": 8,
           "natural": "CLOSED",
           "special": true
         }
@@ -223,7 +305,16 @@
   "timer": {
     "delay": 0.001
   },
+  "pressure_control": {
+    "active_stages": ["pressurization", "autosequence", "postburn"]
+  },
+  "arduino_type": "real",
+  "task_config": {
+    "tasks": ["sensor", "telemetry", "valve"],
+    "control_tasks": ["sensor", "telemetry", "valve", "stage", "pressure"]
+  },
   "UI": {
-    "data_cutoff": 30
+    "data_cutoff": 30,
+    "message_cutoff": 10
   }
 }

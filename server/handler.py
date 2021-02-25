@@ -55,6 +55,12 @@ class Handler(Namespace):
         
         self.connect(ip, port)
         
+        self.general_copy = None
+        self.sensors_copy = None
+        self.valves_copy = None
+        self.buttons_copy = None
+
+    ## telemetry methods
 
     def connect(self, ip, port):
         # Server-side socket
@@ -178,11 +184,41 @@ class Handler(Namespace):
         log_send('valve', log)
         self.socketio.emit('valve_data', log, broadcast=True)
 
+    def update_store_data(self):
+        self.socketio.emit('general_copy', self.general_copy)
+        self.socketio.emit('sensors_copy', self.sensors_copy)
+        self.socketio.emit('valves_copy', self.valves_copy)
+        self.socketio.emit('buttons_copy', self.buttons_copy)
+
+    ## store copy methods
+    def update_general_copy(self, general):
+        self.general_copy = general
+
+    def update_sensors_copy(self, sensors):
+        self.sensors_copy = sensors
+
+    def update_valves_copy(self, valves):
+        self.valves_copy = valves
+
+    def update_buttons_copy(self, buttons):
+        self.buttons_copy = buttons
 
     def on_button_press(self, data):
         log_send('button', data)
-        log = Log(header=data['header'], message=data['message'])
-        self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
+        if data['header'] == 'update_general':
+            self.update_general_copy(data['message'])
+        elif data['header'] == 'update_sensors':
+            self.update_sensors_copy(data['message'])
+        elif data['header'] == 'update_valves':
+            self.update_valves_copy(data['message'])
+        elif data['header'] == 'update_buttons':
+            self.update_buttons_copy(data['message'])
+        elif data['header'] == 'store_data':
+            self.update_store_data()
+        else:
+            print(data)
+            log = Log(header=data['header'], message=data['message'])
+            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
 
 hidden_log_types = set() # {"general", "sensor", "valve", "button"}
 def log_send(type, log):

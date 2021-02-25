@@ -55,10 +55,12 @@ for (let type of Object.keys(sensors)) {
   sensorTypes.add(type);
   // @ts-ignore
   sensorLocations[type] = new Set();
+  console.log("Added type: " + type);
   // @ts-ignore
   for (let loc in sensors[type]) {
     // @ts-ignore
     sensorLocations[type].add(loc);
+    console.log("Added location: " + loc);
   }
 }
 

@@ -4,15 +4,18 @@ import config from "./config.json";
 import caelusLogger from "./lib/caelusLogger";
 import {
   addResponse,
+  UpdateGeneralCopy,
   updateHeartbeat,
   UpdateHeartbeatAction,
   updateHeartbeatStatus as updateHeartbeatStatusAction,
   updateMode,
   UpdateModeAction,
+  UpdateSensorCopy,
   updateSensorData,
   UpdateSensorDataAction,
   updateStage,
   UpdateStageAction,
+  UpdateValveCopy,
   updateValveData,
   UpdateValveDataAction,
 } from "./store/actions";
@@ -60,6 +63,12 @@ export type ResponseLog = {
 export type Log = HeartbeatLog | StageLog | ModeLog | ResponseLog;
 
 export function createSocketIoCallbacks(store: Store<CaelusState>) {
+  socket.on("connect", () => {
+    sendMessage("store_data", {});
+  });
+
+  // UPDATES BACKEND REDUX STORE COPY UPON RECEIVING DATA
+
   socket.on("general", (log: Log) => {
     switch (log.header) {
       case "heartbeat":
@@ -76,15 +85,37 @@ export function createSocketIoCallbacks(store: Store<CaelusState>) {
         break;
       default:
         caelusLogger("telemetry", "Unknown general header", "warn");
+        break;
     }
+
+    sendMessage("update_general", store.getState().data.general);
   });
 
   socket.on("sensor_data", (log: UpdateSensorDataAction["data"]) => {
     store.dispatch(updateSensorData(log));
+    sendMessage("update_sensors", store.getState().data.sensorData);
   });
 
   socket.on("valve_data", (log: UpdateValveDataAction["data"]) => {
     store.dispatch(updateValveData(log));
+    sendMessage("update_valves", store.getState().data.valveData);
+  });
+
+  // INSERTS SAVED VALUES BACK INTO STORE UPON RECONNECT
+  socket.on("general_copy", function (log: UpdateGeneralCopy) {
+    if (log) {
+      store.dispatch({ type: "GENERAL_COPY", data: log });
+    }
+  });
+  socket.on("sensors_copy", function (log: UpdateSensorCopy) {
+    if (log) {
+      store.dispatch({ type: "UPDATE_SENSOR_COPY", data: log });
+    }
+  });
+  socket.on("valves_copy", function (log: UpdateValveCopy) {
+    if (log) {
+      store.dispatch({ type: "UPDATE_VALVE_COPY", data: log });
+    }
   });
 }
 
@@ -147,8 +178,7 @@ export function requestSensorData({
   type: string;
   location: string;
 }) {
-  const header = "sensor_request";
-  sendMessage(header, {
+  sendMessage("sensor_request", {
     sensor_type: type,
     sensor_location: location,
   });

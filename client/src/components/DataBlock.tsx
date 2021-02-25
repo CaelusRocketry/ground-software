@@ -1,69 +1,23 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import camelize from "../lib/camelize";
 import getColor from "../lib/getColor";
-import stylizeName from "../lib/camelize";
+import { VALVE_MAP } from "../lib/pid";
 import { CaelusState } from "../store/reducers";
-
 import Block from "./Block";
 import BlockHeader from "./BlockHeader";
-import PandidBoxed from "../images/pandidboxed.png";
 
-const VALVE_MAP = {
-  1: "OPEN",
-  0: "CLOSED",
-};
-
-const SENSOR_TEXT_PADDING = {
-  "PT-5": {
-    x: (420 / 784) * 100 + "%",
-    y: (22 / 850) * 100 + "%",
-  },
-  "PT-P": {
-    x: (635 / 784) * 100 + "%",
-    y: (262 / 850) * 100 + "%",
-  },
-  "PT-7": {
-    x: (101 / 784) * 100 + "%",
-    y: (385 / 850) * 100 + "%",
-  },
-  "PT-8": {
-    x: (548 / 784) * 100 + "%",
-    y: (757 / 850) * 100 + "%",
-  },
-};
-
-const VALVE_TEXT_PADDING = {
-  pressurization_valve: {
-    x: (404 / 784) * 100 + "%",
-    y: (210 / 850) * 100 + "%",
-  },
-  vent_valve: {
-    x: (33 / 784) * 100 + "%",
-    y: (95 / 850) * 100 + "%",
-  },
-  remote_drain_valve: {
-    x: (19 / 784) * 100 + "%",
-    y: (598 / 850) * 100 + "%",
-  },
-  main_propellant_valve: {
-    x: (317 / 784) * 100 + "%",
-    y: (736 / 850) * 100 + "%",
-  },
-};
-
-const Data = () => {
-  const data = useSelector((state: CaelusState) => {
-    return {
-      sensorState: state.data.sensorData,
-      valveState: state.data.valveData,
-      heartbeatState: state.data.general.heartbeat,
-      heartbeatStatus:
-        state.data.general.heartbeat_status === undefined
-          ? []
-          : [["", state.data.general.heartbeat_status]],
-      mode: state.data.general.mode,
-    };
-  });
+const DataBlock = () => {
+  const data = useSelector((state: CaelusState) => ({
+    sensorState: state.data.sensorData,
+    valveState: state.data.valveData,
+    heartbeatState: state.data.general.heartbeat,
+    heartbeatStatus:
+      state.data.general.heartbeat_status === undefined
+        ? []
+        : [["", state.data.general.heartbeat_status]],
+    mode: state.data.general.mode,
+  }));
 
   const blockStyle = "rounded-lg m-1 p-4 bg-gray-100";
   const abortStyle = "animate-ping rounded-lg m-1 p-4 bg-pink-300";
@@ -81,49 +35,6 @@ const Data = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <BlockHeader colors={["#0c1f6d", "black", "#8e0004", "black"]}>
-        Sensors and Valves Diagram
-      </BlockHeader>
-      <div
-        style={{ position: "relative", textAlign: "center" }}
-        className="flexFont"
-      >
-        <img
-          src={PandidBoxed}
-          id="pandidboxed"
-          alt="pandidboxed"
-          style={{ width: "100%" }}
-        />
-        {Object.entries(SENSOR_TEXT_PADDING).map(([sensor, padding]) => (
-          <p
-            style={{
-              position: "absolute",
-              left: padding.x,
-              top: padding.y,
-            }}
-            className={"diagram" + sensor}
-          >
-            {getLast(data.sensorState.sensors.pressure[sensor])}
-          </p>
-        ))}
-        {Object.entries(VALVE_TEXT_PADDING).map(([valve, padding]) => (
-          <p
-            style={{
-              position: "absolute",
-              left: padding.x,
-              top: padding.y,
-            }}
-            className={"diagram" + valve}
-          >
-            {VALVE_MAP[data.valveState.valves.solenoid[valve]]}
-          </p>
-        ))}
-      </div>
-
-      <br />
-      <hr />
-      <br />
-
       <BlockHeader colors={["black"]}>Sensors</BlockHeader>
       <Block>
         <div>
@@ -135,7 +46,7 @@ const Data = () => {
         </div>
         {Object.entries(data.sensorState.sensors).map(([type, locations]) => (
           <div key={type}>
-            <h4 className={groupHeaderStyle}>{stylizeName(type)}</h4>
+            <h4 className={groupHeaderStyle}>{camelize(type)}</h4>
 
             <div className="font-mono">
               {Object.keys(locations).map((loc) => {
@@ -147,7 +58,7 @@ const Data = () => {
                     }}
                     key={type + "." + loc}
                   >
-                    {stylizeName(loc) + " "}
+                    {camelize(loc) + " "}
                     {getLast(locations[loc])?.kalman}{" "}
                     {
                       /*@ts-ignore*/
@@ -162,7 +73,7 @@ const Data = () => {
         ))}
       </Block>
 
-      <br></br>
+      <br />
 
       <BlockHeader colors={["black"]}>Valves</BlockHeader>
       <Block>
@@ -175,11 +86,11 @@ const Data = () => {
 
         {Object.keys(data.valveState.valves).map((valve, idx) => (
           <div key={idx}>
-            <h4 className={groupHeaderStyle}>{stylizeName(valve)}</h4>
+            <h4 className={groupHeaderStyle}>{camelize(valve)}</h4>
             <div className="font-mono">
               {Object.keys(data.valveState.valves[valve]).map((loc) => (
                 <p key={valve + "." + loc}>
-                  {stylizeName(loc)}:{" "}
+                  {camelize(loc)}:{" "}
                   {VALVE_MAP[data.valveState.valves.solenoid[loc]]}
                 </p>
               ))}
@@ -205,4 +116,4 @@ const Data = () => {
   );
 };
 
-export default Data;
+export default DataBlock;

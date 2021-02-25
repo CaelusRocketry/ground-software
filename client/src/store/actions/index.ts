@@ -1,3 +1,5 @@
+import { CaelusState } from "../reducers";
+
 export type SensorData = {
   measured: number;
   kalman: number;
@@ -122,6 +124,36 @@ export const addResponse = (
   data,
 });
 
+export type UpdateGeneralCopy = {
+  type: "UPDATE_GENERAL_COPY";
+  data: CaelusState["data"]["general"];
+};
+
+export type UpdateValveCopy = {
+  type: "UPDATE_VALVE_COPY";
+  data: CaelusState["data"]["valveData"];
+};
+
+export type UpdateSensorCopy = {
+  type: "UPDATE_SENSOR_COPY";
+  data: CaelusState["data"]["sensorData"];
+};
+
+export const updateGeneralCopy = (data: UpdateGeneralCopy["data"]) => ({
+  type: "UPDATE_GENERAL_COPY",
+  data,
+});
+
+export const updateSensorCopy = (data: UpdateSensorCopy["data"]) => ({
+  type: "UPDATE_SENSOR_COPY",
+  data,
+});
+
+export const updateValveCopy = (data: UpdateValveCopy["data"]) => ({
+  type: "UPDATE_VALVE_COPY",
+  data,
+});
+
 export type DataAction =
   | UpdateCountdownAction
   | UpdateHeartbeatAction
@@ -130,6 +162,9 @@ export type DataAction =
   | UpdateSensorDataAction
   | UpdateStageAction
   | UpdateValveDataAction
+  | UpdateGeneralCopy
+  | UpdateValveCopy
+  | UpdateSensorCopy
   | AddResponseAction;
 
 export type GeneralPressedAction = {

@@ -79,10 +79,11 @@ const Graph = (props: GraphProps) => {
 
   // RETURN RANGE FOR SENSOR/VALVE READINGS
   const findRange = (type: SensorType, loc: string) => [
-    // @ts-ignore
-    sensors[type][loc].boundaries.safe[0],
-    // @ts-ignore
-    sensors[type][loc].boundaries.warn[1],
+    // TODO: Use correct boundaries depending on state
+    0,
+    100,
+    // sensors[type][loc].boundaries.safe[0],
+    // sensors[type][loc].boundaries.warn[1],
   ];
 
   // DROPDOWN OPTIONS
