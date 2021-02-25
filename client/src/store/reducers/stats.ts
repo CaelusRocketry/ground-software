@@ -106,7 +106,7 @@ const actionsWithMessageAndTimestamp = [
   "ADD_RESPONSE",
 ];
 
-const consoleLogSensorData = false;
+const consoleLogSensorData = true;
 
 const updateData = (state = createInitialState(), action: DataAction) => {
   caelusLogger("update-data", action);
@@ -125,10 +125,12 @@ const updateData = (state = createInitialState(), action: DataAction) => {
 
             if (consoleLogSensorData) {
               console.log("SENSOR DATA");
-              console.log(type);
-              console.log(location);
-              console.log(state.sensorData.sensors[type]);
-              console.log(state.sensorData.sensors[type][location]);
+              console.log(
+                type,
+                location,
+                state.sensorData.sensors[type][location]
+              );
+              console.log({ measured, kalman });
             }
 
             if (!(type in state.sensorData.sensors)) {
