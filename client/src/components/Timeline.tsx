@@ -1,6 +1,5 @@
-// Adoped from https://github.com/tverdohleb/react-trivial-timeline [MIT]
+// Adapted from https://github.com/tverdohleb/react-trivial-timeline [MIT]
 
-import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
 
@@ -18,15 +17,18 @@ const StyledItem = styled.li`
   position: relative;
 `;
 
-const StyledIcon = styled.div`
+const StyledIcon = styled.div<{
+  lineColor?: string;
+  iconFill?: string;
+}>`
   border: ${(props) => {
-    if (props.lineColor === null) {
+    if (props.lineColor == null) {
       return "none";
     }
     return `2px solid ${props.lineColor}`;
   }};
   padding: ${(props) => {
-    if (props.lineColor === null) {
+    if (props.lineColor == null) {
       return "2px";
     }
     return "0px";
@@ -39,9 +41,14 @@ const StyledIcon = styled.div`
   height: 1em;
 `;
 
-const Interval = ({ interval, separator }) => {
+type IntervalProps = {
+  interval: string | { start: string; end: string };
+  separator: string | React.ReactNode;
+};
+
+const Interval = ({ interval, separator }: IntervalProps) => {
   if (typeof interval === "string") {
-    return interval;
+    return <>{interval}</>;
   }
   if (interval.start && interval.end) {
     return (
@@ -70,9 +77,10 @@ const Interval = ({ interval, separator }) => {
       </>
     );
   }
-  return "";
+  return null;
 };
-const StyledContent = styled.div`
+
+const StyledContent = styled.div<{ lineColor?: string }>`
   position: relative;
   margin-left: 2.5em;
   :before {
@@ -86,7 +94,8 @@ const StyledContent = styled.div`
     height: 100%;
   }
 `;
-const StyledInterval = styled.p`
+
+const StyledInterval = styled.p<{ background: string }>`
   margin: 0 0 0 1em;
   padding: 0.25em 1em;
   background: ${(props) => props.background};
@@ -94,32 +103,41 @@ const StyledInterval = styled.p`
   border-radius: 5px;
 `;
 
-const StyledTitle = styled(({ tag, children, ...props }) =>
+const StyledTitle = styled(({ tag = "h1", children, ...props }) =>
   e(tag, props, children)
 )`
   margin-top: 0;
 `;
-StyledTitle.defaultProps = {
-  tag: "h1",
-};
 
 const StyledDescription = styled.div``;
-const StyledSubtitle = styled(({ tag, children, ...props }) =>
+const StyledSubtitle = styled(({ tag = "h4", children, ...props }) =>
   e(tag, props, children)
 )``;
-StyledSubtitle.defaultProps = {
-  tag: "h4",
-};
+
 const StyledIntervalContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin: 1em 0;
   align-items: center;
 `;
-export const Timeline = ({ lineColor, intervalSeparator, children }) => {
+
+type TimelineProps = {
+  lineColor?: string;
+  intervalSeparator?: React.ReactNode;
+  children?: React.ReactNode;
+};
+
+export const Timeline = ({
+  lineColor = "#eeeeee",
+  intervalSeparator = <>&nbsp;&mdash; </>,
+  children = null,
+}: TimelineProps) => {
   const childrenWithProps = React.Children.map(children, (child) =>
+    // @ts-expect-error
     React.cloneElement(child, {
+      // @ts-expect-error
       lineColor: child.props.lineColor || lineColor,
+      // @ts-expect-error
       intervalSeparator: child.props.intervalSeparator || intervalSeparator,
     })
   );
@@ -129,36 +147,39 @@ export const Timeline = ({ lineColor, intervalSeparator, children }) => {
     </StyledContainer>
   );
 };
-Timeline.propTypes = {
-  lineColor: PropTypes.string,
-  intervalSeparator: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  children: PropTypes.node,
-};
-Timeline.defaultProps = {
-  intervalSeparator: <>&nbsp;&mdash; </>,
-  children: null,
+
+type EventProps = {
+  title: string;
+  subtitle?: string;
+  interval?: string | { start: string; end: string };
+  intervalSeparator?: string | React.ReactNode;
+  children?: React.ReactNode;
+  lineColor?: string;
+  titleTag?: string;
+  subtitleTag?: string;
+  intervalColor?: string;
+  intervalBackground: string;
+  iconFill?: string;
+  iconOutline?: string | null;
 };
 
 export const Event = ({
   title,
-  subtitle,
-  interval,
-  children,
+  subtitle = "",
+  interval = "Pending",
+  children = null,
   lineColor,
-  titleTag,
-  subtitleTag,
-  intervalColor,
-  intervalSeparator,
+  titleTag = "h1",
+  subtitleTag = "h4",
+  intervalColor = "#000000",
+  intervalSeparator = <>&nbsp;&mdash; </>,
   intervalBackground,
-  iconFill,
-  iconOutline,
-}) => (
+  iconFill = "transparent",
+  iconOutline = null,
+}: EventProps) => (
   <StyledItem>
     <StyledIntervalContainer>
-      <StyledIcon
-        lineColor={iconOutline === null ? null : iconOutline || lineColor}
-        iconFill={iconFill}
-      />
+      <StyledIcon lineColor={iconOutline ?? lineColor} iconFill={iconFill} />
       <StyledInterval color={intervalColor} background={intervalBackground}>
         <Interval interval={interval} separator={intervalSeparator} />
       </StyledInterval>
@@ -174,35 +195,3 @@ export const Event = ({
     </StyledContent>
   </StyledItem>
 );
-
-Event.propTypes = {
-  title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string,
-  interval: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  intervalSeparator: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  children: PropTypes.node,
-  lineColor: PropTypes.string,
-  titleTag: PropTypes.string,
-  subtitleTag: PropTypes.string,
-  intervalColor: PropTypes.string,
-  intervalBackground: PropTypes.string,
-  iconFill: PropTypes.string,
-  iconOutline: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([null, undefined]),
-  ]),
-};
-
-Event.defaultProps = {
-  subtitle: "",
-  interval: "Pending",
-  children: null,
-  titleTag: "h1",
-  subtitleTag: "h4",
-  intervalBackground: "#cccccc",
-  intervalColor: "#000000",
-  iconFill: "transparent",
-  iconOutline: undefined,
-  lineColor: "#000000",
-  intervalSeparator: <>&nbsp;&mdash; </>,
-};

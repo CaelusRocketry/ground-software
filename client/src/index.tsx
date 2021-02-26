@@ -27,8 +27,8 @@ export function countDownStart() {
       clearInterval(countDownInterval);
     }
   }, 1000);
-  clearInterval(countDownStart);
-};
+  clearInterval(countDownInterval);
+}
 
 ReactDOM.render(
   <Provider store={store}>

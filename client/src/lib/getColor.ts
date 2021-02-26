@@ -1,4 +1,6 @@
-const getColor = (status) => {
+import caelusLogger from "./caelusLogger";
+
+const getColor = (status: any) => {
   if (status.length === 0) {
     return "black";
   }
@@ -10,6 +12,7 @@ const getColor = (status) => {
     case 1:
       return "red";
     default:
+      caelusLogger("heartbeat-status", "Invalid heartbeat status", "warn");
       return "blue";
   }
 };
