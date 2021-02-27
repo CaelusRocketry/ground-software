@@ -4,22 +4,26 @@ import config from "./config.json";
 import caelusLogger from "./lib/caelusLogger";
 import {
   addResponse,
+  updateGeneralCopy,
   UpdateGeneralCopy,
   updateHeartbeat,
   UpdateHeartbeatAction,
   updateHeartbeatStatus as updateHeartbeatStatusAction,
   updateMode,
   UpdateModeAction,
+  updateSensorCopy,
   UpdateSensorCopy,
   updateSensorData,
   UpdateSensorDataAction,
   updateStage,
   UpdateStageAction,
+  updateValveCopy,
   UpdateValveCopy,
   updateValveData,
   UpdateValveDataAction,
 } from "./store/actions";
 import { CaelusState } from "./store/reducers";
+import { GeneralStore, SensorStore, ValveStore } from "./store/reducers/stats";
 
 const SOCKETIO_URL =
   "http://" +
@@ -102,19 +106,19 @@ export function createSocketIoCallbacks(store: Store<CaelusState>) {
   });
 
   // INSERTS SAVED VALUES BACK INTO STORE UPON RECONNECT
-  socket.on("general_copy", function (log: UpdateGeneralCopy) {
+  socket.on("general_copy", function (log: GeneralStore) {
     if (log) {
-      store.dispatch({ type: "GENERAL_COPY", data: log });
+      store.dispatch(updateGeneralCopy(log));
     }
   });
-  socket.on("sensors_copy", function (log: UpdateSensorCopy) {
+  socket.on("sensors_copy", function (log: SensorStore) {
     if (log) {
-      store.dispatch({ type: "UPDATE_SENSOR_COPY", data: log });
+      store.dispatch(updateSensorCopy(log));
     }
   });
-  socket.on("valves_copy", function (log: UpdateValveCopy) {
+  socket.on("valves_copy", function (log: ValveStore) {
     if (log) {
-      store.dispatch({ type: "UPDATE_VALVE_COPY", data: log });
+      store.dispatch(updateValveCopy(log));
     }
   });
 }
