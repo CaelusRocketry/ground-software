@@ -22,6 +22,8 @@ const DataBlock = () => {
   const blockStyle = "rounded-lg m-1 p-4 bg-gray-100";
   const abortStyle = "animate-ping rounded-lg m-1 p-4 bg-pink-300";
   const groupHeaderStyle = "font-bold mb-1";
+  console.log('----------------------VALVE-------------------------------');
+  console.log(data.valveState.valves.solenoid.main_propellant_valve);
 
   const getLast: <T>(arr: T[]) => T | undefined = (arr) =>
     arr.length > 0 ? arr[arr.length - 1] : undefined;
@@ -90,8 +92,7 @@ const DataBlock = () => {
             <div className="font-mono">
               {Object.keys(data.valveState.valves[valve]).map((loc) => (
                 <p key={valve + "." + loc}>
-                  {camelize(loc)}:{" "}
-                  {VALVE_MAP[data.valveState.valves.solenoid[loc]]}
+                  {camelize(loc)}:{" "}{VALVE_MAP[data.valveState.valves.solenoid[loc]]}
                 </p>
               ))}
             </div>

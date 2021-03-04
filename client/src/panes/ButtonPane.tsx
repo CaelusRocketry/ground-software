@@ -162,7 +162,7 @@ const ButtonPane = () => {
     keyof ValveLocations
   >("solenoid");
   const requestValveLocationRef = useRef<HTMLSelectElement>(null);
-
+  
   return (
     <div className="pane">
       <Header>Actions</Header>
@@ -314,14 +314,14 @@ const ButtonPane = () => {
           onClick={onClickedStageProgress}
           className={buttonStyles.big}
           disabled={
-            currentProgress !== 100 ||
+            (typeof currentProgress == "number" ? currentProgress : parseInt(currentProgress)) !== 100 ||
             (stages[currentStage] === "autosequence" && currentCountdown !== 0)
           }
         >
           <div className="py-1 px-2">
             <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-gray-300 bg-gray-600">
               "{stages[currentStage]}"
-              {currentProgress !== 100 ? " in progress" : " completed"}
+              {(typeof currentProgress == "number" ? currentProgress : parseInt(currentProgress)) !== 100 ? " in progress" : " completed"}
             </span>
           </div>
           Progress To {stageNames[stages[currentStage + 1]]}
@@ -329,13 +329,13 @@ const ButtonPane = () => {
             <div className="flex mb-2 items-center justify-between">
               <div className="text-right">
                 <span className="text-xs font-semibold inline-block text-gray-600">
-                  {round(currentProgress, 2)}%
+                  {round((typeof currentProgress == "number" ? currentProgress : parseInt(currentProgress)), 2)}%
                 </span>
               </div>
             </div>
             <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-300">
               <div
-                style={{ width: round(currentProgress, 0).toString() + "%" }}
+                style={{ width: round((typeof currentProgress == "number" ? currentProgress : parseInt(currentProgress)), 0).toString() + "%" }}
                 className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gray-600"
               />
             </div>
