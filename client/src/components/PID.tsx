@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import BlockHeader from "./BlockHeader";
 import { VALVE_MAP, PADDING } from "../lib/pid";
 import { CaelusState } from "../store/reducers";
+import { type } from "os";
 
 const PID = () => {
   const data = useSelector((state: CaelusState) => ({
@@ -19,11 +20,17 @@ const PID = () => {
 
   const getLast: <T>(arr: T[]) => T | undefined = (arr) =>
     arr.length > 0 ? arr[arr.length - 1] : undefined;
+    
+  const round = (num: number | undefined, precision: number): number | undefined => {
+    let rounded = num ? Math.round(num * precision) / precision : undefined;
+    return rounded;
+  };
+
   const sensorExists = (
     sensorType: keyof typeof data.sensorState.sensors,
     sensorLoc: string
   ) =>
-    sensorType in data.sensorState &&
+    sensorType in data.sensorState.sensors &&
     sensorLoc in data.sensorState.sensors[sensorType];
   const valveExists = (valveLoc: string) =>
     valveLoc in data.valveState.valves.solenoid;
@@ -70,7 +77,7 @@ const PID = () => {
             className={"diagram" + sensor}
           >
             {sensorExists("pressure", sensor)
-              ? getLast(data.sensorState.sensors.pressure[sensor])
+              ? round(getLast(data.sensorState.sensors.pressure[sensor])?.kalman, 1000)
               : ""}
           </p>
         ))}
@@ -83,9 +90,10 @@ const PID = () => {
             }}
             className={"diagram" + valve}
           >
-            {valveExists(loc) &&
-              // @ts-expect-error
-              VALVE_MAP[data.valveState.valves.solenoid[valve]]}
+            {valveExists(loc)
+              ? VALVE_MAP[data.valveState.valves.solenoid[loc]]
+              : ""
+            }
           </p>
         ))}
       </div>
