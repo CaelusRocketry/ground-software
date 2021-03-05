@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import BlockHeader from "./BlockHeader";
 import { VALVE_MAP, PADDING } from "../lib/pid";
 import { CaelusState } from "../store/reducers";
-import { type } from "os";
 
 const PID = () => {
   const data = useSelector((state: CaelusState) => ({
