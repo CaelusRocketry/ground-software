@@ -163,7 +163,7 @@ class Handler(Namespace):
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while self.running:
-            log = Log(header="heartbeat", message="AT")
+            log = Log(header="heartbeat", message="AT", timestamp=time.time())
             self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)

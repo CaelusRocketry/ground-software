@@ -27,7 +27,6 @@ export function countDownStart() {
       clearInterval(countDownInterval);
     }
   }, 1000);
-  clearInterval(countDownInterval);
 }
 
 ReactDOM.render(
