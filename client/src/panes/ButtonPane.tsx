@@ -28,6 +28,15 @@ import {
 } from "../lib/locationNames";
 import { CaelusState } from "../store/reducers";
 import ButtonPaneSelector from "./ButtonPaneSelector";
+import config from "../config.json";
+
+
+var disable_auth = false
+if(!config.Authorized_IPs.includes(window.location.hostname) )
+  disable_auth = true
+else
+  console.log("Authorized access to Actions.")
+
 
 const round = (progress: number, places: number) =>
   Number(progress).toFixed(places);
@@ -43,7 +52,9 @@ const buttonStyles = {
 };
 
 function onClickedSoftAbort(type: "soft") {
-  if (window.confirm("Are you sure you want to " + type + " abort?")) {
+  if(disable_auth) {
+    window.alert("You do not have authorization to issue a soft abort.")
+  } else if (window.confirm("Are you sure you want to " + type + " abort?")) {
     caelusLogger("button-press", "Confirmed abort");
     softAbort();
   }
@@ -60,19 +71,12 @@ function onClickedActuateValve(
     info: { valveLocation, valveType, actuationPriority },
   });
 
-  if (
-    valveLocation == null ||
-    valveType == null ||
-    actuationType == null ||
-    actuationPriority == null
-  ) {
-    alert("You haven't selected something for each dropdown.");
+  if (!valveLocation ||  !valveType ||  !actuationType || !actuationPriority ) {
+    window.alert("You haven't selected something for each dropdown.");
   } else {
-    if (
-      window.confirm(
-        `Are you sure you want to actuate the ${valveType} valve at ${valveLocation} w/ priority ${actuationPriority}`
-      )
-    ) {
+    if(disable_auth) {
+      window.alert("You do not have authorization to actuate valves.")
+    } else if (  window.confirm(`Are you sure you want to actuate the ${valveType} valve at ${valveLocation} w/ priority ${actuationPriority}`) ) {
       actuateValve({
         valveType,
         valveLocation,
@@ -85,24 +89,32 @@ function onClickedActuateValve(
 
 function onClickedUndoSoftAbort() {
   // TODO: If the current mode isn't Soft Abort, don't allow this (gray out the button, and if they somehow click on it then alert them that its a disallowed action)
-  if (window.confirm("Are you sure you want to undo soft abort?")) {
+  if(disable_auth) {
+    window.alert("You do not have authorization to undo a soft abort.")
+  } else if (window.confirm("Are you sure you want to undo soft abort?")) {
     caelusLogger("button-press", "Confirmed undo abort");
     undoSoftAbort();
   }
 }
 
 function onClickedRequestValveData(type?: string, location?: string) {
-  if (type == null || location == null) {
+  if (!type || !location) {
     alert("You haven't selected something for each dropdown.");
+  } else if(disable_auth) {
+    window.alert("You do not have authorization to request valve data.")
   } else {
+    console.log("Requesting valve data")
     requestValveData({ type, location });
   }
 }
 
 function onClickedRequestSensorData(type?: string, location?: string) {
-  if (type == null || location == null) {
+  if (!type || !location) {
     alert("You haven't selected something for each dropdown.");
-  } else {
+  } else if(disable_auth) {
+    window.alert("You do not have authorization to request sensor data.")
+  }  else {
+    console.log("Requesting sensor data")
     requestSensorData({ type, location });
   }
 }
@@ -136,9 +148,10 @@ const ButtonPane = () => {
     // If the pi isn't 100% ready to progress to next stage, mention that here. Otherwise, progress (w/ confirmation).
     // @ts-ignore
     const nextStageName = stageNames[stages[currentStage + 1]];
-    if (
-      window.confirm(`Are you sure you want to progress to ${nextStageName}?`)
-    ) {
+    console.log("Asked for stage progression.")
+    if(disable_auth) {
+      window.alert("You do not have authorization to progress to the next stage.")
+    }  else if ( window.confirm(`Are you sure you want to progress to ${nextStageName}?`) ) {
       if (nextStageName === "Autosequence") {
         countDownStart();
       }
@@ -271,6 +284,7 @@ const ButtonPane = () => {
             )
           }
           className={buttonStyles.smallMarginless}
+          // disabled={disable_auth}
         >
           Request Data
         </button>
@@ -305,6 +319,7 @@ const ButtonPane = () => {
             )
           }
           className={buttonStyles.smallMarginless}
+          // disabled={disable_auth}
         >
           Request State
         </button>
@@ -315,7 +330,8 @@ const ButtonPane = () => {
           className={buttonStyles.big}
           disabled={
             (typeof currentProgress == "number" ? currentProgress : parseInt(currentProgress)) !== 100 ||
-            (stages[currentStage] === "autosequence" && currentCountdown !== 0)
+            (stages[currentStage] === "autosequence" && currentCountdown !== 0) 
+            // && disable_auth
           }
         >
           <div className="py-1 px-2">
