@@ -1,6 +1,8 @@
 import React from "react";
+import { StatsState } from "../store/reducers/stats";
 import { useSelector } from "react-redux";
 import getColor from "../lib/getColor";
+import sensorColor from "../lib/getColor";
 import stylizeName from "../lib/camelize";
 import { CaelusState } from "../store/reducers";
 
@@ -62,6 +64,7 @@ const Data = () => {
           ? []
           : [["", state.data.general.heartbeat_status]],
       mode: state.data.general.mode,
+      Stage: state.data.general.stage,
     };
   });
 
@@ -145,7 +148,7 @@ const Data = () => {
                   <p
                     style={{
                       color:
-                        "green" /*sensorColor(data.sensorState[sensor], progress)*/,
+                        sensorColor(data.sensorState.sensors[type][locations], data.Stage),
                     }}
                     key={type + "." + loc}
                   >
