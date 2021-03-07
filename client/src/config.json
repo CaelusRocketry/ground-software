@@ -206,22 +206,22 @@
             "safe": [100, 500],
             "warn": [50, 550],
             "critical": [0, 600],
-            "waiting": {
+          "waiting": {
               "safe": [100, 500],
               "warn": [50, 550],
               "critical": [0, 600]
             },
-            "pressurization": {
+          "pressurization": {
               "safe": [100, 500],
               "warn": [50, 550],
               "critical": [0, 600]
             },
-            "autosequence": {
+          "autosequence": {
               "safe": [100, 500],
               "warn": [50, 550],
               "critical": [0, 600]
             },
-            "postburn": {
+          "postburn": {
               "safe": [100, 500],
               "warn": [50, 550],
               "critical": [0, 600]

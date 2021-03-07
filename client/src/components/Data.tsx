@@ -1,12 +1,14 @@
 import React from "react";
+import { StatsState } from "../store/reducers/stats";
 import { useSelector } from "react-redux";
 import getColor from "../lib/getColor";
+import sensorColor from "../lib/getColor";
 import stylizeName from "../lib/camelize";
 import { CaelusState } from "../store/reducers";
 
 import Block from "./Block";
 import BlockHeader from "./BlockHeader";
-import PandidBoxed from "../images/pandidboxed.png";
+import NitrousPID from "../images/nitrouspid.png";
 
 const VALVE_MAP = {
   1: "OPEN",
@@ -62,8 +64,11 @@ const Data = () => {
           ? []
           : [["", state.data.general.heartbeat_status]],
       mode: state.data.general.mode,
+      Stage: state.data.general.stage,
     };
   });
+
+  
 
   const blockStyle = "rounded-lg m-1 p-4 bg-gray-100";
   const abortStyle = "animate-ping rounded-lg m-1 p-4 bg-pink-300";
@@ -89,9 +94,9 @@ const Data = () => {
         className="flexFont"
       >
         <img
-          src={PandidBoxed}
-          id="pandidboxed"
-          alt="pandidboxed"
+          src={NitrousPID}
+          id="nitrouspid"
+          alt="nitrouspid"
           style={{ width: "100%" }}
         />
         {Object.entries(SENSOR_TEXT_PADDING).map(([sensor, padding]) => (
@@ -143,7 +148,7 @@ const Data = () => {
                   <p
                     style={{
                       color:
-                        "green" /*getColor(data.sensorState[sensor][loc])*/,
+                        sensorColor(data.sensorState.sensors[type][locations], data.Stage),
                     }}
                     key={type + "." + loc}
                   >
