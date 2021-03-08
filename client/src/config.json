@@ -316,5 +316,6 @@
   "UI": {
     "data_cutoff": 30,
     "message_cutoff": 10
-  }
+  },
+  "Authorized_IPs": ["localhost"]
 }

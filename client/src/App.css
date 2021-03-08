@@ -89,3 +89,8 @@
   margin-left: 10px;
   opacity: 0.75;
 }
+
+button:disabled,  button[disabled] {
+  background-color: #cccccc;
+  color: #666666;
+}
