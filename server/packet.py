@@ -3,6 +3,7 @@ import json
 from enum import IntEnum
 from typing import List
 
+INITIAL_TIME = time.time()
 
 class LogPriority(IntEnum):
     """ LogPriority Enum indicates the priority or status of the Packet """
@@ -56,10 +57,10 @@ class Packet:
         self,
         logs: List[Log] = [],
         priority: LogPriority = LogPriority.INFO,
-        timestamp: float = time.time(),
+        timestamp: float = None,
     ):
         self.logs = logs
-        self.timestamp = timestamp
+        self.timestamp = time.time() - INITIAL_TIME if timestamp is None else timestamp
         self.priority = priority
 
 
