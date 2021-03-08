@@ -16,10 +16,12 @@ class LogPriority(IntEnum):
 class Log:
     """ Log class stores messages to be sent to and from ground and flight station """
 
-    def __init__(self, header, message={}, timestamp: float = time.time()):
+    def __init__(self, header, message={}, timestamp: float = "ERROR"):
         self.header = header
         self.message = message
         self.timestamp = timestamp
+        if self.timestamp == "ERROR":
+            raise Exception("Timestamp not explicity passed during object instantiation")
 
 
     def save(self, filename="blackbox.txt"):

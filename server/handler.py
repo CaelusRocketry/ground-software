@@ -164,7 +164,7 @@ class Handler(Namespace):
         """ Constantly sends heartbeat message """
         while self.running:
             log = Log(header="heartbeat", message="AT", timestamp=time.time())
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
+            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=time.time()))
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
 
@@ -217,8 +217,8 @@ class Handler(Namespace):
             self.update_store_data()
         else:
             print(data)
-            log = Log(header=data['header'], message=data['message'])
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
+            log = Log(header=data['header'], message=data['message'], timestamp=time.time())
+            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=time.time()))
 
 hidden_log_types = set() # {"general", "sensor", "valve", "button"}
 def log_send(type, log):
