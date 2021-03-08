@@ -76,7 +76,7 @@ export function createSocketIoCallbacks(store: Store<CaelusState>) {
   socket.on("general", (log: Log) => {
     switch (log.header) {
       case "heartbeat":
-        store.dispatch(updateHeartbeat(log.message));
+        store.dispatch(updateHeartbeat(log.timestamp));
         break;
       case "stage":
         store.dispatch(updateStage(log.message));

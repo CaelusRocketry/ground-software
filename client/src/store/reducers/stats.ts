@@ -168,7 +168,7 @@ const updateData = (state = createInitialState(), action: DataAction) => {
         return state;
 
       case "UPDATE_HEARTBEAT":
-        state.general.heartbeat_received = Date.now();
+        state.general.heartbeat_received = action.data;
         return state;
 
       case "UPDATE_HEARTBEAT_STATUS":

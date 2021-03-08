@@ -48,10 +48,7 @@ export const updateValveData = (
 
 export type UpdateHeartbeatAction = {
   type: "UPDATE_HEARTBEAT";
-  data: {
-    header: "heartbeat";
-    status: "ok";
-  };
+  data: number
 };
 
 export const updateHeartbeat = (

@@ -11,7 +11,7 @@ const DataBlock = () => {
   const data = useSelector((state: CaelusState) => ({
     sensorState: state.data.sensorData,
     valveState: state.data.valveData,
-    heartbeatState: state.data.general.heartbeat,
+    heartbeatState: state.data.general.heartbeat_received,
     heartbeatStatus:
       state.data.general.heartbeat_status === undefined
         ? []
