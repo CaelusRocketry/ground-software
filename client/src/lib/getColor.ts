@@ -1,10 +1,10 @@
 import caelusLogger from "./caelusLogger";
 
 const getColor = (status: any) => {
-  if (status.length === 0) {
+  if(status == undefined){
     return "black";
   }
-  switch (status[status.length - 1][1]) {
+  switch (status) {
     case 3:
       return "green";
     case 2:
