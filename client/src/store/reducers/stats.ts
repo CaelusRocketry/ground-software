@@ -193,7 +193,7 @@ const updateData = (state = createInitialState(), action: DataAction) => {
 
         state.general.responses.push({
           header,
-          message: action.data,
+          message: action.data.message,
           timestamp: action.data.timestamp,
         });
 
