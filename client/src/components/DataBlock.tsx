@@ -12,10 +12,7 @@ const DataBlock = () => {
     sensorState: state.data.sensorData,
     valveState: state.data.valveData,
     heartbeatState: state.data.general.heartbeat_received,
-    heartbeatStatus:
-      state.data.general.heartbeat_status === undefined
-        ? []
-        : [["", state.data.general.heartbeat_status]],
+    heartbeatStatus: state.data.general.heartbeat_status,
     mode: state.data.general.mode,
   }));
 

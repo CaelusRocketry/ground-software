@@ -9,12 +9,6 @@ const PID = () => {
   const data = useSelector((state: CaelusState) => ({
     sensorState: state.data.sensorData,
     valveState: state.data.valveData,
-    heartbeatState: state.data.general.heartbeat,
-    heartbeatStatus:
-      state.data.general.heartbeat_status === undefined
-        ? []
-        : [["", state.data.general.heartbeat_status]],
-    mode: state.data.general.mode,
   }));
 
   const getLast: <T>(arr: T[]) => T | undefined = (arr) =>

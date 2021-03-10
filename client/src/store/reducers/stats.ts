@@ -66,7 +66,6 @@ const initialValveData: ValveStore = {
 };
 
 export interface GeneralStore {
-  heartbeat?: boolean;
   heartbeat_received: number;
   heartbeat_status?: HeartbeatStatus;
   stage: Stage;
@@ -86,7 +85,6 @@ const createInitialState = (): StatsState => ({
   sensorData: initialSensorData,
   valveData: initialValveData,
   general: {
-    heartbeat: undefined,
     heartbeat_received: 0,
     heartbeat_status: undefined,
     stage: "waiting", // value should be undefined, but is set to 'autosequence' for testing purposes
@@ -168,7 +166,6 @@ const updateData = (state = createInitialState(), action: DataAction) => {
         return state;
 
       case "UPDATE_HEARTBEAT":
-        state.general.heartbeat = true;
         state.general.heartbeat_received = action.data;
         return state;
 

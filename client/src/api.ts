@@ -5,20 +5,17 @@ import caelusLogger from "./lib/caelusLogger";
 import {
   addResponse,
   updateGeneralCopy,
-  UpdateGeneralCopy,
   updateHeartbeat,
   UpdateHeartbeatAction,
   updateHeartbeatStatus as updateHeartbeatStatusAction,
   updateMode,
   UpdateModeAction,
   updateSensorCopy,
-  UpdateSensorCopy,
   updateSensorData,
   UpdateSensorDataAction,
   updateStage,
   UpdateStageAction,
   updateValveCopy,
-  UpdateValveCopy,
   updateValveData,
   UpdateValveDataAction,
 } from "./store/actions";
@@ -195,21 +192,17 @@ export function requestSensorData({
 export const updateHeartbeatStatus = (store: Store<CaelusState>) => {
   let general = store.getState().data.general;
 
-  if (general.heartbeat === undefined) {
-    store.dispatch(updateHeartbeatStatusAction(1));
+  const timeSinceLastHeartbeatReceived = (Date.now() / 1000 - INITIAL_TIME) - general.heartbeat_received;
+  console.log("TIME SINCE LAST HEARTBEAT WAS RECEIVED: " + timeSinceLastHeartbeatReceived);
+
+  let status: 1 | 2 | 3;
+  if (timeSinceLastHeartbeatReceived > 10) {
+    status = 1;
+  } else if (timeSinceLastHeartbeatReceived > 6) {
+    status = 2;
   } else {
-    const timeSinceLastHeartbeatReceived = (Date.now() / 1000 - INITIAL_TIME) - general.heartbeat_received;
-    console.log("TIME SINCE LAST HEARTBEAT WAS RECEIVED: " + timeSinceLastHeartbeatReceived);
-
-    let status: 1 | 2 | 3;
-    if (timeSinceLastHeartbeatReceived > 10) {
-      status = 1;
-    } else if (timeSinceLastHeartbeatReceived > 6) {
-      status = 2;
-    } else {
-      status = 3;
-    }
-
-    store.dispatch(updateHeartbeatStatusAction(status));
+    status = 3;
   }
+
+  store.dispatch(updateHeartbeatStatusAction(status));
 };
