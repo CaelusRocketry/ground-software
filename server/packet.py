@@ -53,7 +53,7 @@ class Log:
 class Packet:
     """ Packet class stores groups of messages, which are grouped by LogPriority. """
     
-    INITIAL_TIME = time.time()
+    INITIAL_TIME = Log.INITIAL_TIME
     
     def __init__(
         self,
