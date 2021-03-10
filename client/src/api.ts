@@ -83,7 +83,7 @@ export function createSocketIoCallbacks(store: Store<CaelusState>) {
         store.dispatch(updateMode(log.message));
         break;
       case "response":
-        store.dispatch(addResponse(log.message));
+        store.dispatch(addResponse(log));
         break;
       default:
         caelusLogger("telemetry", "Unknown general header", "warn");
