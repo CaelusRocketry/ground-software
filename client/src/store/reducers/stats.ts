@@ -66,7 +66,7 @@ const initialValveData: ValveStore = {
 };
 
 export interface GeneralStore {
-  heartbeat?: number;
+  heartbeat?: boolean;
   heartbeat_received: number;
   heartbeat_status?: HeartbeatStatus;
   stage: Stage;
@@ -168,6 +168,7 @@ const updateData = (state = createInitialState(), action: DataAction) => {
         return state;
 
       case "UPDATE_HEARTBEAT":
+        state.general.heartbeat = true;
         state.general.heartbeat_received = action.data;
         return state;
 

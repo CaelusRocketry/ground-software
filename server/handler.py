@@ -188,6 +188,7 @@ class Handler(Namespace):
         self.socketio.emit('sensors_copy', self.sensors_copy)
         self.socketio.emit('valves_copy', self.valves_copy)
         self.socketio.emit('buttons_copy', self.buttons_copy)
+        self.socketio.emit('initial_time', Packet.INITIAL_TIME)
 
     ## store copy methods
     def update_general_copy(self, general):
