@@ -7,7 +7,6 @@ from typing import Any, List, Tuple, Union
 from packet import Packet, Log, LogPriority
 from flask_socketio import Namespace
 
-
 BYTE_SIZE = 8192
 
 DELAY = .05
@@ -16,7 +15,6 @@ DELAY_SEND = .05
 DELAY_HEARTBEAT = 3
 
 SEND_ALLOWED = True
-
 BLOCK_SIZE = 32
 f = open("black_box.txt", "w+")
 f.close()
@@ -97,7 +95,6 @@ class Handler(Namespace):
             ])
         )
 
-
     def send(self):
         """ Constantly sends next packet from queue to ground station """
         while self.running:
@@ -123,6 +120,9 @@ class Handler(Namespace):
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
         # TODO: This is implemented wrong. It should enqueue by finding packets that have similar priorities, not changing the priorities of current packets.
+        #Update hearbeat state
+        packet.timestamp = time.time()-self.start_time
+        packet.timestamp = round(packet.timestamp, 1)
         packet_str = (packet.to_string() + "END").encode("ascii")
         heapq.heappush(self.queue_send, (packet.priority, packet_str))
 
@@ -146,8 +146,8 @@ class Handler(Namespace):
         packets = [Packet.from_string(p_str) for p_str in packet_strs]
         for packet in packets:
             for log in packet.logs:
+                log.timestamp = log.timestamp-self.start_time if log.timestamp is None else log.timestamp
                 log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
-
                 if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
                     self.update_general(log.__dict__)
 
