@@ -43,7 +43,6 @@ class Handler(Namespace):
 
         self.conn = None
         self.running = False
-        self.start_time = time.time()
 
         self.socketio = socketio
         self.socketio.on_event(
@@ -52,6 +51,7 @@ class Handler(Namespace):
         )
         
         self.connect(ip, port)
+        self.INITIAL_TIME = time.time()
         
         self.general_copy = None
         self.sensors_copy = None
@@ -91,8 +91,9 @@ class Handler(Namespace):
         self.enqueue(
             Packet(logs=[Log(
                 header=json['header'],
-                message=json['message'])
-            ])
+                message=json['message'],
+                timestamp=time.time()-self.INITIAL_TIME)
+            ], timestamp=time.time()-self.INITIAL_TIME)
         )
 
     def send(self):
@@ -120,9 +121,6 @@ class Handler(Namespace):
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
         # TODO: This is implemented wrong. It should enqueue by finding packets that have similar priorities, not changing the priorities of current packets.
-        #Update hearbeat state
-        packet.timestamp = time.time()-self.start_time
-        packet.timestamp = round(packet.timestamp, 1)
         packet_str = (packet.to_string() + "END").encode("ascii")
         heapq.heappush(self.queue_send, (packet.priority, packet_str))
 
@@ -146,7 +144,6 @@ class Handler(Namespace):
         packets = [Packet.from_string(p_str) for p_str in packet_strs]
         for packet in packets:
             for log in packet.logs:
-                log.timestamp = log.timestamp-self.start_time if log.timestamp is None else log.timestamp
                 log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
                 if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
                     self.update_general(log.__dict__)
@@ -162,8 +159,8 @@ class Handler(Namespace):
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while self.running:
-            log = Log(header="heartbeat", message="AT")
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
+            log = Log(header="heartbeat", message="AT", timestamp=time.time()-self.INITIAL_TIME)
+            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=time.time()-self.INITIAL_TIME))
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
 
@@ -188,7 +185,7 @@ class Handler(Namespace):
         self.socketio.emit('sensors_copy', self.sensors_copy)
         self.socketio.emit('valves_copy', self.valves_copy)
         self.socketio.emit('buttons_copy', self.buttons_copy)
-        self.socketio.emit('initial_time', Packet.INITIAL_TIME)
+        self.socketio.emit('initial_time', self.INITIAL_TIME)
 
     ## store copy methods
     def update_general_copy(self, general):
@@ -218,7 +215,7 @@ class Handler(Namespace):
         else:
             print(data)
             log = Log(header=data['header'], message=data['message'])
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
+            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=time.time()-self.INITIAL_TIME))
 
 hidden_log_types = set() # {"general", "sensor", "valve", "button"}
 def log_send(type, log):
