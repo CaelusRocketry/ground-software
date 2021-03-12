@@ -88,13 +88,8 @@ class Handler(Namespace):
 
 
     def send_to_flight_software(self, json):
-        self.enqueue(
-            Packet(logs=[Log(
-                header=json['header'],
-                message=json['message'],
-                timestamp=time.time()-self.INITIAL_TIME)
-            ], timestamp=time.time()-self.INITIAL_TIME)
-        )
+        log = Log(header=json['header'], message=json['message'], timestamp=time.time()-self.INITIAL_TIME)
+        self.enqueue(Packet(logs=[log], timestamp=log.timestamp))
 
     def send(self):
         """ Constantly sends next packet from queue to ground station """
@@ -160,7 +155,7 @@ class Handler(Namespace):
         """ Constantly sends heartbeat message """
         while self.running:
             log = Log(header="heartbeat", message="AT", timestamp=time.time()-self.INITIAL_TIME)
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=time.time()-self.INITIAL_TIME))
+            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
 
@@ -214,8 +209,8 @@ class Handler(Namespace):
             self.update_store_data()
         else:
             print(data)
-            log = Log(header=data['header'], message=data['message'])
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=time.time()-self.INITIAL_TIME))
+            log = Log(header=data['header'], message=data['message'], timestamp=time.time()-self.INITIAL_TIME)
+            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
 
 hidden_log_types = set() # {"general", "sensor", "valve", "button"}
 def log_send(type, log):
