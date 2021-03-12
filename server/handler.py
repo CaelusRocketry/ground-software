@@ -7,7 +7,6 @@ from typing import Any, List, Tuple, Union
 from packet import Packet, Log, LogPriority
 from flask_socketio import Namespace
 
-
 BYTE_SIZE = 8192
 
 DELAY = .05
@@ -16,7 +15,6 @@ DELAY_SEND = .05
 DELAY_HEARTBEAT = 3
 
 SEND_ALLOWED = True
-
 BLOCK_SIZE = 32
 f = open("black_box.txt", "w+")
 f.close()
@@ -45,7 +43,6 @@ class Handler(Namespace):
 
         self.conn = None
         self.running = False
-        self.start_time = time.time()
 
         self.socketio = socketio
         self.socketio.on_event(
@@ -54,6 +51,7 @@ class Handler(Namespace):
         )
         
         self.connect(ip, port)
+        self.INITIAL_TIME = time.time()
         
         self.general_copy = None
         self.sensors_copy = None
@@ -90,13 +88,8 @@ class Handler(Namespace):
 
 
     def send_to_flight_software(self, json):
-        self.enqueue(
-            Packet(logs=[Log(
-                header=json['header'],
-                message=json['message'])
-            ])
-        )
-
+        log = Log(header=json['header'], message=json['message'], timestamp=time.time()-self.INITIAL_TIME)
+        self.enqueue(Packet(logs=[log], timestamp=log.timestamp))
 
     def send(self):
         """ Constantly sends next packet from queue to ground station """
@@ -147,7 +140,6 @@ class Handler(Namespace):
         for packet in packets:
             for log in packet.logs:
                 log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
-
                 if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
                     self.update_general(log.__dict__)
 
@@ -162,8 +154,8 @@ class Handler(Namespace):
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while self.running:
-            log = Log(header="heartbeat", message="AT")
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
+            log = Log(header="heartbeat", message="AT", timestamp=time.time()-self.INITIAL_TIME)
+            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
 
@@ -188,7 +180,7 @@ class Handler(Namespace):
         self.socketio.emit('sensors_copy', self.sensors_copy)
         self.socketio.emit('valves_copy', self.valves_copy)
         self.socketio.emit('buttons_copy', self.buttons_copy)
-        self.socketio.emit('initial_time', Packet.INITIAL_TIME)
+        self.socketio.emit('initial_time', self.INITIAL_TIME)
 
     ## store copy methods
     def update_general_copy(self, general):
@@ -217,8 +209,8 @@ class Handler(Namespace):
             self.update_store_data()
         else:
             print(data)
-            log = Log(header=data['header'], message=data['message'])
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
+            log = Log(header=data['header'], message=data['message'], timestamp=time.time()-self.INITIAL_TIME)
+            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
 
 hidden_log_types = set() # {"general", "sensor", "valve", "button"}
 def log_send(type, log):

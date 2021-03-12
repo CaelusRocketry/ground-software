@@ -15,12 +15,12 @@ class LogPriority(IntEnum):
 class Log:
     """ Log class stores messages to be sent to and from ground and flight station """
     
-    INITIAL_TIME = time.time()
-    
     def __init__(self, header, message={}, timestamp: float = None):
         self.header = header
         self.message = message
-        self.timestamp = time.time() - self.INITIAL_TIME if timestamp is None else timestamp
+        self.timestamp = timestamp
+        if self.timestamp is None:
+            raise Exception("Timestamp not specified")
 
     def save(self, filename="blackbox.txt"):
         f = open(filename, "a+")
@@ -53,8 +53,6 @@ class Log:
 class Packet:
     """ Packet class stores groups of messages, which are grouped by LogPriority. """
     
-    INITIAL_TIME = Log.INITIAL_TIME
-    
     def __init__(
         self,
         logs: List[Log] = [],
@@ -62,8 +60,10 @@ class Packet:
         timestamp: float = None,
     ):
         self.logs = logs
-        self.timestamp = time.time() - self.INITIAL_TIME if timestamp is None else timestamp
+        self.timestamp = timestamp
         self.priority = priority
+        if self.timestamp is None:
+            raise Exception("Timestamp not specified")
 
 
     def add(self, log: Log):
