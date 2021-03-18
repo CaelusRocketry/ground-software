@@ -3,6 +3,7 @@ import React from "react";
 import StatisticsView from "./views/StatisticsView";
 import ActionsView from "./views/ActionsView";
 import CountdownView from "./views/CountdownView";
+import ControlView from "./views/ControlView";
 
 import "./App.css";
 import Logo from "./images/logo.png";
@@ -34,10 +35,13 @@ function Navbar() {
         <b style={{ fontSize: "1.5rem" }}>Ground Software</b>
       </NavbarItem>
       <NavbarItem>
-        <Link to="/">Dashboard</Link>
+        <Link to="/">Stage</Link>
       </NavbarItem>
       <NavbarItem>
-        <Link to="/actions">Actions</Link>
+        <Link to="/control">Control</Link>
+      </NavbarItem>
+      <NavbarItem>
+        <Link to="/actions">Data</Link>
       </NavbarItem>
       <NavbarItem>
         <Link to="/countdown">Countdown</Link>
@@ -57,6 +61,9 @@ const App = () => {
           </Route>
           <Route path="/countdown" exact>
             <CountdownView />
+          </Route>
+          <Route path="/control" exact>
+            <ControlView />
           </Route>
           <Route path="/" exact>
             <StatisticsView />
