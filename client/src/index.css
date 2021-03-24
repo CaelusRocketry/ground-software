@@ -60,3 +60,15 @@ ul {
   width: 3px;
   height: 3px;
 }
+
+.footer {
+  margin-top: 1rem;
+  padding: 3rem;
+  background-color: rgb(235, 195, 65);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  opacity: 0.95;
+}

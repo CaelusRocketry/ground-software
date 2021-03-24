@@ -6,9 +6,13 @@ import CountdownView from "./views/CountdownView";
 import ControlView from "./views/ControlView";
 
 import "./App.css";
-import Logo from "./images/logo.png";
+import config from "./config.json";
 
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+
+import getColor from "./lib/getColor";
+import { useSelector } from "react-redux";
+import { CaelusState } from "./store/reducers";
 
 function NavbarItem({ children }: { children: React.ReactNode }) {
   return (
@@ -26,38 +30,63 @@ function NavbarItem({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Navbar() {
-  return (
-    <div
-      style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
-    >
-      <NavbarItem>
-        <b style={{ fontSize: "1.5rem" }}>Ground Software</b>
-      </NavbarItem>
-      <NavbarItem>
-        <Link to="/">Stage</Link>
-      </NavbarItem>
-      <NavbarItem>
-        <Link to="/control">Control</Link>
-      </NavbarItem>
-      <NavbarItem>
-        <Link to="/actions">Data</Link>
-      </NavbarItem>
-      <NavbarItem>
-        <Link to="/countdown">Countdown</Link>
-      </NavbarItem>
-    </div>
-  );
-}
-
 const App = () => {
+
+  const data = useSelector((state: CaelusState) => ({
+    heartbeatStatus: state.data.general.heartbeat_status,
+    mode: state.data.general.mode,
+  }));
+
   return (
     <div className="App font-sans bg-light-1 text-dark-1">
       <BrowserRouter>
-        <Navbar />
+      <div
+      style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+      >
+        <NavbarItem>
+          <b style={{ fontSize: "1.5rem" }}>Ground Software</b>
+        </NavbarItem>
+
+      <select style={{fontSize: "1rem"}}>
+        <option>{config.test_type.Nitrous}</option>
+        <option>{config.test_type.Ethanol}</option>
+        <option>{config.test_type.Full}</option>
+      </select>
+
+
+        <NavbarItem>
+          <Link to="/">Stage</Link>
+        </NavbarItem>
+
+        <NavbarItem>
+          <Link to="/control">Control</Link>
+        </NavbarItem>
+
+        <NavbarItem>
+          <Link to="/actions">Data</Link>
+        </NavbarItem>
+
+        <NavbarItem>
+          <Link to="/countdown">Countdown</Link>
+        </NavbarItem>
+
+        <NavbarItem>
+          <p style={{ color: getColor(data.heartbeatStatus), }}>
+              <span className="font-bold">{"Heartbeat"}</span>
+          </p>
+        </NavbarItem>
+        
+        <NavbarItem>
+          <p style={{ color: getColor(data.mode) }}>
+              <span className="font-bold">{"Mode: "}</span>
+              <span className="font-bold">{data.mode}</span> 
+          </p>
+        </NavbarItem>
+
+      </div>
         <Switch>
           <Route path="/actions" exact>
-            <ActionsView />
+            <ActionsView /> 
           </Route>
           <Route path="/countdown" exact>
             <CountdownView />
@@ -70,7 +99,7 @@ const App = () => {
           </Route>
         </Switch>
       </BrowserRouter>
-      <img src={Logo} id="logo" alt="Logo" />
+
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import BlockHeader from "./BlockHeader";
 import { VALVE_MAP, PADDING } from "../lib/pid";
 import { CaelusState } from "../store/reducers";
+import config from "../config.json";
 
 const PID = () => {
   const data = useSelector((state: CaelusState) => ({
@@ -37,15 +38,15 @@ const PID = () => {
       <BlockHeader colors={["#0c1f6d", "black", "#8e0004", "black"]}>
         Sensors and Valves Diagram
       </BlockHeader>
-      <select
+      <select           
         onChange={(e) => {
           // @ts-expect-error
           setDiagram({ type: e.target.value });
         }}
       >
-        <option value="NITROUS">Nitrous</option>
-        <option value="ETHANOL">Ethanol</option>
-        <option value="FULL">Full</option>
+        <option value="NITROUS">{config.test_type.Nitrous}</option>
+        <option value="ETHANOL">{config.test_type.Ethanol}</option>
+        <option value="FULL">{config.test_type.Full}</option>
       </select>
 
       <div

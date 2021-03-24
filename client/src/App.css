@@ -79,18 +79,24 @@
   @apply p-2;
 }
 
+/* Footer Pane*/
+.footerPane {
+  position: absolute;
+  left: 10rem;
+  bottom: 0.8rem;
+}
+
 /* Logo */
 #logo {
-  position: absolute;
+  position: fixed;
   width: 120px;
-  bottom: 0;
-  left: 0;
-  margin-bottom: 20px;
-  margin-left: 10px;
+  bottom: 0.8rem;
+  left: 1rem;
   opacity: 0.75;
 }
 
-button:disabled,  button[disabled] {
+button:disabled,
+button[disabled] {
   background-color: #cccccc;
   color: #666666;
 }
