@@ -7,10 +7,11 @@ import SequencePane from "../panes/SequencePane";
 import ChecklistPane from "../panes/ChecklistPane";
 
 const StageView = () => (
-  <SplitPane className="view" split="vertical" defaultSize="50%">  
+  <><SplitPane className="view" split="vertical" defaultSize="50%">  
     <SequencePane />
     <ChecklistPane />
   </SplitPane>
+  <FooterPane /></>
 );
 
 export default StageView;
