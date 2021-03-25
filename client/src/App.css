@@ -86,6 +86,11 @@
   bottom: 0.8rem;
 }
 
+/* .checklist {
+  position: relative;
+  margin-top: 3rem;
+} */
+
 /* Logo */
 #logo {
   position: fixed;

@@ -323,5 +323,14 @@
     "Full": "Full"
 
   },
+  "checklist": {
+    "Step_1": "Say hi ← (Priority: !!!!!)",
+    "Step_2": "Pressurize the system",
+    "Step_3": "Run some code",
+    "Step_4": "Check to make sure everything is pressurized",
+    "Step_5": "If something broke, abort",
+    "Step_6": "If something didn’t break, still abort"
+  },
+
   "Authorized_IPs": ["localhost"]
 }
