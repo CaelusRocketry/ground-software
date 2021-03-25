@@ -15,67 +15,24 @@ const ChecklistPane = () => {
         style={{ display: "flex", flexDirection: "column" }}
         className="pane"
       >
-      <Header>Timeline</Header>
-        <Checkbox 
-        style={{ fontSize: "20px", marginBottom: 20, marginTop: 8}}
-        animation="jelly" 
-        // icon=() add icon if you want
-        color="success"
-        shape="round"
-        //variant="fill"
-        >{config.checklist.Step_1}</Checkbox>
+      <Header>Checklist</Header>
+          {Object.entries(config.checklist).map(([num, step]) => {
+            return(
+              <Checkbox 
+                style={{ fontSize: "20px", marginBottom: 20, marginTop: 8, marginLeft: 20}}
+                animation="jelly" 
+                // icon=() add icon if you want
+                color="warning"
+                shape="round"
+                //variant="fill"
+              >
+                {step}
+              </Checkbox>
+            )
+          })}
 
+        </div>
 
-        <Checkbox 
-        style={{ fontSize: "20px", marginBottom: 20}}
-        animation="jelly" 
-        // icon=() add icon if you want
-        color="success"
-        shape="round"
-        //variant="fill"
-        >{config.checklist.Step_2}</Checkbox>
-
-
-        <Checkbox 
-        style={{ fontSize: "20px", marginBottom: 20}}
-        animation="jelly" 
-        // icon=() add icon if you want
-        color="success"
-        shape="round"
-        //variant="fill" 
-        >{config.checklist.Step_3}</Checkbox>
-
-
-        <Checkbox 
-        style={{ fontSize: "20px", marginBottom: 20}}
-        animation="jelly" 
-        // icon=() add icon if you want
-        color="success"
-        shape="round"
-        //variant="fill" 
-        >{config.checklist.Step_4}</Checkbox>
-
-
-        <Checkbox 
-        style={{ fontSize: "20px", marginBottom: 20}}
-        animation="jelly" 
-        // icon=() add icon if you want
-        color="success"
-        shape="round"
-        variant="fill" 
-        >{config.checklist.Step_5}</Checkbox> 
-
-
-        <Checkbox 
-        style={{ fontSize: "20px", marginBottom: 20}}
-        animation="jelly" 
-        // icon=() add icon if you want
-        color="success"
-        shape="round"
-        variant="fill" 
-        >{config.checklist.Step_6}</Checkbox> 
-
-      </div>
     </>
     
 
