@@ -13,6 +13,8 @@ import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import getColor from "./lib/getColor";
 import { useSelector } from "react-redux";
 import { CaelusState } from "./store/reducers";
+import StageView from "./views/StageView";
+import StatusView from "./views/StatusView";
 
 function NavbarItem({ children }: { children: React.ReactNode }) {
   return (
@@ -55,7 +57,15 @@ const App = () => {
 
 
         <NavbarItem>
-          <Link to="/">Stage</Link>
+          <Link to="/statistics">Statistics</Link>
+        </NavbarItem>
+
+        <NavbarItem>
+          <Link to="/actions">Actions</Link>
+        </NavbarItem>
+        |
+        <NavbarItem>
+          <Link to="/stage">Stage</Link>
         </NavbarItem>
 
         <NavbarItem>
@@ -63,7 +73,7 @@ const App = () => {
         </NavbarItem>
 
         <NavbarItem>
-          <Link to="/actions">Data</Link>
+          <Link to="/status">Status</Link>
         </NavbarItem>
 
         <NavbarItem>
@@ -88,14 +98,23 @@ const App = () => {
           <Route path="/actions" exact>
             <ActionsView /> 
           </Route>
+          <Route path="/statistics" exact>
+            <StatisticsView /> 
+          </Route>
           <Route path="/countdown" exact>
             <CountdownView />
           </Route>
           <Route path="/control" exact>
             <ControlView />
           </Route>
-          <Route path="/" exact>
-            <StatisticsView />
+          <Route path="/stage" exact>
+            <StageView />
+          </Route>
+          <Route path="/control" exact>
+            <ControlView />
+          </Route>
+          <Route path="/status" exact>
+            <StatusView />
           </Route>
         </Switch>
       </BrowserRouter>
