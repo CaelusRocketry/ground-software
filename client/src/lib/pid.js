@@ -72,7 +72,7 @@ export const NEW_PADDING = {
             y2: (1504/1725) * 100 + '%'
           }
         },
-      }
+      },
       "VALVE" : {
         "vent_valve": {
           "TEXT" : {
