@@ -8,7 +8,7 @@ const DataPane = () => (
   <div>
     <Header>Data</Header>
     <div className="view">
-      <PID />
+      {/* <PID /> */}
       <DataBlock />
     </div>
   </div>
