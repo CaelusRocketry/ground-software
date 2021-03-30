@@ -5,6 +5,7 @@ import ButtonPane from "../panes/ButtonPane";
 import SequencePane from "../panes/SequencePane";
 
 import ChecklistPane from "../panes/ChecklistPane";
+import FooterPane from "../panes/FooterPane";
 
 const StageView = () => (
   <><SplitPane className="view" split="vertical" defaultSize="50%">  
