@@ -1,11 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { View, Picker, StyleSheet } from "react-native";
 
 //Come up with style for words in buttons later
-
-const wordDist = {
-    marginLeft: '10px',
-    marginTop: '10px'
-};
 
 const priorityDist = {
     marginLeft: '25px',
@@ -14,11 +10,6 @@ const priorityDist = {
 
 const openDist = {
     marginLeft: '40px',
-    marginTop: '10px'
-};
-
-const closeDist = {
-    marginLeft: '55px',
     marginTop: '10px'
 };
 
@@ -32,25 +23,15 @@ const resetDist = {
     marginTop: '10px'
 };
 
-const ButtonBar = () => (
-
+const ButtonBar = () => {
     return(
 
         <div>
 
-            <Text style={wordDist}>NCSV-1</Text>
+            <Text style={marginLeft: '10px', marginTop: '10px'}>NCSV-1</Text>
 
-            <Dropdown>
-                <Dropdown.Toggle variant="success" id="dropdown-basic" className="mt-2 col-md-12 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded disabled:bg-gray-900" style={priorityDist}>
-                    Priority
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Warn</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Critical</Dropdown.Item>
-                </Dropdown.Menu>
-            </Dropdown>
+            //https://blog.campvanilla.com/reactjs-dropdown-menus-b6e06ae3a8fe
+            //https://blog.logrocket.com/building-a-custom-dropdown-menu-component-for-react-e94f02ced4a1/
 
 
             <button
@@ -70,16 +51,10 @@ const ButtonBar = () => (
 
 
             <button
-                style={{
-                    borderWidth:1,
-                    borderColor:'rgba(0,0,0,0.2)',
-                    alignItems:'center',
-                    justifyContent:'center',
-                    width:100,
-                    height:100,
-                    backgroundColor:'#CACACA',
-                    borderRadius:50,
-                  }, {closeDist}}  
+                style={
+                    marginLeft: '55px',
+                    marginTop: '10px'
+                  }
             >
                 CLOSE
             </button>
@@ -118,6 +93,6 @@ const ButtonBar = () => (
         </div>
     );
 
-);
+};
 
 export default ButtonBar;
