@@ -1,11 +1,13 @@
 import React from "react";
+import ButtonBarPane from "../panes/ButtonBarPane";
 
 import FooterPane from "../panes/FooterPane.tsx";
 
 
 const ControlView = () => (
   
-  <FooterPane />
+  <> <ButtonBarPane />
+  <FooterPane /> </>
       
 );
 
