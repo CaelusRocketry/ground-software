@@ -331,7 +331,8 @@
     "If something broke, abort",
     "If something didn’t break, still abort"
   ],
-  "notifications": ["Valve Actuation", "TBD"],
-
+  "notifications": {
+     "list": ["Valve Actuation", "Stage progression request", "TBD"]
+  },
   "Authorized_IPs": ["localhost"]
 }

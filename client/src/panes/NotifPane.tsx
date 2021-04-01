@@ -4,11 +4,12 @@ import Header from "../components/Header";
 import {CaelusState} from "../store/reducers";
 import config from "../config.json";
 const NotifPane = () => {
+    const headers = config["notifications"]["list"];
     const responses = useSelector(
         (state: CaelusState) => state.data.general.responses
       );
     function s3(data: any, i:any){
-        if(data.header!="Stage progression request"){
+        if(headers.indexOf(data.header)!=-1){
         return(
         <li key={i} className="list-group-item list-group-item-primary">
               <h3 className="text-lg font-bold">{data.header}</h3>
