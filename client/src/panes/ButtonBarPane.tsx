@@ -1,5 +1,5 @@
-
-import React from "react";
+import React, { useState, useCallback, useRef } from "react";
+import ButtonPaneSelector from "./ButtonPaneSelector";
 import { useSelector } from "react-redux";
 import camelize from "../lib/camelize";
 import getColor from "../lib/getColor";
@@ -7,11 +7,6 @@ import { VALVE_MAP, PADDING } from "../lib/pid";
 import { CaelusState } from "../store/reducers";
 import Block from "../components/Block";
 import BlockHeader from "../components/BlockHeader";
-
-//Come up with style for words in buttons later
-
-//https://blog.campvanilla.com/reactjs-dropdown-menus-b6e06ae3a8fe
-//https://blog.logrocket.com/building-a-custom-dropdown-menu-component-for-react-e94f02ced4a1/
 
 const ButtonBarPane = () => {
     const data = useSelector((state: CaelusState) => ({
@@ -22,8 +17,14 @@ const ButtonBarPane = () => {
         mode: state.data.general.mode,
     }));
     
+    const actuationTypeRef = useRef<HTMLSelectElement>(null);
+    const actuationPriorityRef = useRef<HTMLSelectElement>(null);
+    const actuateValveLocationRef = useRef<HTMLSelectElement>(null);
+
     const valveExists = (valveLoc: string) =>
     valveLoc in data.valveState.valves.solenoid;
+
+    //Add in NOSV = norm_open & NCSV = norm_close *as constants*
 
     const valve_abbrevs = {
         "vent_valve": "NOSV-3",
@@ -39,7 +40,6 @@ const ButtonBarPane = () => {
         justifyContent:'center',
         width:60,
         height:60,
-        borderRadius:17,
         margin: "15px"
       };
 
@@ -60,24 +60,48 @@ const ButtonBarPane = () => {
                 <span style={{fontSize: "25px", margin: "20px"}}>
                         {loc in valve_abbrevs
                         ? Object.entries(valve_abbrevs).map(([long_name, short_name]) => (
-                            loc == long_name 
+                            loc === long_name 
                             ? short_name
                             : ""
                         ))
                         : loc
                     }    
                 </span>
+                
+                <div style = {{margin: '15px'}}>
+                    <ButtonPaneSelector
+                        label="Priority Dropdown"
+                        ref={actuationPriorityRef}
+                        options={[1, 2, 3]}
+                        optionNames={{ 1: "!", 2: "!!", 3: "!!!" }}
+                    />
+                </div>
 
-                <button style={Object.assign({backgroundColor: "#8de4ff"}, button_style)}>
+                <button 
+                style={Object.assign({backgroundColor: "#8de4ff", borderRadius:17}, button_style)}
+                //onClick (reference ref)
+                >
                     OPEN
                 </button>
-                <button style={Object.assign({backgroundColor: "#e8e8e8"}, button_style)}>
+
+                <button 
+                style={Object.assign({backgroundColor: "#e8e8e8", borderRadius:17}, button_style)}
+                //onClick (reference ref)
+                >
                     CLOSE
                 </button>
-                <button style={Object.assign({backgroundColor: "#10f5e1"}, button_style)}>
+
+                <button 
+                style={Object.assign({backgroundColor: "#10f5e1", borderRadius:17}, button_style)}
+                //onClick (reference ref)
+                >
                     PULSE
                 </button>
-                <button style={Object.assign({backgroundColor: "#ff5050"}, button_style)}>
+
+                <button 
+                style={Object.assign({backgroundColor: "#ff5050", borderRadius:17}, button_style)}
+                //onClick (reference ref)
+                >
                     RESET
                 </button>
 
