@@ -1,12 +1,43 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useRef } from "react";
 import ButtonPaneSelector from "./ButtonPaneSelector";
 import { useSelector } from "react-redux";
-import camelize from "../lib/camelize";
-import getColor from "../lib/getColor";
-import { VALVE_MAP, PADDING } from "../lib/pid";
+import { actuateValve } from "../api";
 import { CaelusState } from "../store/reducers";
-import Block from "../components/Block";
-import BlockHeader from "../components/BlockHeader";
+import caelusLogger from "../lib/caelusLogger";
+import config from "../config.json";
+
+var disable_auth = false
+if(!config.Authorized_IPs.includes(window.location.hostname) )
+  disable_auth = true
+else
+  console.log("Authorized access to Actions.")
+
+function onClickedActuateValve(
+    valveLocation?: string,
+    valveType?: string,
+    actuationType?: string,
+    actuationPriority?: string
+  ) {
+    caelusLogger("button-press", {
+      button: "actuate_valves",
+      info: { valveLocation, valveType, actuationPriority },
+    });
+  
+    if (!valveLocation ||  !valveType ||  !actuationType || !actuationPriority ) {
+      window.alert("You haven't selected something for each dropdown.");
+    } else {
+      if(disable_auth) {
+        window.alert("You do not have authorization to actuate valves.")
+      } else if (  window.confirm(`Are you sure you want to actuate the ${valveType} valve at ${valveLocation} w/ priority ${actuationPriority}`) ) {
+        actuateValve({
+          valveType,
+          valveLocation,
+          actuationType,
+          actuationPriority,
+        });
+      }
+    }
+  }
 
 const ButtonBarPane = () => {
     const data = useSelector((state: CaelusState) => ({
@@ -17,14 +48,21 @@ const ButtonBarPane = () => {
         mode: state.data.general.mode,
     }));
     
-    const actuationTypeRef = useRef<HTMLSelectElement>(null);
     const actuationPriorityRef = useRef<HTMLSelectElement>(null);
-    const actuateValveLocationRef = useRef<HTMLSelectElement>(null);
 
     const valveExists = (valveLoc: string) =>
     valveLoc in data.valveState.valves.solenoid;
 
-    //Add in NOSV = norm_open & NCSV = norm_close *as constants*
+    const valve_types = {
+        "NOSV-1": "OPEN",
+        "NOSV-2": "OPEN",
+        "NOSV-3": "OPEN",
+        "NOSV-4": "OPEN",
+        "NCSV-1": "CLOSE",
+        "NCSV-2": "CLOSE",
+        "NCSV-3": "CLOSE",
+        "NCSV-4": "CLOSE"
+    };
 
     const valve_abbrevs = {
         "vent_valve": "NOSV-3",
@@ -48,7 +86,6 @@ const ButtonBarPane = () => {
         <div>
             
         {Object.entries(data.valveState.valves.solenoid).map(([loc, valve]) => (
-
 
             <div style={{
                 margin: "10px",
@@ -79,14 +116,22 @@ const ButtonBarPane = () => {
 
                 <button 
                 style={Object.assign({backgroundColor: "#8de4ff", borderRadius:17}, button_style)}
-                //onClick (reference ref)
+
+                onClick={() =>
+                    onClickedActuateValve(loc, "solenoid", "OPEN", actuationPriorityRef.current?.value)
+                  }
+
                 >
                     OPEN
                 </button>
 
                 <button 
                 style={Object.assign({backgroundColor: "#e8e8e8", borderRadius:17}, button_style)}
-                //onClick (reference ref)
+                
+                onClick={() =>
+                    onClickedActuateValve(loc, "solenoid", "CLOSE", actuationPriorityRef.current?.value)
+                  }
+
                 >
                     CLOSE
                 </button>
@@ -98,12 +143,21 @@ const ButtonBarPane = () => {
                     PULSE
                 </button>
 
-                <button 
-                style={Object.assign({backgroundColor: "#ff5050", borderRadius:17}, button_style)}
-                //onClick (reference ref)
-                >
-                    RESET
-                </button>
+                <span>
+                    {loc in valve_types
+                        ? Object.entries(valve_types).map(([valve_name, valve_type]) => (
+                            loc === valve_name 
+                            ? valve_type
+                            : ""
+                        ))
+                        : onClickedActuateValve(loc, "solenoid", ???, actuationPriorityRef.current?.value)
+                    }
+                    <button 
+                        style={Object.assign({backgroundColor: "#ff5050", borderRadius:17}, button_style)}
+                    >
+                        RESET
+                    </button>    
+                </span>
 
             </div>
 
