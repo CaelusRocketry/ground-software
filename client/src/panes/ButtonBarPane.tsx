@@ -103,7 +103,6 @@ const ButtonBarPane = () => {
                 borderColor: "black",
                 borderRadius: "8px"
             }}>
-            </div>
 
                 <span style={{fontSize: "25px", margin: "20px"}}>
                     {loc in valve_abbrevs
