@@ -6,6 +6,23 @@ import threading
 from typing import Any, List, Tuple, Union
 from packet import Packet, Log, LogPriority
 from flask_socketio import Namespace
+import json
+import boto3
+from decimal import Decimal
+
+# CREATE TABLE
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('CallistoData')
+
+# INSERT SENSORS
+"""config = json.loads(open("config.json").read())
+data = {'sensors': {}}
+for sensor_type in config['sensors']['list']:
+    data['sensors'][sensor_type] = {}
+    for sensor in config['sensors']['list'][sensor_type]:
+        data['sensors'][sensor_type][sensor] = []
+table.put_item(Item={'Data Type': 'sensorData', 'Data': data})"""
+
 
 BYTE_SIZE = 8192
 
@@ -52,6 +69,13 @@ class Handler(Namespace):
         
         self.connect(ip, port)
         self.INITIAL_TIME = time.time()
+        # INSERT INITIAL TIME
+        table.put_item(
+            Item={
+                'Data Type': 'Initial Time',
+                'Data': Decimal(str(self.INITIAL_TIME))
+            }
+        )
         
         self.general_copy = None
         self.sensors_copy = None
@@ -160,18 +184,46 @@ class Handler(Namespace):
             time.sleep(DELAY_HEARTBEAT)
 
     ## backend methods
-
     def update_general(self, log):
         log_send('general', log)
         self.socketio.emit('general', log, broadcast=True)
     
     
     def update_sensor_data(self, log):
+        data = {'sensors': {}, 'timestamps': []}
+        sensors = data['sensors']
+        timestamps = data['timestamps']
+
+        for s_type, locations in log['message'].items():
+            for location, sensor in locations.items():
+                measured = sensor['measured']
+                kalman = sensor['kalman']
+                status = sensor['status']
+
+                if not s_type in sensors:
+                    sensors[s_type] = {}
+                if not location in sensors[s_type]:
+                    sensors[s_type][location] = []
+
+                sensor_stored = sensors[s_type][location]
+                sensor_stored.append({'measured': Decimal(str(measured)), 'kalman': Decimal(str(kalman))})
+
+        timestamps.append(Decimal(str(log['timestamp'])))
+        table.put_item(Item={'Data Type': 'sensorData', 'Data': data})
+
         log_send('sensor', log)
         self.socketio.emit('sensor_data', log, broadcast=True)
 
     
     def update_valve_data(self, log):
+        data = {'valves': {}}
+        for (valve_type, locations) in log['message'].items():
+            data['valves'][valve_type] = {}
+            for (location, valve) in locations.items():
+                data['valves'][valve_type][location] = valve
+        data['timestamp'] = Decimal(str(log['timestamp']))
+        table.put_item(Item={'Data Type': 'valveData', 'Data': data})
+        
         log_send('valve', log)
         self.socketio.emit('valve_data', log, broadcast=True)
 
