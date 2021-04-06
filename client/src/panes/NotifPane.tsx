@@ -3,6 +3,13 @@ import {useSelector} from "react-redux";
 import Header from "../components/Header";
 import {CaelusState} from "../store/reducers";
 import config from "../config.json";
+import { CSSProperties } from "styled-components";
+const style = {
+  background: "#F5F5F5",
+  padding: "5px",
+  marginLeft: "35px",
+  overflowY: "scroll" as CSSProperties["overflowY"],
+};
 const NotifPane = () => {
     const headers = config["notifications"]["list"];
     const responses = useSelector(
@@ -25,7 +32,7 @@ const NotifPane = () => {
     }
     function Selector(){
         return(
-        <ul className="list-group">
+        <ul className="list-group" style={style}>
             {responses.slice(0).map((data, i) => (
             s3(data, i)
           ))}
