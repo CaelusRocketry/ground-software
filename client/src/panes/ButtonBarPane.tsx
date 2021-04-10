@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import ButtonPaneSelector from "./ButtonPaneSelector";
 import { useSelector } from "react-redux";
 import { actuateValve } from "../api";
@@ -40,7 +40,20 @@ function onClickedActuateValve(
     }
   }
 
-function onClickedUndoSoftAbort() {
+const mode = useSelector((state: CaelusState) => state.data.general.mode);
+
+const switchView = (name: keyof typeof views) =>
+  setViews({ ...views, [name]: !views[name] });
+
+const [views, setViews] = useState({
+  abort: false,
+  actuation: false,
+  sensor: false,
+  valve: false,
+});
+
+
+function onClickedUndoAbort() {
     // TODO: If the current mode isn't Soft Abort, don't allow this (gray out the button, and if they somehow click on it then alert them that its a disallowed action)
   if(disable_auth) {
     window.alert("You do not have authorization to undo a soft abort.")
@@ -50,7 +63,7 @@ function onClickedUndoSoftAbort() {
   }
 }
 
-function onClickedSoftAbort(type: "soft") {
+function onClickedAbort(type: "soft") {
   if(disable_auth) {
     window.alert("You do not have authorization to issue a soft abort.")
   } else if (window.confirm("Are you sure you want to " + type + " abort?")) {
@@ -70,9 +83,6 @@ const ButtonBarPane = () => {
     
     const actuationPriorityRef = useRef<HTMLSelectElement>(null);
 
-    const valveExists = (valveLoc: string) =>
-    valveLoc in data.valveState.valves.solenoid;
-
     const valve_abbrevs = {
         "vent_valve": "NOSV-3",
         "pressurization_valve": "NOSV-4",
@@ -89,7 +99,18 @@ const ButtonBarPane = () => {
         height:60,
         margin: "15px"
       };
-
+    
+    const abort_style = {
+      borderWidth:1,
+      borderColor:'rgba(0,0,0,0.2)',
+      alignItems:'center',
+      justifyContent:'center',
+      width:200,
+      height:60,
+      margin: "15px",
+      backgroundColor: "#eb2323",
+      borderRadius:17
+    };
     return(
 
       <div>
@@ -169,6 +190,15 @@ const ButtonBarPane = () => {
 
         ))}
 
+        <div className={views.abort ? "block" : "hidden"}>
+          <button
+            style={abort_style}
+            onClick={() => onClickedAbort("soft")}
+            disabled={mode === "Normal" ? false : true}
+          >
+            Abort
+          </button>
+        </div>         
             
       </div>
             
