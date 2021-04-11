@@ -6,8 +6,9 @@ import threading
 from typing import Any, List, Tuple, Union
 from packet import Packet, Log, LogPriority
 from flask_socketio import Namespace
+import traceback
 
-BYTE_SIZE = 8192
+BYTE_SIZE = 16384
 
 DELAY = .05
 DELAY_LISTEN = .05
@@ -110,6 +111,7 @@ class Handler(Namespace):
         while self.running:
             data = self.conn.recv(BYTE_SIZE)
             if data:
+                print("ME LIKEYYYYYY")
                 self.ingest_queue.put(data)
 
 
@@ -126,35 +128,48 @@ class Handler(Namespace):
             # block=True waits until an item is available
             # We add a timeout so the loop can stop
             try:
-                data = self.ingest_queue.get(block=True, timeout=1)
-                self.ingest(data)
-            except Empty:
-                pass
+                if not self.ingest_queue.empty():
+                    print("dfjkGOOOOOD")
+                    data = self.ingest_queue.get(block=True, timeout=1)
+                    self.ingest(data)
+            except Exception as e:
+                print('SDJFKKKKKKK=-----------------------------------------')
+                print(e)
+                traceback.print_exc()
 
 
     def ingest(self, packet_str):
         """ Prints any packets received """
-        packet_str = packet_str.decode()
-        packet_strs = packet_str.split("END")[:-1]
-        packets = [Packet.from_string(p_str) for p_str in packet_strs]
-        for packet in packets:
-            for log in packet.logs:
-                log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
-                if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
-                    self.update_general(log.__dict__)
+        try:
+            packet_str = packet_str.decode()
+            print("Received: " + packet_str)
+            packet_strs = packet_str.split("END")[:-1]
+            print('AAAAAAAAAAAAAAAJJJJJJJJJJJJJJJJ')
+            packets = [Packet.from_string(p_str) for p_str in packet_strs]
+            for packet in packets:
+                for log in packet.logs:
+                    log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
+                    if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
+                        self.update_general(log.__dict__)
 
-                if "sensor_data" in log.header:
-                    self.update_sensor_data(log.__dict__)
+                    if "sensor_data" in log.header:
+                        self.update_sensor_data(log.__dict__)
 
-                if "valve_data" in log.header:
-                    self.update_valve_data(log.__dict__)
-                
-                log.save()
+                    if "valve_data" in log.header:
+                        self.update_valve_data(log.__dict__)
+                    
+                    log.save()
+
+        except Exception as e:
+            print('ohFN ODSNOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
+            print(e)
+            traceback.print_exc()
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while self.running:
-            log = Log(header="heartbeat", message="AT", timestamp=time.time()-self.INITIAL_TIME)
+            # TODO: WHY IS THERE A MESSAGE?
+            log = Log(header="heartbeat", message={}, timestamp=time.time()-self.INITIAL_TIME)
             self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)

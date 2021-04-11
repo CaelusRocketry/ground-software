@@ -81,11 +81,31 @@ class Packet:
     @staticmethod
     def from_string(input_string):
         input_dict = json.loads(input_string)
+        real_logs = []
+        print('\n\n--------------------------------------------------\n\n')
+        print(input_dict)
+
+        # for i in input_dict["logs"]: #prints message out one at a time: '{' 'm' 'e' 's' etc
+        #     #thats bc input_dict["logs"] is a string not a dict
+        #     print(i)
+        #     print(type(i))
+
+        if isinstance(input_dict["logs"], str):
+            real_logs.append(json.loads(input_dict["logs"]))
+        elif isinstance(input_dict["logs"], list) and isinstance(input_dict["logs"][0], str):
+            for l in input_dict["logs"]:
+                real_logs.append(json.loads(l))
+        else:
+            raise Exception("Invalid log type in json: the log in the json string sent from FS is neither a list nor a string \
+                \n It should be one of: \n \
+                {... 'logs' : '{json string stuff}' ...} \n \
+                or {... 'logs': ['{json string stuff}', '{second json string}', ...] ...} \n \
+                Given json: " + input_string)
 
         return Packet(
             [
                 Log(log["header"], log["message"], log["timestamp"])
-                for log in input_dict["logs"]
+                for log in real_logs
             ],
 
             input_dict["priority"],
