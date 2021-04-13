@@ -102,7 +102,7 @@ class Handler(Namespace):
                     print("Sending:", encoded)
                 time.sleep(DELAY_SEND)
             except Exception as e:
-                print("ERROR:", e)
+                print("ERROR: ", e)
                 self.running = False
 
 
@@ -111,7 +111,7 @@ class Handler(Namespace):
         while self.running:
             data = self.conn.recv(BYTE_SIZE)
             if data:
-                print("ME LIKEYYYYYY")
+                # print("ME LIKEYYYYYY")
                 self.ingest_queue.put(data)
 
 
@@ -129,12 +129,12 @@ class Handler(Namespace):
             # We add a timeout so the loop can stop
             try:
                 if not self.ingest_queue.empty():
-                    print("dfjkGOOOOOD")
+                    # print("dfjkGOOOOOD")
                     data = self.ingest_queue.get(block=True, timeout=1)
                     self.ingest(data)
             except Exception as e:
-                print('SDJFKKKKKKK=-----------------------------------------')
-                print(e)
+                # print('SDJFKKKKKKK=-----------------------------------------')
+                # print(e)
                 traceback.print_exc()
 
 
@@ -144,7 +144,7 @@ class Handler(Namespace):
             packet_str = packet_str.decode()
             print("Received: " + packet_str)
             packet_strs = packet_str.split("END")[:-1]
-            print('AAAAAAAAAAAAAAAJJJJJJJJJJJJJJJJ')
+            # print('AAAAAAAAAAAAAAAJJJJJJJJJJJJJJJJ')
             packets = [Packet.from_string(p_str) for p_str in packet_strs]
             for packet in packets:
                 for log in packet.logs:
@@ -161,8 +161,8 @@ class Handler(Namespace):
                     log.save()
 
         except Exception as e:
-            print('ohFN ODSNOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
-            print(e)
+            # print('ohFN ODSNOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
+            # print(e)
             traceback.print_exc()
 
     def heartbeat(self):
@@ -171,7 +171,7 @@ class Handler(Namespace):
             # TODO: WHY IS THERE A MESSAGE?
             log = Log(header="heartbeat", message={}, timestamp=time.time()-self.INITIAL_TIME)
             self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
-            print("Sent heartbeat")
+            # print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
 
     ## backend methods
@@ -230,4 +230,5 @@ class Handler(Namespace):
 hidden_log_types = set() # {"general", "sensor", "valve", "button"}
 def log_send(type, log):
     if type not in hidden_log_types:
-        print(f"Sending [{type}] {log}")
+        # print(f"Sending [{type}] {log}")
+        pass

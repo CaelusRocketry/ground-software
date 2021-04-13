@@ -82,8 +82,8 @@ class Packet:
     def from_string(input_string):
         input_dict = json.loads(input_string)
         real_logs = []
-        print('\n\n--------------------------------------------------\n\n')
-        print(input_dict)
+        # print('\n\n--------------------------------------------------\n\n')
+        # print(input_dict)
 
         # for i in input_dict["logs"]: #prints message out one at a time: '{' 'm' 'e' 's' etc
         #     #thats bc input_dict["logs"] is a string not a dict
