@@ -102,13 +102,14 @@ const ButtonBarPane = () => {
     const abort_style = {
       borderWidth:1,
       borderColor:'rgba(0,0,0,0.2)',
-      borderRadius: "8px",
       alignItems:'center',
       justifyContent:'center',
-      width:200,
+      width: 1500,
       height:60,
-      margin: "10px",
+      margin: "15px",
       backgroundColor: "#eb2323",
+      borderRadius: 17, 
+      fontWeight: 700
     };
     return(
 
@@ -189,8 +190,9 @@ const ButtonBarPane = () => {
 
         ))}
         
-        <div style={abort_style}>
+        <div>
           <button
+            style={abort_style}
             onClick={() => onClickedAbort("soft")}
             disabled={mode === "Normal" ? false : true}
           >
