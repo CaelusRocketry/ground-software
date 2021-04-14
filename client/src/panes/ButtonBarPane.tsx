@@ -40,19 +40,6 @@ function onClickedActuateValve(
     }
   }
 
-const mode = useSelector((state: CaelusState) => state.data.general.mode);
-
-const switchView = (name: keyof typeof views) =>
-  setViews({ ...views, [name]: !views[name] });
-
-const [views, setViews] = useState({
-  abort: false,
-  actuation: false,
-  sensor: false,
-  valve: false,
-});
-
-
 function onClickedUndoAbort() {
     // TODO: If the current mode isn't Soft Abort, don't allow this (gray out the button, and if they somehow click on it then alert them that its a disallowed action)
   if(disable_auth) {
@@ -80,6 +67,18 @@ const ButtonBarPane = () => {
         heartbeatStatus: state.data.general.heartbeat_status,
         mode: state.data.general.mode,
     }));
+
+    const mode = useSelector((state: CaelusState) => state.data.general.mode);
+
+    const switchView = (name: keyof typeof views) =>
+      setViews({ ...views, [name]: !views[name] });
+
+    const [views, setViews] = useState({
+      abort: false,
+      actuation: false,
+      sensor: false,
+      valve: false,
+    });
     
     const actuationPriorityRef = useRef<HTMLSelectElement>(null);
 
@@ -189,7 +188,7 @@ const ButtonBarPane = () => {
             </div>
 
         ))}
-
+        
         <div className={views.abort ? "block" : "hidden"}>
           <button
             style={abort_style}
