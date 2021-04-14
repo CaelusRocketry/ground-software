@@ -324,12 +324,12 @@
   },
   "checklist": {
     "waiting": {
-      "1": "w-Say hi ← (Priority: !!!!!)",
-      "2": "w-Pressurize the system",
-      "3": "w-Run some code",
-      "4": "w-Check to make sure everything is pressurized",
-      "5": "w-If something broke, abort",
-      "6": "w-If something didn’t break, still abort"
+      "1": ["w-Say hi ← (Priority: !!!!!)", true],
+      "2": ["w-Pressurize the system", true],
+      "3": ["w-Run some code", true],
+      "4": ["w-Check to make sure everything is pressurized", true],
+      "5": ["w-If something broke, abort", true],
+      "6": ["w-If something didn’t break, still abort", true]
     },
     "pressurization": {
       "1": "p-Say hi ← (Priority: !!!!!)",
