@@ -189,9 +189,8 @@ const ButtonBarPane = () => {
 
         ))}
         
-        <div className={views.abort ? "block" : "hidden"}>
+        <div style={abort_style}>
           <button
-            style={abort_style}
             onClick={() => onClickedAbort("soft")}
             disabled={mode === "Normal" ? false : true}
           >
