@@ -104,12 +104,12 @@ const ButtonBarPane = () => {
       borderColor:'rgba(0,0,0,0.2)',
       alignItems:'center',
       justifyContent:'center',
-      width: 1500,
+      width: 1515,
       height:60,
-      margin: "15px",
-      backgroundColor: "#eb2323",
+      margin: "10px",
       borderRadius: 17, 
-      fontWeight: 700
+      fontWeight: 700,
+      color: "black"
     };
     return(
 
@@ -192,13 +192,23 @@ const ButtonBarPane = () => {
         
         <div>
           <button
-            style={abort_style}
+            style={Object.assign({backgroundColor: "#eb2323"}, abort_style)}
             onClick={() => onClickedAbort("soft")}
             disabled={mode === "Normal" ? false : true}
           >
             Abort
           </button>
-        </div>         
+        </div>
+
+        <div>
+          <button
+            style={Object.assign({backgroundColor: "#a6a6a6"}, abort_style)}
+            onClick={() => onClickedUndoAbort()}
+            disabled={mode === "Normal" ? true : false}
+          >
+            Undo Abort
+          </button>
+        </div> 
             
       </div>
             
