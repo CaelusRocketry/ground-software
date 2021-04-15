@@ -7,6 +7,7 @@ from typing import Any, List, Tuple, Union
 from packet import Packet, Log, LogPriority
 from flask_socketio import Namespace
 import traceback
+import json
 
 BYTE_SIZE = 16384
 
@@ -88,8 +89,8 @@ class Handler(Namespace):
         self.ingest_thread.start()
 
 
-    def send_to_flight_software(self, json):
-        log = Log(header=json['header'], message=json['message'], timestamp=time.time()-self.INITIAL_TIME)
+    def send_to_flight_software(self, dct):
+        log = Log(header=dct['header'], message=json.dumps(dct['message']), timestamp=time.time()-self.INITIAL_TIME)
         self.enqueue(Packet(logs=[log], timestamp=log.timestamp))
 
     def send(self):

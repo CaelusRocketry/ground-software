@@ -160,8 +160,9 @@ const ButtonPane = () => {
   }, [currentStage]);
 
   // If u click on a closed view, it opens. If it's already opened, it closes.
-  const switchView = (name: keyof typeof views) =>
+  const switchView = (name: keyof typeof views) => {
     setViews({ ...views, [name]: !views[name] });
+  }
 
   const actuationTypeRef = useRef<HTMLSelectElement>(null);
   const actuationPriorityRef = useRef<HTMLSelectElement>(null);

@@ -102,6 +102,9 @@ class Packet:
                 or {... 'logs': ['{json string stuff}', '{second json string}', ...] ...} \n \
                 Given json: " + input_string)
 
+        for i in range(len(real_logs)):
+            if isinstance(real_logs[i]["message"], str):
+                real_logs[i]["message"] = json.loads(real_logs[i]["message"]) # String to dict
         return Packet(
             [
                 Log(log["header"], log["message"], log["timestamp"])

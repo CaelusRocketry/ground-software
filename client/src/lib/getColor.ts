@@ -1,7 +1,7 @@
 import caelusLogger from "./caelusLogger";
 
 const getColor = (status: any) => {
-  if(status == undefined){
+  if(status === undefined){
     return "black";
   }
   switch (status) {
