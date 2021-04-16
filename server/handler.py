@@ -8,6 +8,9 @@ from packet import Packet, Log, LogPriority
 from flask_socketio import Namespace
 import traceback
 import json
+import serial
+
+USE_XBEE = True
 
 BYTE_SIZE = 16384
 
@@ -25,7 +28,8 @@ f.close()
 class Handler(Namespace):
     """ Handles all communication """
 
-    def init(self, ip, port, socketio):
+    def init(self, config, socketio):
+        self.using_xbee = config["telemetry"]["USING_XBEE"]
         """ Based on given IP and port, create and connect a socket """
 
         """ A heapqueue of packets to send """
@@ -33,7 +37,10 @@ class Handler(Namespace):
         
         self.send_thread = threading.Thread(target=self.send, daemon=True)
         self.send_thread.daemon = True
-        self.listen_thread = threading.Thread(target=self.listen, daemon=True)
+        if self.using_xbee:
+            self.listen_thread = threading.Thread(target=self.listen_xbee, daemon=True)
+        else:
+            self.listen_thread = threading.Thread(target=self.listen_socket, daemon=True)
         self.listen_thread.daemon = True
         self.heartbeat_thread = threading.Thread(target=self.heartbeat, daemon=True)
         self.heartbeat_thread.daemon = True
@@ -42,27 +49,31 @@ class Handler(Namespace):
         # This thread reads from the ingest queue
         self.ingest_thread = threading.Thread(target=self.ingest_loop, daemon=True)
         self.ingest_thread.daemon = True
-
-        self.conn = None
         self.running = False
+        self.INITIAL_TIME = time.time()
+
+        if self.using_xbee:
+            self.ser = None
+            self.connect_xbee(config["telemetry"]["XBEE_PORT"], config["telemetry"]["XBEE_BAUD_RATE"])
+            self.rcvd = ""
+        else:
+            self.conn = None
+            self.connect_socket(config["telemetry"]["GS_IP"], config["telemetry"]["SOCKET_PORT"])
+
+        self.general_copy = None
+        self.sensors_copy = None
+        self.valves_copy = None
+        self.buttons_copy = None
 
         self.socketio = socketio
         self.socketio.on_event(
             'json',
             self.send_to_flight_software
         )
-        
-        self.connect(ip, port)
-        self.INITIAL_TIME = time.time()
-        
-        self.general_copy = None
-        self.sensors_copy = None
-        self.valves_copy = None
-        self.buttons_copy = None
 
     ## telemetry methods
 
-    def connect(self, ip, port):
+    def connect_socket(self, ip, port):
         # Server-side socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -79,6 +90,18 @@ class Handler(Namespace):
         
         print("Finished connecting")
 
+    def connect_xbee(self, port, baud):
+        try:
+            self.ser = serial.Serial(port, baud)
+            self.ser.flushInput()
+            self.ser.flushOutput()
+            self.INITIAL_TIME = time.time()
+            print("Finished connecting")
+
+        except Exception as e:
+            print("ERROR:", e)
+            self.running = False
+
 
     def begin(self):
         """ Starts the send and listen threads """
@@ -93,27 +116,50 @@ class Handler(Namespace):
         log = Log(header=dct['header'], message=json.dumps(dct['message']), timestamp=time.time()-self.INITIAL_TIME)
         self.enqueue(Packet(logs=[log], timestamp=log.timestamp))
 
+
     def send(self):
         """ Constantly sends next packet from queue to ground station """
         while self.running:
             try:
                 if self.queue_send and SEND_ALLOWED:
                     _, encoded = heapq.heappop(self.queue_send)
-                    self.conn.send(encoded)
-                    print("Sending:", encoded)
-                time.sleep(DELAY_SEND)
+                    if USE_XBEE:
+                        subpackets = [encoded[i:255+i] for i in range(0, len(encoded), 255)] #split into smaller packets of 255
+                        for subpacket in subpackets:
+                            self.ser.write(subpacket)
+                    else:
+                        self.conn.send(encoded)
+                    print("Sent packet:", encoded, len(encoded))
+                    time.sleep(DELAY_SEND)
             except Exception as e:
-                print("ERROR: ", e)
+                print("ERROR:", e)
                 self.running = False
 
 
-    def listen(self):
+    def listen_xbee(self):
+        """ Constantly listens for any from ground station """
+        while self.running:
+            data = self.ser.read(self.ser.in_waiting).decode()
+            if data:
+                self.rcvd += data
+
+            packet_start = self.rcvd.find("^")
+            if packet_start != -1:
+                packet_end = self.rcvd.find("$", packet_start)
+                if packet_end != -1:
+                    incoming_packet = self.rcvd[packet_start+1:packet_end]
+                    self.ingest_queue.put(incoming_packet)
+                    self.rcvd = self.rcvd[packet_end+1:]
+            time.sleep(DELAY_LISTEN)
+
+    def listen_socket(self):
         """ Constantly listens for any from ground station """
         while self.running:
             data = self.conn.recv(BYTE_SIZE)
             if data:
-                # print("ME LIKEYYYYYY")
                 self.ingest_queue.put(data)
+            time.sleep(DELAY_LISTEN)
+
 
 
     def enqueue(self, packet):

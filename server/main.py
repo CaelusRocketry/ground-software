@@ -9,7 +9,6 @@ import logging
 
 import argparse
 
-
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
@@ -27,6 +26,7 @@ if args.config == "local":
     config = json.loads(open("config.json").read())
     config["telemetry"]["GS_IP"] = "127.0.0.1"
     config["telemetry"]["SOCKETIO_HOST"] = "127.0.0.1"
+    config["telemetry"]["USING_XBEE"] = False
 elif args.config != None:
     try:
         config = json.loads(open(args.config).read())
@@ -35,9 +35,6 @@ elif args.config != None:
 else:
     config = json.loads(open("config.json").read())
 
-
-GS_IP = config["telemetry"]["GS_IP"]
-GS_PORT = config["telemetry"]["GS_PORT"]
 
 app = Flask(__name__, static_folder="templates")
 CORS(app)
@@ -49,7 +46,7 @@ if __name__ == "__main__":
     print("listening and sending")
 
     handler = Handler('/')
-    handler.init(GS_IP, GS_PORT, socketio)
+    handler.init(config, socketio)
     handler.begin()
 
     socketio.on_namespace(handler)
