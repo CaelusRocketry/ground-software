@@ -5,7 +5,7 @@
     "DELAY": 0.1,
     "SOCKETIO_HOST": "127.0.0.1",
     "SOCKETIO_PORT": 5000,
-    "XBEE_PORT": "COM10",
+    "XBEE_PORT": "COM6",
     "XBEE_BAUD_RATE": 9600,
     "USING_XBEE": true
   },

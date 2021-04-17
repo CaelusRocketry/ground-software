@@ -126,6 +126,7 @@ class Handler(Namespace):
                     if USE_XBEE:
                         subpackets = [encoded[i:255+i] for i in range(0, len(encoded), 255)] #split into smaller packets of 255
                         for subpacket in subpackets:
+                            print("Writing:", subpacket)
                             self.ser.write(subpacket)
                     else:
                         self.conn.send(encoded)
@@ -142,6 +143,7 @@ class Handler(Namespace):
             data = self.ser.read(self.ser.in_waiting).decode()
             if data:
                 self.rcvd += data
+                # print("Just got:", data)
 
             packet_start = self.rcvd.find("^")
             if packet_start != -1:
@@ -165,7 +167,7 @@ class Handler(Namespace):
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
         # TODO: This is implemented wrong. It should enqueue by finding packets that have similar priorities, not changing the priorities of current packets.
-        packet_str = (packet.to_string() + "END").encode("ascii")
+        packet_str = (packet.to_string() + "$").encode("ascii")
         heapq.heappush(self.queue_send, (packet.priority, packet_str))
 
     
@@ -188,14 +190,20 @@ class Handler(Namespace):
     def ingest(self, packet_str):
         """ Prints any packets received """
         try:
-            packet_str = packet_str.decode()
-            print("Received: " + packet_str)
-            packet_strs = packet_str.split("END")[:-1]
+            # packet_str = packet_str.decode()
+            # print("Received: " + packet_str)
+            if "$" in packet_str:
+                packet_strs = packet_str.split("$")[:-1]
+            else:
+                packet_strs = [packet_str]
+                
+            print(packet_strs)
             # print('AAAAAAAAAAAAAAAJJJJJJJJJJJJJJJJ')
             packets = [Packet.from_string(p_str) for p_str in packet_strs]
             for packet in packets:
                 for log in packet.logs:
                     log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
+                    print("header: \n\n\n\n\n " + log.header)
                     if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
                         self.update_general(log.__dict__)
 
