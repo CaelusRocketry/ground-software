@@ -1,5 +1,4 @@
-import React, { useState }  from 'react';
-import { Checkbox, useCheckboxState } from 'pretty-checkbox-react';
+import React from 'react';
 import styled from 'styled-components';
 
 
@@ -9,6 +8,7 @@ import '@djthoms/pretty-checkbox';
 import Header from '../components/Header';
 import { CaelusState } from "../store/reducers";
 import { useSelector } from "react-redux";
+import Checklist from "../components/Checklist";
 
 const Button = styled.button`
   background-color: black;
@@ -85,43 +85,7 @@ const ChecklistPane = () => {
         <Button onClick={nextButtonPushed}> Next </Button>
       </div>
     
-      <input 
-        className="Question__answer-checkbox"  
-        onChange={() => {
-          localStorage.setItem("check1", localStorage.getItem("check1") === "false" ? "true" : "false" );
-          console.log("1- " + localStorage.getItem("check1"));
-        }}
-        type="checkbox"
-        style={{ fontSize: "20px", marginBottom: 20, marginTop: 8, marginLeft: 20 }}
-      /> 
-
-      {/* <input 
-        className="Question__answer-checkbox"  
-        onClick={() => {
-          localStorage.setItem("check2", localStorage.getItem("check2") === "false" ? "true" : "false" );
-          console.log("2- " + localStorage.getItem("check2"));
-        }}
-        type="checkbox"
-        style={{ fontSize: "20px", marginBottom: 20, marginTop: 8, marginLeft: 20 }}
-      />  */}
-
-      {/* var storedNames = JSON.parse(localStorage.getItem("names")); */}
-
-
-      
-
-
-      {/* <input 
-        className="Question__answer-checkbox"
-        onClick={() => {
-          console.log("checkbox stored" + checkboxState);
-          localStorage.setItem("true", checkboxState[0]);
-          setCheckboxState(checkboxState[0] === "true" ? arr => [] : "true" );
-        }}
-        type="checkbox"
-        style={{ fontSize: "20px", marginBottom: 20, marginTop: 8, marginLeft: 20 }}
-      /> */}
-
+      <Checklist />
 
       {/* {(stageNames[stages[x]] === stageNames[stages[currentStage]])
         ? Object.entries(stageParameters[x]).map(([num, step]) => {
