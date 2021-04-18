@@ -26,7 +26,6 @@ if args.config == "local":
     config = json.loads(open("config.json").read())
     config["telemetry"]["GS_IP"] = "127.0.0.1"
     config["telemetry"]["SOCKETIO_HOST"] = "127.0.0.1"
-    config["telemetry"]["USING_XBEE"] = False
 elif args.config != None:
     try:
         config = json.loads(open(args.config).read())
@@ -36,6 +35,9 @@ else:
     config = json.loads(open("config.json").read())
 
 
+BAUD_RATE = config["telemetry"]["XBEE_BAUD_RATE"]
+GS_PORT = config["telemetry"]["XBEE_PORT"]
+
 app = Flask(__name__, static_folder="templates")
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -43,11 +45,11 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 time.sleep(1)
 
 if __name__ == "__main__":
-    print("listening and sending")
-
+    
     handler = Handler('/')
-    handler.init(config, socketio)
+    handler.init(GS_PORT, BAUD_RATE)
     handler.begin()
+    print("listening and sending")
 
     socketio.on_namespace(handler)
     socketio.run(app, host=config["telemetry"]["SOCKETIO_HOST"], port=int(config["telemetry"]["SOCKETIO_PORT"]))
