@@ -112,7 +112,7 @@ const ButtonBarPane = () => {
     };
     return(
 
-      <div>
+      <div style={{backgroundColor: "white", padding: "20px"}}>
             
         {Object.entries(data.valveState.valves.solenoid).map(([loc, valve]) => (
 
@@ -121,75 +121,62 @@ const ButtonBarPane = () => {
                 backgroundColor: "#d6fdff",
                 borderWidth: "1px",
                 borderColor: "black",
-                borderRadius: "8px"
+                borderRadius: "8px",
+                marginBottom: "20px"
             }}>
-
-                <span style={{fontSize: "25px", margin: "20px"}}>
-                    {loc in valve_abbrevs
-                      ? Object.entries(valve_abbrevs).map(([long_name, short_name]) => (
-                        loc === long_name 
-                          ? short_name
-                          : ""
-                        ))
-                      : loc
-                    }    
-                </span>
-                
-                <div style = {{margin: '15px'}}>
-                    <ButtonPaneSelector
-                      label="Priority Dropdown"
-                      ref={actuationPriorityRef}
-                      options={[1, 2, 3]}
-                      optionNames={{ 1: "!", 2: "!!", 3: "!!!" }}
-                    />
-                </div>
-
-                <button 
-                  style={Object.assign({backgroundColor: "#8de4ff", borderRadius:17}, button_style)}
-
-                  onClick={() =>
-                    onClickedActuateValve(loc, "solenoid", "3", actuationPriorityRef.current?.value)
-                  }
-                >
-                  OPEN
-                </button>
-
-                <button 
-                  style={Object.assign({backgroundColor: "#e8e8e8", borderRadius:17}, button_style)}
-                    
-                  onClick={() =>
-                    onClickedActuateValve(loc, "solenoid", "2", actuationPriorityRef.current?.value)
-                  }
-
-                >
-                  CLOSE
-                </button>
-
-                <button 
-                  style={Object.assign({backgroundColor: "#10f5e1", borderRadius:17}, button_style)}
-
-                  onClick={() =>
-                    onClickedActuateValve(loc, "solenoid", "4", actuationPriorityRef.current?.value)
-                  }
-                >
-                  PULSE
-                </button>
-
-                <button 
-                  style={Object.assign({backgroundColor: "#ff5050", borderRadius:17}, button_style)}
-
-                  onClick={() =>
-                    onClickedActuateValve(loc, "solenoid", "1", actuationPriorityRef.current?.value)
-                  }
-                >
-                  RESET
-                </button>    
-
+              <span style={{fontSize: "25px", margin: "20px"}}>
+                  {loc in valve_abbrevs
+                    ? Object.entries(valve_abbrevs).map(([long_name, short_name]) => (
+                      loc === long_name 
+                        ? short_name
+                        : ""
+                      ))
+                    : loc
+                  }    
+              </span>
+              <div style = {{margin: '15px', display: "inline"}}>
+                <ButtonPaneSelector
+                  label="Priority"
+                  ref={actuationPriorityRef}
+                  options={[1, 2, 3]}
+                  optionNames={{ 1: "1", 2: "2", 3: "3" }}
+                />
+              </div>
+              <button 
+                style={Object.assign({backgroundColor: "#8de4ff", borderRadius:17}, button_style)}
+                onClick={() =>
+                  onClickedActuateValve(loc, "solenoid", "3", actuationPriorityRef.current?.value)
+                }
+              >
+                OPEN
+              </button>
+              <button 
+                style={Object.assign({backgroundColor: "#e8e8e8", borderRadius:17}, button_style)} 
+                onClick={() =>
+                  onClickedActuateValve(loc, "solenoid", "2", actuationPriorityRef.current?.value)
+                }
+              >
+                CLOSE
+              </button>
+              <button 
+                style={Object.assign({backgroundColor: "#10f5e1", borderRadius:17}, button_style)}
+                onClick={() =>
+                  onClickedActuateValve(loc, "solenoid", "4", actuationPriorityRef.current?.value)
+                }
+              >
+                PULSE
+              </button>
+              <button 
+                style={Object.assign({backgroundColor: "#ff5050", borderRadius:17}, button_style)}
+                onClick={() =>
+                  onClickedActuateValve(loc, "solenoid", "1", actuationPriorityRef.current?.value)
+                }
+              >
+                RESET
+              </button>    
             </div>
-
         ))}
-        
-        <div className={views.abort ? "block" : "hidden"}>
+        <div>
           <button
             style={abort_style}
             onClick={() => onClickedAbort("soft")}
@@ -197,12 +184,9 @@ const ButtonBarPane = () => {
           >
             Abort
           </button>
-        </div>         
-            
+        </div>             
       </div>
-            
     );
-
 };
 
 export default ButtonBarPane;
