@@ -13,8 +13,8 @@ BYTE_SIZE = 8192
 
 DELAY = .05
 DELAY_LISTEN = .005
-DELAY_SEND = .05
-DELAY_HEARTBEAT = 3
+DELAY_SEND = 1
+DELAY_HEARTBEAT = 5
 
 SEND_ALLOWED = True
 
@@ -90,14 +90,17 @@ class Handler(Namespace):
                 if self.queue_send and SEND_ALLOWED:
                     _, packet_str = heapq.heappop(self.queue_send)
 
-                    subpackets = [packet_str[i:255+i] for i in range(0, len(packet_str), 255)] #split into smaller packets of 255
+                    subpacket_len = 60
+                    subpackets = [packet_str[i:subpacket_len+i] for i in range(0, len(packet_str), subpacket_len)] #split into smaller packets of 255
 
                     for subpacket in subpackets:
                         self.ser.write(subpacket)
+                        print("Sent subpacket:", subpacket)
                         time.sleep(DELAY_SEND)
                       
 
                     print("Sent packet:", packet_str, len(packet_str))
+                    time.sleep(DELAY_SEND)
                     
 
             except Exception as e:
@@ -121,8 +124,10 @@ class Handler(Namespace):
                     self.ingest_queue.put(incoming_packet)
                     
                     self.rcvd = self.rcvd[packet_end+1:]
+                    # print("packet receiveddddd")
         
             time.sleep(DELAY_LISTEN)
+            
 
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
@@ -139,30 +144,35 @@ class Handler(Namespace):
             try:
                 data = self.ingest_queue.get(block=True, timeout=1)
                 self.ingest(data)
+                print("\nRecieved:", data)
             except Empty:
                 pass
 
 
     def ingest(self, packet_str):
         """ Prints any packets received """
-        packet = Packet.from_string(packet_str)
-        for log in packet.logs:
-            log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
-            if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
-                self.update_general(log.__dict__)
+        try:
+            packet = Packet.from_string(packet_str)
+            for log in packet.logs:
+                log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
+                if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
+                    self.update_general(log.__dict__)
 
-            if "sensor_data" in log.header:
-                self.update_sensor_data(log.__dict__)
+                if "sensor_data" in log.header:
+                    self.update_sensor_data(log.__dict__)
 
-            if "valve_data" in log.header:
-                self.update_valve_data(log.__dict__)
-            
-            log.save()
+                if "valve_data" in log.header:
+                    self.update_valve_data(log.__dict__)
+                
+                log.save()
+        except Exception as e:
+            print("Failed while ingesting:", packet_str)
+            print(e)
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while self.running:
-            log = Log(header="heartbeat", message="AT - " + str(self.heartbeat_packet_number), timestamp=round(time.time()-self.INITIAL_TIME, 3))
+            log = Log(header="heartbeat", message="AT - " + str(self.heartbeat_packet_number), timestamp=self.get_curr_time())
             self.heartbeat_packet_number += 1
 
             self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
@@ -218,10 +228,13 @@ class Handler(Namespace):
             self.update_store_data()
         else:
             print(data)
-            log = Log(header=data['header'], message=data['message'])
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
+            log = Log(header=data['header'], message=data['message'], timestamp=self.get_curr_time())
+            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
 
-hidden_log_types = set() # {"general", "sensor", "valve", "button"}
+    def get_curr_time(self):
+        return round(time.time()-self.INITIAL_TIME, 3)
+
+hidden_log_types = {"general", "sensor", "valve", "button"}
 def log_send(type, log):
     if type not in hidden_log_types:
-        print(f"Sending [{type}] {log}")
+        print(f"To Frontend: [{type}] {log}")
