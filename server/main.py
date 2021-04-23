@@ -35,9 +35,6 @@ else:
     config = json.loads(open("config.json").read())
 
 
-BAUD_RATE = config["telemetry"]["BAUD_RATE"]
-GS_PORT = config["telemetry"]["GS_PORT"]
-
 app = Flask(__name__, static_folder="templates")
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -47,7 +44,7 @@ time.sleep(1)
 if __name__ == "__main__":
     
     handler = Handler('/')
-    handler.init(GS_PORT, BAUD_RATE)
+    handler.init(config)
     handler.begin()
     print("listening and sending")
 

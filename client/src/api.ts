@@ -99,6 +99,8 @@ export function createSocketIoCallbacks(store: Store<CaelusState>) {
   });
 
   socket.on("valve_data", (log: UpdateValveDataAction["data"]) => {
+    console.log("GOT VALVE DATA");
+    console.log(log);
     store.dispatch(updateValveData(log));
     sendMessage("update_valves", store.getState().data.valveData);
   });

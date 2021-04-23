@@ -1,11 +1,13 @@
 {
   "telemetry": {
-    "GS_IP": "127.0.0.1",
+    "SOCKET_IP": "127.0.0.1",
+    "SOCKET_PORT": 5005,
     "DELAY": 0.1,
     "SOCKETIO_HOST": "127.0.0.1",
     "SOCKETIO_PORT": 5000,
-    "GS_PORT": "/dev/ttyUSB0",
-    "BAUD_RATE": 9600
+    "XBEE_PORT": "/dev/ttyUSB0",
+    "BAUD_RATE": 9600,
+    "USE_XBEE": false
   },
   "sensors": {
     "list": {

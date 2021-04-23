@@ -7,6 +7,7 @@ import serial
 from typing import Any, List, Tuple, Union
 from packet import Packet, Log, LogPriority
 from flask_socketio import Namespace
+import socket
 
 
 BYTE_SIZE = 8192
@@ -26,7 +27,7 @@ f.close()
 class Handler(Namespace):
     """ Handles all communication """
 
-    def init(self, gs_port, baud_rate):
+    def init(self, config):
         """ Based on given IP and port, create and connect a socket """
 
         """ A heapqueue of packets to send """
@@ -48,18 +49,23 @@ class Handler(Namespace):
         self.ser = None
         self.running = False
         self.INITIAL_TIME = -100
+        self.using_xbee = config["telemetry"]["USE_XBEE"]
 
-        try:
-            self.ser = serial.Serial(gs_port, baud_rate)
+        if self.using_xbee:
+            baud = config["telemetry"]["BAUD_RATE"]
+            xbee_port = config["telemetry"]["XBEE_PORT"]
+            self.ser = serial.Serial(xbee_port, baud_rate)
             self.ser.flushInput()
             self.ser.flushOutput()
-            self.INITIAL_TIME = time.time()
-            print("Finished connecting")
-
-        except Exception as e:
-            print("ERROR:", e)
-            self.running = False
+            print("Finished setting up xbee")
         
+        else:
+            gs_ip = config["telemetry"]["SOCKET_IP"]
+            gs_port = config["telemetry"]["SOCKET_PORT"]
+            self.connect(gs_ip, gs_port)
+
+        self.INITIAL_TIME = time.time()
+
         self.general_copy = None
         self.sensors_copy = None
         self.valves_copy = None
@@ -79,6 +85,24 @@ class Handler(Namespace):
         self.ingest_thread.start()
 
 
+    def connect(self, ip, port):
+        # Server-side socket
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+        # Binds to the provided IP and port
+        print("IP:", ip, "PORT:", port)
+        self.sock.bind((ip, port))
+
+        # Listens for connections, allowing at most 1 pending connection
+        self.sock.listen(1)
+
+        # Accept a connection
+        (self.conn, _addr) = self.sock.accept()
+        
+        print("Finished connecting")
+
+
     def send_to_flight_software(self, json):
         log = Log(header=json['header'], message=json['message'], timestamp=round(time.time()-self.INITIAL_TIME, 3))
         self.enqueue(Packet(logs=[log], timestamp=log.timestamp))
@@ -89,25 +113,29 @@ class Handler(Namespace):
             try:
                 if self.queue_send and SEND_ALLOWED:
                     _, packet_str = heapq.heappop(self.queue_send)
-
-                    subpackets = [packet_str[i:255+i] for i in range(0, len(packet_str), 255)] #split into smaller packets of 255
-
-                    for subpacket in subpackets:
-                        self.ser.write(subpacket)
-                      
-
-                    print("Sent packet:", packet_str, len(packet_str))
-                    time.sleep(DELAY_SEND)
+                    if self.using_xbee:
+                        subpackets = [packet_str[i:60+i] for i in range(0, len(packet_str), 60)] #split into smaller packets of 60
+                        for subpacket in subpackets:
+                            self.ser.write(subpacket)
+                            time.sleep(DELAY_SEND)
+                    else:
+                        self.conn.send(packet_str)
+                    print("Sending:", packet_str)
+                time.sleep(DELAY_SEND)
 
             except Exception as e:
-                print("ERROR:", e)
+                print("ERROR: ", e)
                 self.running = False
 
 
     def listen(self):
         """ Constantly listens for any from ground station """
         while self.running:
-            data = self.ser.read(self.ser.in_waiting).decode()
+            if self.using_xbee:
+                data = self.ser.read(self.ser.in_waiting).decode()
+            else:
+                data = self.conn.recv(BYTE_SIZE).decode()
+            print("Received: ", data)
             if data:
                 self.rcvd += data
 
@@ -122,6 +150,7 @@ class Handler(Namespace):
                     self.rcvd = self.rcvd[packet_end+1:]
         
             time.sleep(DELAY_LISTEN)
+
 
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
@@ -144,6 +173,7 @@ class Handler(Namespace):
 
     def ingest(self, packet_str):
         """ Prints any packets received """
+        print("Ingesting:", packet_str)
         packet = Packet.from_string(packet_str)
         for log in packet.logs:
             log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
@@ -157,6 +187,7 @@ class Handler(Namespace):
                 self.update_valve_data(log.__dict__)
             
             log.save()
+
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
@@ -217,10 +248,10 @@ class Handler(Namespace):
             self.update_store_data()
         else:
             print(data)
-            log = Log(header=data['header'], message=data['message'])
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO))
+            log = Log(header=data['header'], message=data['message'], timestamp=round(time.time()-self.INITIAL_TIME, 3))
+            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
 
-hidden_log_types = set() # {"general", "sensor", "valve", "button"}
+hidden_log_types = {"general", "sensor", "valve", "button"}
 def log_send(type, log):
     if type not in hidden_log_types:
-        print(f"Sending [{type}] {log}")
+        print(f"Sending to Frontend [{type}] {log}")

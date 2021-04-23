@@ -157,8 +157,13 @@ const updateData = (state = createInitialState(), action: DataAction) => {
         return state;
 
       case "UPDATE_VALVE_DATA":
+        console.log("VALVE DATA REEEE");
+        console.log(action.data.message);
+        console.log(state.valveData.valves);
         for (let [type, locations] of Object.entries(action.data.message)) {
           for (let [location, valve] of Object.entries(locations)) {
+            console.log(type);
+            console.log(location);
             state.valveData.valves[type][location] = valve;
           }
         }
