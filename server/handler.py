@@ -6,23 +6,12 @@ import threading
 from typing import Any, List, Tuple, Union
 from packet import Packet, Log, LogPriority
 from flask_socketio import Namespace
+import traceback
 import json
-import boto3
-from decimal import Decimal
 
 # CREATE TABLE
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('CallistoData')
-
-# INSERT SENSORS
-"""config = json.loads(open("config.json").read())
-data = {'sensors': {}}
-for sensor_type in config['sensors']['list']:
-    data['sensors'][sensor_type] = {}
-    for sensor in config['sensors']['list'][sensor_type]:
-        data['sensors'][sensor_type][sensor] = []
-table.put_item(Item={'Data Type': 'sensorData', 'Data': data})"""
-
+table = dynamodb.Table('CallistoSensorData')
 
 BYTE_SIZE = 8192
 
@@ -68,19 +57,19 @@ class Handler(Namespace):
         )
         
         self.connect(ip, port)
-        self.INITIAL_TIME = time.time()
-        # INSERT INITIAL TIME
-        table.put_item(
-            Item={
-                'Data Type': 'Initial Time',
-                'Data': Decimal(str(self.INITIAL_TIME))
-            }
-        )
-        
-        self.general_copy = None
-        self.sensors_copy = None
-        self.valves_copy = None
-        self.buttons_copy = None
+
+        self.INITIAL_TIME = time.time() # SET INITIAL TIME
+        self.socketio.emit('initial_time', self.INITIAL_TIME, broadcast=True)
+
+        self.sensor_data = {'sensors': {}, 'timestamps': []}
+        self.valve_data = {'valves': {}, 'timestamp': None}
+        self.heartbeat_received = 0
+        self.heartbeat_status = None
+        self.stage = 'waiting'
+        self.countdown = 10
+        self.responses = []
+        self.percent_data = 0
+        self.mode = 'Normal'
 
     ## telemetry methods
 
@@ -111,8 +100,8 @@ class Handler(Namespace):
         self.ingest_thread.start()
 
 
-    def send_to_flight_software(self, json):
-        log = Log(header=json['header'], message=json['message'], timestamp=time.time()-self.INITIAL_TIME)
+    def send_to_flight_software(self, dct):
+        log = Log(header=dct['header'], message=json.dumps(dct['message']), timestamp=time.time()-self.INITIAL_TIME)
         self.enqueue(Packet(logs=[log], timestamp=log.timestamp))
 
     def send(self):
@@ -125,7 +114,7 @@ class Handler(Namespace):
                     print("Sending:", encoded)
                 time.sleep(DELAY_SEND)
             except Exception as e:
-                print("ERROR:", e)
+                print("ERROR: ", e)
                 self.running = False
 
 
@@ -134,6 +123,7 @@ class Handler(Namespace):
         while self.running:
             data = self.conn.recv(BYTE_SIZE)
             if data:
+                # print("ME LIKEYYYYYY")
                 self.ingest_queue.put(data)
 
 
@@ -150,47 +140,88 @@ class Handler(Namespace):
             # block=True waits until an item is available
             # We add a timeout so the loop can stop
             try:
-                data = self.ingest_queue.get(block=True, timeout=1)
-                self.ingest(data)
-            except Empty:
-                pass
+                if not self.ingest_queue.empty():
+                    # print("dfjkGOOOOOD")
+                    data = self.ingest_queue.get(block=True, timeout=1)
+                    self.ingest(data)
+            except Exception as e:
+                # print('SDJFKKKKKKK=-----------------------------------------')
+                # print(e)
+                traceback.print_exc()
 
 
     def ingest(self, packet_str):
         """ Prints any packets received """
-        packet_str = packet_str.decode()
-        packet_strs = packet_str.split("END")[:-1]
-        packets = [Packet.from_string(p_str) for p_str in packet_strs]
-        for packet in packets:
-            for log in packet.logs:
-                log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
-                if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
-                    self.update_general(log.__dict__)
+        try:
+            packet_str = packet_str.decode()
+            packet_strs = packet_str.split("END")[:-1]
+            packets = [Packet.from_string(p_str) for p_str in packet_strs]
+            log_map = {
+                "heartbeat": self.update_heartbeat,
+                "stage": self.update_stage,
+                "response": self.update_response,
+                "mode": self.update_mode,
+                "sensor_data": self.update_sensor_data,
+                "valve_data": self.update_valve_data
+            }
 
-                if "sensor_data" in log.header:
-                    self.update_sensor_data(log.__dict__)
-
-                if "valve_data" in log.header:
-                    self.update_valve_data(log.__dict__)
-                
-                log.save()
+            for packet in packets:
+                for log in packet.logs:
+                    log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
+                    log_map[log.header](log.__dict__)                
+                    log.save()
+        except Exception as e:
+            # print('ohFN ODSNOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
+            # print(e)
+            traceback.print_exc()
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while self.running:
-            log = Log(header="heartbeat", message="AT", timestamp=time.time()-self.INITIAL_TIME)
+            # TODO: WHY IS THERE A MESSAGE?
+            log = Log(header="heartbeat", message={}, timestamp=time.time()-self.INITIAL_TIME)
             self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
-            print("Sent heartbeat")
+            # print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
 
     ## backend methods
-    def update_general(self, log):
-        log_send('general', log)
-        self.socketio.emit('general', log, broadcast=True)
-    
-    
+    def update_heartbeat(self, log):
+        self.heartbeat_received = log.timestamp
+
+        log_send('heartbeat', self.heartbeat_received)
+        self.socketio.emit('heartbeat', self.heartbeat_received, broadcast=True)
+
+    def update_stage(self, log):
+        self.stage = log['message']['stage']
+        self.percent_data = log['message']['status']
+
+        log_send('stage', log)
+        self.socketio.emit('stage', log, broadcast=True)
+
+    def update_response(self, log):
+        header = log['header']
+        if header == "response":
+          header = log['message']['header']
+          del log['message']['header']
+
+        self.responses.append({
+          'header': header,
+          'message': log['message'],
+          'timestamp': log['timestamp'],
+        })
+
+        #TODO - add message compression or data cutoff
+        log_send('response', log)
+        self.socketio.emit('response', log, broadcast=True)
+
+    def update_mode(self, log):
+        self.mode = log['message']['mode']
+
+        log_send('mode', log)
+        self.socketio.emit('mode', log, broadcast=True)
+
     def update_sensor_data(self, log):
-        data = {'sensors': {}, 'timestamps': []}
+        data = self.sensor_data
         sensors = data['sensors']
         timestamps = data['timestamps']
 
@@ -206,65 +237,30 @@ class Handler(Namespace):
                     sensors[s_type][location] = []
 
                 sensor_stored = sensors[s_type][location]
-                sensor_stored.append({'measured': Decimal(str(measured)), 'kalman': Decimal(str(kalman))})
+                sensor_stored.append({'measured': measured, 'kalman': kalman})
 
-        timestamps.append(Decimal(str(log['timestamp'])))
-        table.put_item(Item={'Data Type': 'sensorData', 'Data': data})
+        timestamps.append(log['timestamp'])
 
         log_send('sensor', log)
         self.socketio.emit('sensor_data', log, broadcast=True)
-
-    
+  
     def update_valve_data(self, log):
-        data = {'valves': {}}
+        data = self.valve_data
         for (valve_type, locations) in log['message'].items():
             data['valves'][valve_type] = {}
             for (location, valve) in locations.items():
                 data['valves'][valve_type][location] = valve
-        data['timestamp'] = Decimal(str(log['timestamp']))
-        table.put_item(Item={'Data Type': 'valveData', 'Data': data})
-        
+        data['timestamp'] = log['timestamp']
         log_send('valve', log)
         self.socketio.emit('valve_data', log, broadcast=True)
 
-    def update_store_data(self):
-        self.socketio.emit('general_copy', self.general_copy)
-        self.socketio.emit('sensors_copy', self.sensors_copy)
-        self.socketio.emit('valves_copy', self.valves_copy)
-        self.socketio.emit('buttons_copy', self.buttons_copy)
-        self.socketio.emit('initial_time', self.INITIAL_TIME)
-
-    ## store copy methods
-    def update_general_copy(self, general):
-        self.general_copy = general
-
-    def update_sensors_copy(self, sensors):
-        self.sensors_copy = sensors
-
-    def update_valves_copy(self, valves):
-        self.valves_copy = valves
-
-    def update_buttons_copy(self, buttons):
-        self.buttons_copy = buttons
-
     def on_button_press(self, data):
         log_send('button', data)
-        if data['header'] == 'update_general':
-            self.update_general_copy(data['message'])
-        elif data['header'] == 'update_sensors':
-            self.update_sensors_copy(data['message'])
-        elif data['header'] == 'update_valves':
-            self.update_valves_copy(data['message'])
-        elif data['header'] == 'update_buttons':
-            self.update_buttons_copy(data['message'])
-        elif data['header'] == 'store_data':
-            self.update_store_data()
-        else:
-            print(data)
-            log = Log(header=data['header'], message=data['message'], timestamp=time.time()-self.INITIAL_TIME)
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
+        log = Log(header=data['header'], message=data['message'], timestamp=time.time()-self.INITIAL_TIME)
+        self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
 
 hidden_log_types = set() # {"general", "sensor", "valve", "button"}
 def log_send(type, log):
     if type not in hidden_log_types:
-        print(f"Sending [{type}] {log}")
+        # print(f"Sending [{type}] {log}")
+        pass
