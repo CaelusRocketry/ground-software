@@ -16,6 +16,8 @@ createSocketIoCallbacks(store);
 
 setInterval(() => {
   updateHeartbeatStatus(store);
+  console.log(store.getState().data);
+  console.log(store.getState().buttonReducer);
 }, 1000);
 
 export function countDownStart() {

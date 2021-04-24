@@ -1,4 +1,5 @@
 import { CaelusState } from "../reducers";
+import { SensorStore, ValveStore } from "../reducers/stats";
 
 export type SensorData = {
   measured: number;
@@ -9,12 +10,11 @@ export type SensorData = {
 export type UpdateSensorDataAction = {
   type: "UPDATE_SENSOR_DATA";
   data: {
-    timestamp: number;
+    header: string,
     message: {
-      [type: string]: {
-        [location: string]: SensorData;
-      };
-    };
+      sensor_data: SensorStore
+    },
+    timestamp: number
   };
 };
 
@@ -31,9 +31,7 @@ export type UpdateValveDataAction = {
   type: "UPDATE_VALVE_DATA";
   data: {
     message: {
-      [type: string]: {
-        [location: string]: ValveData;
-      };
+      valve_data: ValveStore
     };
     timestamp: number;
   };

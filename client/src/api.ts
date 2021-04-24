@@ -4,23 +4,19 @@ import config from "./config.json";
 import caelusLogger from "./lib/caelusLogger";
 import {
   addResponse,
-  updateGeneralCopy,
   updateHeartbeat,
   UpdateHeartbeatAction,
   updateHeartbeatStatus as updateHeartbeatStatusAction,
   updateMode,
   UpdateModeAction,
-  updateSensorCopy,
   updateSensorData,
   UpdateSensorDataAction,
   updateStage,
   UpdateStageAction,
-  updateValveCopy,
   updateValveData,
   UpdateValveDataAction,
 } from "./store/actions";
 import { CaelusState } from "./store/reducers";
-import { GeneralStore, SensorStore, ValveStore } from "./store/reducers/stats";
 
 const SOCKETIO_URL =
   "http://" +
@@ -65,16 +61,11 @@ export type ResponseLog = {
 export type Log = HeartbeatLog | StageLog | ModeLog | ResponseLog;
 
 export function createSocketIoCallbacks(store: Store<CaelusState>) {
-  socket.on("connect", () => {
-    sendMessage("store_data", {});
-  });
-
-  // UPDATES BACKEND REDUX STORE COPY UPON RECEIVING DATA
-
+  // UPDATES REDUX UPON RECEIVING DATA
   socket.on("general", (log: Log) => {
     switch (log.header) {
       case "heartbeat":
-        store.dispatch(updateHeartbeat(log.timestamp));
+        store.dispatch(updateHeartbeat(log.message));
         break;
       case "stage":
         store.dispatch(updateStage(log.message));
@@ -83,42 +74,23 @@ export function createSocketIoCallbacks(store: Store<CaelusState>) {
         store.dispatch(updateMode(log.message));
         break;
       case "response":
-        store.dispatch(addResponse(log));
+        store.dispatch(addResponse(log.message));
         break;
       default:
         caelusLogger("telemetry", "Unknown general header", "warn");
         break;
     }
-
-    sendMessage("update_general", store.getState().data.general);
   });
 
   socket.on("sensor_data", (log: UpdateSensorDataAction["data"]) => {
     store.dispatch(updateSensorData(log));
-    sendMessage("update_sensors", store.getState().data.sensorData);
   });
 
   socket.on("valve_data", (log: UpdateValveDataAction["data"]) => {
     store.dispatch(updateValveData(log));
-    sendMessage("update_valves", store.getState().data.valveData);
   });
 
-  // INSERTS SAVED VALUES BACK INTO STORE UPON RECONNECT
-  socket.on("general_copy", function (log: GeneralStore) {
-    if (log) {
-      store.dispatch(updateGeneralCopy(log));
-    }
-  });
-  socket.on("sensors_copy", function (log: SensorStore) {
-    if (log) {
-      store.dispatch(updateSensorCopy(log));
-    }
-  });
-  socket.on("valves_copy", function (log: ValveStore) {
-    if (log) {
-      store.dispatch(updateValveCopy(log));
-    }
-  });
+  // Received initial time from backend
   socket.on("initial_time", function(log: number) {
     INITIAL_TIME = log;
   });

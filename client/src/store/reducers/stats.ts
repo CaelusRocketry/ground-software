@@ -3,7 +3,7 @@ import caelusLogger from "../../lib/caelusLogger";
 import duplicateJson from "../../lib/duplicateJson";
 import { sensors, valves } from "../../lib/locationNames";
 import { HeartbeatStatus, Stage, TelemetryResponse } from "../../types";
-import { DataAction } from "../actions";
+import { DataAction, ValveData } from "../actions";
 
 const dataCutoff = config.UI.data_cutoff;
 const messageCutoff = config.UI.message_cutoff;
@@ -49,7 +49,7 @@ export type SensorStore = {
 export type ValveStore = {
   valves: {
     [type: string]: {
-      [location: string]: 0 | 1;
+      [location: string]: ValveData;
     };
   };
   timestamp?: number;
@@ -106,7 +106,7 @@ const actionsWithMessageAndTimestamp = [
 
 const consoleLogSensorData = false;
 
-const updateData = (state = createInitialState(), action: DataAction) => {
+const updateData = (state = createInitialState(), action: any) => {
   caelusLogger("update-data", action);
 
   // Ensure we can safely modify the state
@@ -114,56 +114,10 @@ const updateData = (state = createInitialState(), action: DataAction) => {
   try {
     switch (action.type) {
       case "UPDATE_SENSOR_DATA":
-        for (let [type, locations] of Object.entries(action.data.message)) {
-          for (let [location, sensor] of Object.entries(locations)) {
-            // eslint-disable-next-line
-            const { measured, kalman, status } = sensor;
-
-            if (consoleLogSensorData) {
-              console.log("SENSOR DATA");
-              console.log(
-                type,
-                location,
-                state.sensorData.sensors[type][location]
-              );
-              console.log({ measured, kalman });
-            }
-
-            if (!(type in state.sensorData.sensors)) {
-              state.sensorData.sensors[type] = {};
-            }
-            if (!(location in state.sensorData.sensors[type])) {
-              state.sensorData.sensors[type][location] = [];
-            }
-
-            let sensorStored = state.sensorData.sensors[type][location];
-
-            sensorStored.push({ measured, kalman });
-
-            // Ensure that there are only dataCutoff values in the series
-            if (sensorStored.length > dataCutoff) {
-              sensorStored.shift();
-            }
-          }
-        }
-
-        state.sensorData.timestamps.push(action.data.timestamp);
-
-        // Ensure that there are only dataCutoff values in the series
-        if (state.sensorData.timestamps.length > dataCutoff) {
-          state.sensorData.timestamps.shift();
-        }
-
-        return state;
+        state.sensorData = action.data.message.sensor_data;
 
       case "UPDATE_VALVE_DATA":
-        for (let [type, locations] of Object.entries(action.data.message)) {
-          for (let [location, valve] of Object.entries(locations)) {
-            state.valveData.valves[type][location] = valve;
-          }
-        }
-        state.valveData.timestamp = action.data.timestamp;
-        return state;
+        state.valveData = action.data.message.valve_data;
 
       case "UPDATE_HEARTBEAT":
         state.general.heartbeat_received = action.data;
@@ -185,34 +139,7 @@ const updateData = (state = createInitialState(), action: DataAction) => {
         return state;
 
       case "ADD_RESPONSE":
-        let header = action.data.header;
-        if (header === "response") {
-          header = action.data.message.header;
-          delete action.data.message.header;
-        }
-
-        state.general.responses.push({
-          header,
-          message: action.data.message,
-          timestamp: action.data.timestamp,
-        });
-
-        if (state.general.responses.length > messageCutoff) {
-          state.general.responses.shift();
-        }
-
-        return state;
-
-      case "UPDATE_GENERAL_COPY":
-        state.general = action.data;
-        return state;
-
-      case "UPDATE_SENSOR_COPY":
-        state.sensorData = action.data;
-        return state;
-
-      case "UPDATE_VALVE_COPY":
-        state.valveData = action.data;
+        state.general.responses = action.data.message.response;
         return state;
 
       case "UPDATE_MODE":

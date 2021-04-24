@@ -8,6 +8,7 @@ from packet import Packet, Log, LogPriority
 from flask_socketio import Namespace
 import traceback
 import json
+import boto3
 
 # CREATE TABLE
 dynamodb = boto3.resource('dynamodb')
@@ -71,6 +72,9 @@ class Handler(Namespace):
         self.percent_data = 0
         self.mode = 'Normal'
 
+    def get_timestamp(self):
+        return time.time() - self.INITIAL_TIME
+
     ## telemetry methods
 
     def connect(self, ip, port):
@@ -101,7 +105,7 @@ class Handler(Namespace):
 
 
     def send_to_flight_software(self, dct):
-        log = Log(header=dct['header'], message=json.dumps(dct['message']), timestamp=time.time()-self.INITIAL_TIME)
+        log = Log(header=dct['header'], message=json.dumps(dct['message']), timestamp=self.get_timestamp())
         self.enqueue(Packet(logs=[log], timestamp=log.timestamp))
 
     def send(self):
@@ -179,24 +183,24 @@ class Handler(Namespace):
         """ Constantly sends heartbeat message """
         while self.running:
             # TODO: WHY IS THERE A MESSAGE?
-            log = Log(header="heartbeat", message={}, timestamp=time.time()-self.INITIAL_TIME)
+            log = Log(header="heartbeat", message={}, timestamp=self.get_timestamp())
             self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
             # print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
 
     ## backend methods
     def update_heartbeat(self, log):
-        self.heartbeat_received = log.timestamp
-
-        log_send('heartbeat', self.heartbeat_received)
-        self.socketio.emit('heartbeat', self.heartbeat_received, broadcast=True)
+        self.heartbeat_received = log['timestamp']
+        
+        send_log = Log('heartbeat', message=self.heartbeat_received, timestamp=self.get_timestamp())
+        self.socketio.emit('general', send_log.__dict__, broadcast=True)
 
     def update_stage(self, log):
         self.stage = log['message']['stage']
         self.percent_data = log['message']['status']
-
-        log_send('stage', log)
-        self.socketio.emit('stage', log, broadcast=True)
+        
+        send_log = Log('stage', message={'stage': self.stage, 'status': self.percent_data}, timestamp=self.get_timestamp())
+        self.socketio.emit('general', send_log.__dict__, broadcast=True)
 
     def update_response(self, log):
         header = log['header']
@@ -209,16 +213,16 @@ class Handler(Namespace):
           'message': log['message'],
           'timestamp': log['timestamp'],
         })
-
+        
         #TODO - add message compression or data cutoff
-        log_send('response', log)
-        self.socketio.emit('response', log, broadcast=True)
+        send_log = Log('response', message={'response': self.responses}, timestamp=self.get_timestamp())
+        self.socketio.emit('general', send_log.__dict__, broadcast=True)
 
     def update_mode(self, log):
         self.mode = log['message']['mode']
-
-        log_send('mode', log)
-        self.socketio.emit('mode', log, broadcast=True)
+        
+        send_log = Log('mode', message={'mode': self.mode}, timestamp=self.get_timestamp())
+        self.socketio.emit('general', send_log.__dict__, broadcast=True)
 
     def update_sensor_data(self, log):
         data = self.sensor_data
@@ -241,8 +245,8 @@ class Handler(Namespace):
 
         timestamps.append(log['timestamp'])
 
-        log_send('sensor', log)
-        self.socketio.emit('sensor_data', log, broadcast=True)
+        send_log = Log('sensor_data', message={'sensor_data': self.sensor_data}, timestamp=self.get_timestamp())
+        self.socketio.emit('sensor_data', send_log.__dict__, broadcast=True)
   
     def update_valve_data(self, log):
         data = self.valve_data
@@ -252,11 +256,13 @@ class Handler(Namespace):
                 data['valves'][valve_type][location] = valve
         data['timestamp'] = log['timestamp']
         log_send('valve', log)
-        self.socketio.emit('valve_data', log, broadcast=True)
+
+        send_log = Log('valve_data', message={'valve_data': self.valve_data}, timestamp=self.get_timestamp())
+        self.socketio.emit('valve_data', send_log.__dict__, broadcast=True)
 
     def on_button_press(self, data):
         log_send('button', data)
-        log = Log(header=data['header'], message=data['message'], timestamp=time.time()-self.INITIAL_TIME)
+        log = Log(header=data['header'], message=data['message'], timestamp=self.get_timestamp())
         self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
 
 hidden_log_types = set() # {"general", "sensor", "valve", "button"}
