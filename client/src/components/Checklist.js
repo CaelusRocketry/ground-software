@@ -1,25 +1,27 @@
 import React, {useState, useEffect} from 'react';
+import { CHECKLIST } from "../lib/checklist";
 
 const Checklist = () => {
-  const [toggle, setToggle] = useState(localStorage.getItem('toggle') === "true")
-
-  useEffect(() => {
-    localStorage.setItem('toggle', toggle)
-  }, [toggle]);
 
   return (
-    
+
     <div>
-      <input 
-        onClick={() => {
-          setToggle(!toggle)  
-        }}
-        checked={toggle}
-        type="checkbox"
-        style={{ fontSize: "20px", marginBottom: 5, marginTop: 8, marginLeft: 20 }}  
-      /> 
-      <label>It WORKSSSSSS</label>
-        {toggle ? <p>Yay</p>: null}
+      {Object.keys(CHECKLIST).map((stage) => (
+        Object.keys(stage).map((element) => (
+          <div>
+            <input 
+              onClick={() => {
+                localStorage.setItem('toggle', localStorage.getItem('toggle') === 'true' ? 'false' : 'true') 
+              }}
+              checked={localStorage.getItem('toggle') === "true"}
+              type="checkbox"
+              style={{ fontSize: "20px", marginBottom: 5, marginTop: 8, marginLeft: 20 }}  
+            /> 
+            <label style={{marginLeft: "10px"}}>{element}</label>
+          </div>
+        ))
+      ))}
+
     </div>  
   );
 };

@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-
 
 import config from "../config.json";
 import { stages, stageNames } from "../lib/locationNames";
@@ -9,6 +8,7 @@ import Header from '../components/Header';
 import { CaelusState } from "../store/reducers";
 import { useSelector } from "react-redux";
 import Checklist from "../components/Checklist";
+import { CHECKLIST } from "../lib/checklist";
 
 const Button = styled.button`
   background-color: black;
@@ -34,12 +34,15 @@ var y = 0;
 var arr = [ "false", "false", "false", "false", "false"];
 
 const ChecklistPane = () => {
+  
+  const length = Object.keys(CHECKLIST).length;
+
   const currentStage = useSelector((state: CaelusState) =>
     stages.indexOf(state.data.general.stage)
   );
 
   function nextButtonPushed() {
-    if (x < 3) {
+    if (x < length) {
       x = x + 1;
     }
   }
@@ -48,19 +51,7 @@ const ChecklistPane = () => {
     if (x > 0) {
       x = x - 1;
     }
-  }
-
-  // handleFormSubmit = () => {
-  //   const { user, rememberMe } = state;
-  //   localStorage.setItem('rememberMe', rememberMe);
-  //   localStorage.setItem('user', rememberMe ? user : '');
-  // };
-
-  // const checkbox = useCheckboxState();
-
-    
-
-  // const [checkboxState, setCheckboxState] = useState([ "false", "false", "false" ]);   
+  } 
 
   const handleCheckbox = () => {
 
@@ -73,81 +64,34 @@ const ChecklistPane = () => {
   localStorage.setItem("check2", "false")
 
 
+
   return (
     <div
       style={{ display: "flex", flexDirection: "column" }}
       className="pane"
     >
-      <Header>Checklist: {stageNames[stages[x]]}</Header>
       <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-        <Button onClick={backButtonPushed}> Back </Button>
-        <Button disabled onClick={() => window.location.reload()}>{stageNames[stages[x + 1]]}</Button>
-        <Button onClick={nextButtonPushed}> Next </Button>
+        <Button style={{display:x===0?"none":"block"}} onClick={backButtonPushed}> Back </Button>
+        <h1 style={{lineHeight:"50px", margin:"auto 20px", fontSize:"25px", fontWeight: "bold"}}>{stageNames[stages[x]]}</h1>
+        <Button style={{display:x+1===length?"none":"block"}} onClick={nextButtonPushed}> Next </Button>
       </div>
-    
-      <Checklist />
 
-      {/* {(stageNames[stages[x]] === stageNames[stages[currentStage]])
-        ? Object.entries(stageParameters[x]).map(([num, step]) => {
-          localStorage.setItem('check', "0")
-          return (
-            <input //locked
-              // onClick={checkbox.setState(true)}
-              className="Question__answer-checkbox"
-              // checked={true}localStorage.setItem('rememberMe', rememberMe);
-
+      <div>
+        {Object.entries(CHECKLIST[stages[x]]).map(([loc, elem]) => (
+          <div style={{fontSize: "20px", marginTop: "10px"}}>
+            <input 
               onClick={() => {
-
-                localStorage.setItem("true", checkboxState);
-                console.log("checkbox stored" + checkboxState);
+                localStorage.setItem(stages[x]+loc, localStorage.getItem(stages[x]+loc) === 'true' ? 'false' : 'true') 
               }}
-
-
-
+              checked={localStorage.getItem(stages[x]+loc) === "true"}
               type="checkbox"
-              value={step}
-              // onChange={this.props.setAnswer}
-              //defaultChecked={ }
-              style={{ fontSize: "20px", marginBottom: 20, marginTop: 8, marginLeft: 20 }}
-            // animation="jelly" 
-            // icon=() add icon if you want
-            // color='red'
-            // shape="round"
+              style={{ fontSize: "20px", marginBottom: 5, marginTop: 8, marginLeft: 20 }}  
+            /> 
+            <label style={{marginLeft: "10px"}}>{elem}</label>
+          </div>
+        ))}
 
-            />
-
-          )
-        })
-        : Object.entries(stageParameters[x]).map(([num, step]) => {
-
-          //var
-          return (
-            <Checkbox disabled checked
-
-              onClick={() => {
-                firstChecked = true
-
-                localStorage.setItem('first', firstChecked.toString());
-
-              }}
-
-
-
-
-              // onChange={() => checkbox.setState(false)}
-              // defaultValue=""
-              style={{ fontSize: "20px", marginBottom: 20, marginTop: 8, marginLeft: 20 }}
-              animation="jelly"
-              // icon=() add icon if you want
-              shape="round"
-
-
-            >
-              {step}
-            </Checkbox>
-          )
-        }) 
-      } */}
+    </div>  
     </div>
 
   );
