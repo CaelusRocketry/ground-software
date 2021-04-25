@@ -136,7 +136,111 @@ const ButtonBarPane = () => {
 
   
     const valveExists = (valveLoc: string) =>
-    valveLoc in data.valveState.valves.solenoid;
+    valveLoc in data.valveState.valves.solenoid;  
+    // var actuationPriorityDict: { key: string; value: React.RefObject<HTMLSelectElement>; }[] = [];
+    // Object.entries(data.valveState.valves.solenoid).map(([loc, valve]) => (
+    //   actuationPriorityDict.push({
+    //     key: loc,
+    //     value: useRef<HTMLSelectElement>(null)
+    //   })
+    // ));
+  
+  
+  
+    // const button_style = {
+    //   borderWidth:1,
+    //   borderColor:'rgba(0,0,0,0.2)',
+    //   alignItems:'center',
+    //   justifyContent:'center',
+    //   width:60,
+    //   height:60,
+    //   margin: "15px"
+    // };
+  
+    // return(
+    //   <div className = "pane" style={{backgroundColor: "white"}}>
+    //     {console.log(data.valveState.valves.solenoid)}
+    //   {Object.entries(data.valveState.valves.solenoid).map(([loc, valve]) => (
+  
+    //       <div style={{
+    //           margin: "10px",
+    //           backgroundColor: "#d6fdff",
+    //           borderWidth: "1px",
+    //           borderColor: "black",
+    //           borderRadius: "8px"
+    //       }}>
+    //           <span style={{fontSize: "25px", margin: "20px"}}>
+    //                   {loc in valve_abbrevs
+    //                   ? Object.entries(valve_abbrevs).map(([long_name, short_name]) => (
+    //                       loc === long_name 
+    //                       ? short_name
+    //                       : ""
+    //                   ))
+    //                   : loc
+    //               }    
+    //           </span>
+              
+    //           <button style = {{display: "inline-block", fontSize: "20px", borderWidth: "1px", padding: "10px 0 10px 10px"}}>
+    //               <ButtonPaneSelector
+    //                   label="Priority"
+    //                   ref={actuationPriorityRef}
+    //                   options={[1, 2, 3]}
+    //                   optionNames={{ 1: "1", 2: "2", 3: "3" }}
+    //               />
+    //           </button>
+  
+    //           <button 
+    //           style={Object.assign({backgroundColor: "#8de4ff", borderRadius:17}, button_style)}
+  
+    //           onClick={() =>
+    //               onClickedActuateValve(loc, "solenoid", "OPEN", actuationPriorityDict[loc].current?.value)
+    //             }
+  
+    //           >
+    //               OPEN
+    //           </button>
+  
+    //           <button 
+    //           style={Object.assign({backgroundColor: "#e8e8e8", borderRadius:17}, button_style)}
+              
+    //           onClick={() =>
+    //               {var priorityRef = null;
+                  
+                  
+    //               onClickedActuateValve(loc, "solenoid", "CLOSE", actuationPriorityRef.current?.value)
+    //             }}
+  
+    //           >
+    //               CLOSE
+    //           </button>
+  
+    //           <button 
+    //           style={Object.assign({backgroundColor: "#10f5e1", borderRadius:17}, button_style)}
+    //           //onClick (reference ref)
+    //           >
+    //               PULSE
+    //           </button>
+  
+    //           <span>
+    //               {loc in valve_types
+    //                   ? Object.entries(valve_types).map(([valve_name, valve_type]) => (
+    //                       loc === valve_name 
+    //                       ? valve_type
+    //                       : ""
+    //                   ))
+    //                   : ""//onClickedActuateValve(loc, "solenoid", ???, actuationPriorityRef.current?.value)
+    //               }
+    //               <button 
+    //                   style={Object.assign({backgroundColor: "#ff5050", borderRadius:17}, button_style)}
+    //               >
+    //                   RESET
+    //               </button>    
+    //           </span>
+    //       </div>
+    //   ))}   
+    //   </div>
+        
+  
   
     const valve_types = {
       "NOSV-1": "OPEN",
@@ -198,9 +302,10 @@ const ButtonBarPane = () => {
             <div style = {{margin: '15px', display: "inline"}}>
               <ButtonPaneSelector
                 label="Priority"
-                onChange={() => (
-                  PriorityRefs.set(loc,actuationPriorityRef.current!.value)
-                )}
+                ref={actuationPriorityRef}
+                // onChange={() => (
+                //   PriorityRefs.set(loc,actuationPriorityRef.current!.value)
+                // )}
                 options={[1, 2, 3]}
                 optionNames={{ 1: "1", 2: "2", 3: "3" }}
               />
@@ -208,15 +313,15 @@ const ButtonBarPane = () => {
             <button 
               style={Object.assign({backgroundColor: "#8de4ff", borderRadius:17}, button_style)}
               onClick={() =>
-                onClickedActuateValve(loc, "solenoid", "3", PriorityRefs.get(loc))
+                onClickedActuateValve(loc, "solenoid", "3", actuationPriorityRef.current?.value)
               }
             >
-              {PriorityRefs.get(loc)}OPEN
+              {actuationPriorityRef.current?.value}OPEN
             </button>
             <button 
               style={Object.assign({backgroundColor: "#e8e8e8", borderRadius:17}, button_style)} 
               onClick={() =>
-                onClickedActuateValve(loc, "solenoid", "2", PriorityRefs.get(loc))
+                onClickedActuateValve(loc, "solenoid", "2", actuationPriorityRef.current?.value)
               }
             >
               CLOSE
@@ -224,7 +329,7 @@ const ButtonBarPane = () => {
             <button 
               style={Object.assign({backgroundColor: "#10f5e1", borderRadius:17}, button_style)}
               onClick={() =>
-                onClickedActuateValve(loc, "solenoid", "4", PriorityRefs.get(loc))
+                onClickedActuateValve(loc, "solenoid", "4", actuationPriorityRef.current?.value)
               }
             >
               PULSE
@@ -232,7 +337,7 @@ const ButtonBarPane = () => {
             <button 
               style={Object.assign({backgroundColor: "#ff5050", borderRadius:17}, button_style)}
               onClick={() =>
-                onClickedActuateValve(loc, "solenoid", "1", PriorityRefs.get(loc))
+                onClickedActuateValve(loc, "solenoid", "1", actuationPriorityRef.current?.value)
               }
             >
               RESET
