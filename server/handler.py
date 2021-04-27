@@ -85,7 +85,7 @@ class Handler(Namespace):
         self.ingest_thread.start()
 
 
-    def connect(self, ip, port):
+    def connect_socket(self, ip, port):
         # Server-side socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
