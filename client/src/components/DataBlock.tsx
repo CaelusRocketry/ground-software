@@ -38,10 +38,10 @@ const DataBlock = () => {
       <Block>
         <div>
           <h4 className={groupHeaderStyle}>Timestamp</h4>
-          Timestamp:{" "}
-          <span className="font-mono font-normal">
+          {"Timestamp: "}
+          {/* <span className="font-mono font-normal">
             {getLast(data.sensorState.timestamps)} s
-          </span>
+          </span> */}
         </div>
         {Object.entries(data.sensorState.sensors).map(([type, locations]) => (
           <div key={type}>

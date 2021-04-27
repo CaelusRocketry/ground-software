@@ -43,9 +43,12 @@ class Log:
     @staticmethod
     def from_string(input_string):
         input_dict = json.loads(input_string)
+        msg = input_dict["message"]
+        if type(msg) == str:
+            msg = json.loads(msg)
         log = Log(
             header=input_dict["header"],
-            message=input_dict["message"],
+            message=msg,
             timestamp=input_dict["timestamp"],
         )
         return log
@@ -102,6 +105,9 @@ class Packet:
                 or {... 'logs': ['{json string stuff}', '{second json string}', ...] ...} \n \
                 Given json: " + input_string)
 
+        for i in range(len(real_logs)):
+            if isinstance(real_logs[i]["message"], str):
+                real_logs[i]["message"] = json.loads(real_logs[i]["message"]) # String to dict
         return Packet(
             [
                 Log(log["header"], log["message"], log["timestamp"])
@@ -111,7 +117,6 @@ class Packet:
             input_dict["priority"],
             input_dict["timestamp"],
         )
-
 
     def __lt__(self, other):
         if self.priority != other.priority:

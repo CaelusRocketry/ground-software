@@ -31,6 +31,8 @@ const createSensorStore = (
     }
     data[type] = typeData;
   }
+  console.log("Initial sensor store!");
+  console.log(data);
   return data;
 };
 
@@ -104,7 +106,7 @@ const actionsWithMessageAndTimestamp = [
   "ADD_RESPONSE",
 ];
 
-const consoleLogSensorData = false;
+const consoleLogSensorData = true;
 
 const updateData = (state = createInitialState(), action: DataAction) => {
   caelusLogger("update-data", action);
@@ -114,12 +116,18 @@ const updateData = (state = createInitialState(), action: DataAction) => {
   try {
     switch (action.type) {
       case "UPDATE_SENSOR_DATA":
+        console.log("INCOMING SENSOR DATA");
+        console.log(action.data.message);
+        console.log(Object.entries(action.data.message));
         for (let [type, locations] of Object.entries(action.data.message)) {
           for (let [location, sensor] of Object.entries(locations)) {
             // eslint-disable-next-line
+            // console.log("Type: " + type);
+            // console.log("Location: " + location);
             const { measured, kalman, status } = sensor;
+            // console.log("Value: " + kalman);
 
-            if (consoleLogSensorData) {
+            if (consoleLogSensorData && type == "1") {
               console.log("SENSOR DATA");
               console.log(
                 type,
@@ -157,8 +165,13 @@ const updateData = (state = createInitialState(), action: DataAction) => {
         return state;
 
       case "UPDATE_VALVE_DATA":
+        console.log("VALVE DATA REEEE");
+        console.log(action.data.message);
+        console.log(state.valveData.valves);
         for (let [type, locations] of Object.entries(action.data.message)) {
           for (let [location, valve] of Object.entries(locations)) {
+            console.log(type);
+            console.log(location);
             state.valveData.valves[type][location] = valve;
           }
         }

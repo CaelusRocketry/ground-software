@@ -39,8 +39,8 @@ const PID = () => {
       </BlockHeader>
       <select
         onChange={(e) => {
-          // @ts-expect-error
-          setDiagram({ type: e.target.value });
+   
+          setDiagram({ type: e.target.value as keyof typeof PADDING });
         }}
       >
         <option value="NITROUS">Nitrous</option>
@@ -62,9 +62,9 @@ const PID = () => {
           <p
             style={{
               position: "absolute",
-              // @ts-expect-error
+              
               left: PADDING[diagram.type].SENSOR[sensor]["x"] * 100 + "%",
-              // @ts-expect-error
+              
               top: PADDING[diagram.type].SENSOR[sensor]["y"] * 100 + "%",
             }}
             className={"diagram" + sensor}

@@ -72,8 +72,7 @@ const SequencePane = () => {
         {stages.map((stage, idx) => (
           <Event
             interval={calculateTitle(currentStageIndex, idx, percentage)}
-            // @ts-expect-error
-            title={stageNames[stage]}
+            title={stageNames[stage as keyof typeof stageNames]}
             intervalBackground={calculateColor(currentStageIndex, idx)}
             key={idx}
           >
