@@ -177,6 +177,8 @@ class Handler(Namespace):
         packet = Packet.from_string(packet_str)
         for log in packet.logs:
             log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
+            print("HEADER:", log.header)
+            print("TIMESTAMP:", log.timestamp)
             if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
                 self.update_general(log.__dict__)
 
