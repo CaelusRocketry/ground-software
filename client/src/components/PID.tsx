@@ -76,7 +76,7 @@ const PID = () => {
             <p style={{fontSize: "100%"}}
               className={"diagram" + sensor}
             >
-              hi {sensorExists("pressure", loc)
+              {sensorExists("pressure", loc)
                 ? round(getLast(data.sensorState.sensors.pressure[loc])?.kalman, 1000)
                 : ""}
             </p>
@@ -98,7 +98,7 @@ const PID = () => {
             }}
           >
             <p className={"diagram" + valve} style={{fontSize: "10px"}}>
-              hi {valveExists(loc)
+              {valveExists(loc)
                 ? VALVE_MAP[data.valveState.valves.solenoid[loc]]
                 : ""
               }

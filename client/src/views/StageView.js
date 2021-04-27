@@ -2,7 +2,6 @@ import React from "react";
 import SplitPane from "react-split-pane";
 
 import SequencePane from "../panes/SequencePane";
-import FooterPane from "../panes/FooterPane";
 
 import ChecklistPane from "../panes/ChecklistPane";
 import FooterPane from "../panes/FooterPane";
