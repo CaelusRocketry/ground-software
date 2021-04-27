@@ -76,7 +76,7 @@ const ChecklistPane = () => {
       </div>
 
       <div>
-        {Object.entries(checklist[stages[x]]).map(([loc, elem]) => (
+        {Object.entries(checklist["NITROUS"][stages[x]]).map(([loc, elem]) => (
           <div style={{fontSize: "20px", marginTop: "10px"}}>
             <input 
               onClick={() => {
