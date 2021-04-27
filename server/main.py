@@ -50,13 +50,3 @@ if __name__ == "__main__":
 
     socketio.on_namespace(handler)
     socketio.run(app, host=config["telemetry"]["SOCKETIO_HOST"], port=int(config["telemetry"]["SOCKETIO_PORT"]))
-
-
-    # while True:
-    #     temp = input("")
-    #     header = temp[:temp.index(" ")]
-    #     message = temp[temp.index(" ") + 1:]
-    #     pack = Packet(header=header)
-    #     log = Log(header=header, message=message)
-    #     pack.add(log)
-    #     enqueue(Packet(header="MESSAGE", logs=[log]))

@@ -5,7 +5,7 @@ import serial
 import threading
 import serial
 from typing import Any, List, Tuple, Union
-from packet import Packet, Log, LogPriority
+from packet import Packet, Log, LogPriority # PacketPriority
 from flask_socketio import Namespace
 import socket
 
@@ -15,7 +15,7 @@ BYTE_SIZE = 8192
 DELAY = .05
 DELAY_LISTEN = .005
 DELAY_SEND = .2
-DELAY_HEARTBEAT = 3
+DELAY_HEARTBEAT = .2
 
 SEND_ALLOWED = True
 
@@ -49,12 +49,13 @@ class Handler(Namespace):
         self.ser = None
         self.running = False
         self.INITIAL_TIME = -100
-        self.using_xbee = config["telemetry"]["USE_XBEE"]
+        self.using_xbee = True # config["telemetry"]["USE_XBEE"]
+        print("ysing xbee:", self.using_xbee)
 
         if self.using_xbee:
             baud = config["telemetry"]["XBEE_BAUDRATE"]
             xbee_port = config["telemetry"]["XBEE_PORT"]
-            self.ser = serial.Serial(xbee_port, baud_rate)
+            self.ser = serial.Serial(xbee_port, baud)
             self.ser.flushInput()
             self.ser.flushOutput()
             print("Finished setting up xbee")
@@ -78,6 +79,7 @@ class Handler(Namespace):
 
     def begin(self):
         """ Starts the send and listen threads """
+        print("Staring threads")
         self.running = True
         self.listen_thread.start()
         self.heartbeat_thread.start()
@@ -104,8 +106,8 @@ class Handler(Namespace):
 
 
     def send_to_flight_software(self, json):
-        log = Log(header=json['header'], message=json['message'], timestamp=round(time.time()-self.INITIAL_TIME, 3))
-        self.enqueue(Packet(logs=[log], timestamp=log.timestamp))
+        pack = Packet(header=json['header'], message=json['message'], timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+        self.enqueue(pack)
 
     def send(self):
         """ Constantly sends next packet from queue to flight software """
@@ -152,7 +154,6 @@ class Handler(Namespace):
 
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
-        # TODO: This is implemented wrong. It should enqueue by finding packets that have similar priorities, not changing the priorities of current packets.
         packet_str = ("^" + packet.to_string() + "$").encode("ascii")
         heapq.heappush(self.queue_send, (packet.priority, packet_str))
 
@@ -173,47 +174,48 @@ class Handler(Namespace):
         """ Prints any packets received """
         print("Ingesting:", packet_str)
         packet = Packet.from_string(packet_str)
-        for log in packet.logs:
-            log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
-            print("HEADER:", log.header)
-            print("TIMESTAMP:", log.timestamp)
-            if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
-                self.update_general(log.__dict__)
 
-            if "sensor_data" in log.header:
-                self.update_sensor_data(log.__dict__)
+        print("Sending to frontend packet of type", packet.header, "-", packet.___dict__)
+        
+        # TODO: Update these w proper headings, as well as in GS
+        if "HRT" in packet.header or "stage" in packet.header or "response" in packet.header or "mode" in packet.header:
+            self.update_general(packet.__dict__)
 
-            if "valve_data" in log.header:
-                self.update_valve_data(log.__dict__)
-            
-            log.save()
+        if "DAT" in packet.header:                      #sensor data
+            self.update_sensor_data(packet.__dict__)
+
+        if "VST" in packet.header:                      #valve data
+            self.update_valve_data(packet.__dict__)
+        
+        packet.save()
 
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while self.running:
-            log = Log(header="heartbeat", message="AT - " + str(self.heartbeat_packet_number), timestamp=round(time.time()-self.INITIAL_TIME, 3))
-            self.heartbeat_packet_number += 1
-
+            
+            log = Log(header="HRT", message="AT" + str(self.heartbeat_packet_number), timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
             self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
+
+            self.heartbeat_packet_number += 1
+            
+            # pack = Packet(header="heartbeat", message="AT - " + str(self.heartbeat_packet_number), timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+            # self.enqueue(log)
             print("Sent heartbeat")
             time.sleep(DELAY_HEARTBEAT)
 
     ## backend methods
 
-    def update_general(self, log):
-        log_send('general', log)
-        self.socketio.emit('general', log, broadcast=True)
+    def update_general(self, pack):
+        self.socketio.emit('general', pack, broadcast=True)
     
     
-    def update_sensor_data(self, log):
-        log_send('sensor', log)
-        self.socketio.emit('sensor_data', log, broadcast=True)
+    def update_sensor_data(self, pack):
+        self.socketio.emit('sensor_data', pack, broadcast=True)
 
     
-    def update_valve_data(self, log):
-        log_send('valve', log)
-        self.socketio.emit('valve_data', log, broadcast=True)
+    def update_valve_data(self, pack):
+        self.socketio.emit('valve_data', pack, broadcast=True)
 
     def update_store_data(self):
         self.socketio.emit('general_copy', self.general_copy)
@@ -235,7 +237,7 @@ class Handler(Namespace):
         self.buttons_copy = buttons
 
     def on_button_press(self, data):
-        log_send('button', data)
+        print("Sending to frontend packet of type", data["header"], "-", data.___dict__)
         if data['header'] == 'update_general':
             self.update_general_copy(data['message'])
         elif data['header'] == 'update_sensors':
@@ -248,10 +250,8 @@ class Handler(Namespace):
             self.update_store_data()
         else:
             print(data)
-            log = Log(header=data['header'], message=data['message'], timestamp=round(time.time()-self.INITIAL_TIME, 3))
+            log = Log(header=data['header'], message=data['message'], timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
             self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
+            # pack = Packet(header=data['header'], message=data['message'], timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+            # self.enqueue(pack)
 
-hidden_log_types = {"general", "sensor", "valve", "button"}
-def log_send(type, log):
-    if type not in hidden_log_types:
-        print(f"Sending to Frontend [{type}] {log}")

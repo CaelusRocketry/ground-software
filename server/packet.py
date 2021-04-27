@@ -15,12 +15,19 @@ class LogPriority(IntEnum):
 class Log:
     """ Log class stores messages to be sent to and from ground and flight station """
     
-    def __init__(self, header, message={}, timestamp: float = None):
+    def __init__(self, header, message={}, timestamp: int = None):
         self.header = header
         self.message = message
         self.timestamp = timestamp
+        self.checksum = self.calc_checksum()
+
         if self.timestamp is None:
             raise Exception("Timestamp not specified")
+
+    def calc_checksum(self):
+        packet_str = self.header + "|" + (str) (self.timestamp) + "|" + self.message
+        val = sum(ord(c)*i for i, c in enumerate(packet_str))
+        return val
 
     def save(self, filename="blackbox.txt"):
         f = open(filename, "a+")
@@ -33,25 +40,25 @@ class Log:
             "header": self.header,
             "message": self.message,
             "timestamp": self.timestamp,
+            "checksum": self.checksum
         }
 
 
     def to_string(self):
-        return json.dumps(self.to_json())
+        packet_str = self.header + "|" + (str) (self.timestamp) + "|" + self.message + "|" + (str) (self.checksum)
+        return packet_str
 
-
-    @staticmethod
     def from_string(input_string):
-        input_dict = json.loads(input_string)
-        msg = input_dict["message"]
-        if type(msg) == str:
-            msg = json.loads(msg)
+        input_list = input_string.split("|")
+                
         log = Log(
-            header=input_dict["header"],
-            message=msg,
-            timestamp=input_dict["timestamp"],
+            header= input_list[0],
+            message= input_list[1],
+            timestamp= int(input_list[3]),
+            checksum= int(input_list[4])
         )
         return log
+
 
 class Packet:
     """ Packet class stores groups of messages, which are grouped by LogPriority. """
@@ -75,7 +82,7 @@ class Packet:
 
     def to_string(self):
         return json.dumps({
-            "logs": [log.to_json() for log in self.logs],
+            "logs": [log.to_string() for log in self.logs],
             "timestamp": self.timestamp,
             "priority": self.priority
         })
