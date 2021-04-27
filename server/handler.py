@@ -14,7 +14,7 @@ BYTE_SIZE = 8192
 
 DELAY = .05
 DELAY_LISTEN = .005
-DELAY_SEND = .05
+DELAY_SEND = .2
 DELAY_HEARTBEAT = 3
 
 SEND_ALLOWED = True
@@ -52,7 +52,7 @@ class Handler(Namespace):
         self.using_xbee = config["telemetry"]["USE_XBEE"]
 
         if self.using_xbee:
-            baud = config["telemetry"]["BAUD_RATE"]
+            baud = config["telemetry"]["XBEE_BAUDRATE"]
             xbee_port = config["telemetry"]["XBEE_PORT"]
             self.ser = serial.Serial(xbee_port, baud_rate)
             self.ser.flushInput()
@@ -62,7 +62,7 @@ class Handler(Namespace):
         else:
             gs_ip = config["telemetry"]["SOCKET_IP"]
             gs_port = config["telemetry"]["SOCKET_PORT"]
-            self.connect(gs_ip, gs_port)
+            self.connect_socket(gs_ip, gs_port)
 
         self.INITIAL_TIME = time.time()
 
@@ -144,9 +144,7 @@ class Handler(Namespace):
                 packet_end = self.rcvd.find("$", packet_start)
                 if packet_end != -1:
                     incoming_packet = self.rcvd[packet_start+1:packet_end]
-                    
                     self.ingest_queue.put(incoming_packet)
-                    
                     self.rcvd = self.rcvd[packet_end+1:]
         
             time.sleep(DELAY_LISTEN)

@@ -33,19 +33,19 @@ export const PADDING = {
       },
     },
     VALVE: {
-      pressurization_valve: {
+      nitrous_pressurization: {
         x: 404 / 784,
         y: 210 / 850,
       },
-      vent_valve: {
+      nitrous_vent: {
         x: 33 / 784,
         y: 95 / 850,
       },
-      remote_drain_valve: {
+      nitrous_fill: {
         x: 19 / 784,
         y: 598 / 850,
       },
-      main_propellant_valve: {
+      nitrous_mpv: {
         x: 317 / 784,
         y: 736 / 850,
       },
@@ -75,15 +75,15 @@ export const PADDING = {
       },
     },
     VALVE: {
-      "NCSV-1": {
+      ethanol_vent: {
         x: 274 / 1971,
         y: 91 / 1522,
       },
-      "NOSV-2": {
+      ethanol_mpv: {
         x: 347 / 1971,
         y: 517 / 1522,
       },
-      pressurization_valve: {
+      ethanol_pressurization: {
         x: 52 / 1971,
         y: 1375 / 1522,
       },
@@ -137,35 +137,35 @@ export const PADDING = {
       },
     },
     VALVE: {
-      vent_valve: {
+      nitrous_vent: {
         x: 136 / 3200,
         y: 104 / 1595,
       },
-      pressurization_valve: {
+      nitrous_pressurization: {
         x: 619 / 3200,
         y: 716 / 1595,
       },
-      remote_drain_valve: {
+      nitrous_fill: {
         x: 669 / 3200,
         y: 1163 / 1595,
       },
-      main_propellant_valve: {
+      nitrous_mpv: {
         x: 447 / 3200,
         y: 1385 / 1595,
       },
-      "NCSV-1": {
+      ethanol_vent: {
         x: 2187 / 3200,
         y: 133 / 1595,
       },
-      "NOSV-1": {
+      ethanol_pressurization: {
         x: 2756 / 3200,
         y: 571 / 1595,
       },
-      "NCSV-2": {
+      ethanol_fill: {
         x: 2269 / 3200,
         y: 1478 / 1595,
       },
-      "NOSV-2": {
+      ethanol_mpv: {
         x: 1969 / 3200,
         y: 1152 / 1595,
       },
