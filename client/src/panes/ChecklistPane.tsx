@@ -7,8 +7,7 @@ import '@djthoms/pretty-checkbox';
 import Header from '../components/Header';
 import { CaelusState } from "../store/reducers";
 import { useSelector } from "react-redux";
-import Checklist from "../components/Checklist";
-import { CHECKLIST } from "../lib/checklist";
+import checklist from "../checklist.json";
 
 const Button = styled.button`
   background-color: black;
@@ -35,7 +34,7 @@ var arr = [ "false", "false", "false", "false", "false"];
 
 const ChecklistPane = () => {
   
-  const length = Object.keys(CHECKLIST).length;
+  const length = Object.keys(checklist).length;
 
   const currentStage = useSelector((state: CaelusState) =>
     stages.indexOf(state.data.general.stage)
@@ -77,7 +76,7 @@ const ChecklistPane = () => {
       </div>
 
       <div>
-        {Object.entries(CHECKLIST[stages[x]]).map(([loc, elem]) => (
+        {Object.entries(checklist[stages[x]]).map(([loc, elem]) => (
           <div style={{fontSize: "20px", marginTop: "10px"}}>
             <input 
               onClick={() => {
