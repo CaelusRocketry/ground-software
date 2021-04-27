@@ -1,17 +1,16 @@
 import React from "react";
 import PID from "../components/PID";
-import DataBlock from "../components/DataBlock";
+
 import Header from "../components/Header";
 import "../index.css";
 
-const DataPane = () => (
+const PIDPane = () => (
   <div>
-    <Header>Data</Header>
+    <Header>P&Id Diagram</Header>
     <div className="view">
-      {/* <PID /> */}
-      <DataBlock />
+      <PID />
     </div>
   </div>
 );
 
-export default DataPane;
+export default PIDPane;

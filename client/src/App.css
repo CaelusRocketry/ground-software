@@ -93,7 +93,7 @@
 
 /* Logo */
 #logo {
-  position: fixed;
+  position: absolute;
   width: 120px;
   bottom: 0.8rem;
   left: 1rem;
