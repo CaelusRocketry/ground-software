@@ -66,7 +66,7 @@ const FooterSequence = () => {
   console.log("Percentage: " + percentage);
 
   return (
-    <Link to="/">
+    <Link to="/stage">
       <Timeline>
         <div
         style={{ display: "flex", flexDirection: "row" }}
