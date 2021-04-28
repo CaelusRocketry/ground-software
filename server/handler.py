@@ -5,7 +5,7 @@ import serial
 import threading
 import serial
 from typing import Any, List, Tuple, Union
-from packet import Packet, Log, LogPriority # PacketPriority
+from packet import Packet, LogPriority # PacketPriority
 from flask_socketio import Namespace
 import socket
 
@@ -49,8 +49,8 @@ class Handler(Namespace):
         self.ser = None
         self.running = False
         self.INITIAL_TIME = -100
-        self.using_xbee = True # config["telemetry"]["USE_XBEE"]
-        print("ysing xbee:", self.using_xbee)
+        self.using_xbee = config["telemetry"]["USE_XBEE"]
+        print("using xbee:", self.using_xbee)
 
         if self.using_xbee:
             baud = config["telemetry"]["XBEE_BAUDRATE"]
@@ -155,7 +155,7 @@ class Handler(Namespace):
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
         packet_str = ("^" + packet.to_string() + "$").encode("ascii")
-        heapq.heappush(self.queue_send, (packet.priority, packet_str))
+        heapq.heappush(self.queue_send, (1, packet_str))
 
     
     def ingest_loop(self):
@@ -179,13 +179,13 @@ class Handler(Namespace):
         
         # TODO: Update these w proper headings, as well as in GS
         if "HRT" in packet.header or "stage" in packet.header or "response" in packet.header or "mode" in packet.header:
-            self.update_general(packet.__dict__)
+            self.update_general(packet.to_dict())
 
         if "DAT" in packet.header:                      #sensor data
-            self.update_sensor_data(packet.__dict__)
+            self.update_sensor_data(packet.to_dict())
 
         if "VST" in packet.header:                      #valve data
-            self.update_valve_data(packet.__dict__)
+            self.update_valve_data(packet.to_dict())
         
         packet.save()
 
@@ -194,8 +194,8 @@ class Handler(Namespace):
         """ Constantly sends heartbeat message """
         while self.running:
             
-            log = Log(header="HRT", message="AT" + str(self.heartbeat_packet_number), timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
+            packet = Packet(header="HRT", message="AT" + str(self.heartbeat_packet_number), timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+            self.enqueue(packet)
 
             self.heartbeat_packet_number += 1
             
@@ -237,7 +237,7 @@ class Handler(Namespace):
         self.buttons_copy = buttons
 
     def on_button_press(self, data):
-        print("Sending to frontend packet of type", data["header"], "-", data.___dict__)
+        # print("Sending to frontend packet of type", data["header"], "-", data)
         if data['header'] == 'update_general':
             self.update_general_copy(data['message'])
         elif data['header'] == 'update_sensors':
@@ -250,8 +250,8 @@ class Handler(Namespace):
             self.update_store_data()
         else:
             print(data)
-            log = Log(header=data['header'], message=data['message'], timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
+            packet = Packet(header=data['header'], message=data['message'], timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+            self.enqueue(packet)
             # pack = Packet(header=data['header'], message=data['message'], timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
             # self.enqueue(pack)
 
