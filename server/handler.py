@@ -50,7 +50,7 @@ class Handler(Namespace):
         self.running = False
         self.INITIAL_TIME = -100
         self.using_xbee = config["telemetry"]["USE_XBEE"]
-        print("using xbee:", self.using_xbee)
+        print("Using Xbee:", self.using_xbee)
 
         if self.using_xbee:
             baud = config["telemetry"]["XBEE_BAUDRATE"]
@@ -199,14 +199,15 @@ class Handler(Namespace):
         """ Constantly sends heartbeat message """
         while self.running:
             
-            packet = Packet(header="HRT", message="AT" + str(self.heartbeat_packet_number), timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+            # packet = Packet(header="HRT", message="AT" + str(self.heartbeat_packet_number), timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+            packet = Packet(header="HRT", message="AT", timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
             self.enqueue(packet)
 
-            self.heartbeat_packet_number += 1
+            # self.heartbeat_packet_number += 1
             
             # pack = Packet(header="heartbeat", message="AT - " + str(self.heartbeat_packet_number), timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
             # self.enqueue(log)
-            print("Sent heartbeat")
+            print("------------------Sent heartbeat: {}------------------".format(packet.to_string()));
             time.sleep(DELAY_HEARTBEAT)
 
     ## backend methods

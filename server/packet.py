@@ -34,11 +34,12 @@ class Packet:
         # self.logs.append(log)
         pass
 
+
     def to_string(self):
         packet_str = self.header + "|" + (str) (self.timestamp) + "|" + self.message
         val = sum(ord(c) * i for i, c in enumerate(packet_str))
-
         packet_str += "|" + str(val)
+        return packet_str
 
 
     @staticmethod
@@ -145,9 +146,9 @@ class Packet:
                 
                 ret["message"][valve_type][valve_location] = valve_state
 
-            print("\n\n\n\n\n\n\AYO\n\n\nLOOK\n\VALVE DATA\n")
-            print(ret)
-            print("\n\n\n")
+            # print("\n\n\n\n\n\n\AYO\n\n\nLOOK\n\VALVE DATA\n")
+            # print(ret)
+            # print("\n\n\n")
 
         return ret
 
