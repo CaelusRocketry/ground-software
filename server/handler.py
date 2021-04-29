@@ -8,7 +8,12 @@ from typing import Any, List, Tuple, Union
 from packet import Packet, Log, LogPriority
 from flask_socketio import Namespace
 import socket
+import boto3
+from decimal import Decimal
 
+# CREATE TABLE
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('CallistoSensorData')
 
 BYTE_SIZE = 8192
 
@@ -207,9 +212,26 @@ class Handler(Namespace):
     
     
     def update_sensor_data(self, log):
+        data = {}
+        for sensor_type, sensor_locations in log['message'].items():
+            if sensor_type == 'timestamp':
+                data[sensor_type] = sensor_locations
+                continue
+            data[sensor_type] = {}
+            for location, sensor in sensor_locations.items():
+                data[sensor_type][location] = {}
+                for val_key in sensor:
+                    data[sensor_type][location][val_key] = Decimal(str(sensor[val_key]))
+
+        table.put_item(
+            Item={
+                'Timestamp': Decimal(str(log['timestamp'])),
+                'Data': data
+            }
+        )
+
         log_send('sensor', log)
         self.socketio.emit('sensor_data', log, broadcast=True)
-
     
     def update_valve_data(self, log):
         log_send('valve', log)
