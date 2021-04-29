@@ -56,7 +56,7 @@ class Packet:
         packet = Packet(
             header= input_list[0],
             message= input_list[2],
-            timestamp= int(input_list[1], 16)
+            timestamp= int(input_list[1], 16) / 1000.0
         )
 
         return packet
@@ -79,9 +79,11 @@ class Packet:
         }
 
 
-        ret = {"header": header_map[self.header], "timestamp": self.timestamp, "message": {}}
+        ret = {"header": header_map[self.header], "timestamp": self.timestamp, "message": {"timestamp": self.timestamp}}
 
         if "DAT" in self.header:
+            # type, location, value in hex
+
             sensor_type_inverse_map = {"0": "thermocouple", "1": "pressure"}
             sensor_location_inverse_map = {
                 "1": "PT-1", 
@@ -92,7 +94,7 @@ class Packet:
                 "P": "PT-P", 
                 "7": "PT-7", 
                 "8": "PT-8", 
-                "9": "Thermo1"
+                "9": "Thermo-1"
             } 
             
             sensors = self.message.split(",")
@@ -117,6 +119,35 @@ class Packet:
             # print("\n\n\n\n\n\n\AYO\n\n\nLOOK\n\nSENSOR DATA\n")
             # print(ret)
             # print("\n\n\n")
+
+        elif "VDT" in self.header:
+            # type, location, state
+
+            valve_type_inverse_map = {"0": "solenoid"}
+            valve_location_inverse_map = {
+                "1": "ethanol_pressurization",
+                "2": "ethanol_vent",
+                "3": "ethanol_mpv",
+                "4": "nitrous_pressurization",
+                "5": "nitrous_fill",
+                "6": "nitrous_mpv"
+            }
+            
+            valves = self.message.split(",")
+            
+            for valve_str in valves:
+                valve_type = valve_type_inverse_map[valve_str[0]]
+                valve_location = valve_location_inverse_map[valve_str[1]]
+                valve_state = int(valve_str[2])
+
+                if valve_type not in ret["message"]:
+                    ret["message"][valve_type] = {}
+                
+                ret["message"][valve_type][valve_location] = valve_state
+
+            print("\n\n\n\n\n\n\AYO\n\n\nLOOK\n\VALVE DATA\n")
+            print(ret)
+            print("\n\n\n")
 
         return ret
 

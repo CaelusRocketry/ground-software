@@ -155,7 +155,7 @@ class Handler(Namespace):
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
         to_send = packet.to_string()
-        
+
         if to_send:
             packet_str = ("^" + to_send + "$").encode("ascii")
             heapq.heappush(self.queue_send, (1, packet_str))
@@ -185,10 +185,11 @@ class Handler(Namespace):
             self.update_general(packet.to_dict())
 
         if "DAT" in packet.header:                      #sensor data
-            print("\n\n\n\nSENDING TO FRONT \n\n\nEND SENSOR\n\n\n DATA\n\n\n")
+            
             self.update_sensor_data(packet.to_dict())
 
-        if "VST" in packet.header:                      #valve data
+        if "VDT" in packet.header:                      #valve data
+            print("\n\n\n\nSENDING TO FRONT \n\n\nEND VALVE\n\n\n DATA\n\n\n")
             self.update_valve_data(packet.to_dict())
         
         packet.save()
@@ -254,6 +255,7 @@ class Handler(Namespace):
             self.update_store_data()
         else:
             print(data)
+            # TODO: THIS IS WHERE GS SENDS TO FS. MAP THE GS PACKET TO AN FS-ACCEPTABLE PACKET.
             packet = Packet(header=data['header'], message=data['message'], timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
             self.enqueue(packet)
             # pack = Packet(header=data['header'], message=data['message'], timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
