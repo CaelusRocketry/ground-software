@@ -21,9 +21,11 @@ class Packet:
         message: str = "",
         timestamp: float = None
     ):
+
+        self.header = header
         self.message = message
         self.timestamp = timestamp
-        self.priority = priority
+
         if self.timestamp is None:
             raise Exception("Timestamp not specified")
 
@@ -44,7 +46,9 @@ class Packet:
         input_list = input_string.split("|")
         checksum = int(input_list[3])
         og_str = input_list[0] + "|" + input_list[1] + "|" + input_list[2]
-        val = sum(ord(c) * i for i, c in enumerate(og_str))
+        print(og_str)
+        val = sum(ord(c) * i for i, c in enumerate(og_str)) % 999
+        print(val)
 
         if val != checksum:
             raise Exception("Invalid checksum, packet did not send correctly")
@@ -58,7 +62,24 @@ class Packet:
         return packet
 
     def to_dict(self):
-        ret = {"header": self.header, "timestamp": self.timestamp}
+        header_map = {
+            "HBR": "OK",
+            "SAB": "mode",
+            "UAB": "mode",
+            "AAB": "response",
+            "SAC": "Valve actuation",
+            "SDT": "Sensor data",
+            "DAT": "sensor_data",
+            "VST": "Valve data request",
+            "VDT": "valve_data",
+            "SGP": "stage_progress",
+            "SPQ": "Stage progression request",
+            "SGD": "stage_data",
+            "INF": "info"
+        }
+
+
+        ret = {"header": header_map[self.header], "timestamp": self.timestamp, "message": {}}
 
         if "DAT" in self.header:
             sensor_type_inverse_map = {"0": "thermocouple", "1": "pressure"}
@@ -81,18 +102,27 @@ class Packet:
                 sensor_location = sensor_location_inverse_map[sensor_str[1]]
                 value = int(sensor_str[2:], 16)
 
-                ret[sensor_type][sensor_location]["measured"] = value
-                ret[sensor_type][sensor_location]["kalman"] = value
+                if sensor_type not in ret["message"]:
+                    ret["message"][sensor_type] = {}
+                if sensor_location not in ret["message"][sensor_type]:
+                    ret["message"][sensor_type][sensor_location] = {}
+
+                ret["message"][sensor_type][sensor_location]["measured"] = value
+                ret["message"][sensor_type][sensor_location]["kalman"] = value
 
                 # TODO: make status be the actual value
 
-                ret[sensor_type][sensor_location]["status"] = 0
+                ret["message"][sensor_type][sensor_location]["status"] = "0"
 
-            
+            # print("\n\n\n\n\n\n\AYO\n\n\nLOOK\n\nSENSOR DATA\n")
+            # print(ret)
+            # print("\n\n\n")
 
+        return ret
 
-
-
+    def save(self):
+        # TODO: IMPLEMENT LOGGING TO BLACKBOX OR DATABASE OR SOMETHING
+        pass
 
     def __lt__(self, other):
         return other.timestamp - self.timestamp

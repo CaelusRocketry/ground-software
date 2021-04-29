@@ -154,8 +154,11 @@ class Handler(Namespace):
 
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
-        packet_str = ("^" + packet.to_string() + "$").encode("ascii")
-        heapq.heappush(self.queue_send, (1, packet_str))
+        to_send = packet.to_string()
+        
+        if to_send:
+            packet_str = ("^" + to_send + "$").encode("ascii")
+            heapq.heappush(self.queue_send, (1, packet_str))
 
     
     def ingest_loop(self):
@@ -175,13 +178,14 @@ class Handler(Namespace):
         print("Ingesting:", packet_str)
         packet = Packet.from_string(packet_str)
 
-        print("Sending to frontend packet of type", packet.header, "-", packet.___dict__)
+        print("Sending to frontend packet of type", packet.header, "-", packet.to_dict())
         
         # TODO: Update these w proper headings, as well as in GS
         if "HRT" in packet.header or "stage" in packet.header or "response" in packet.header or "mode" in packet.header:
             self.update_general(packet.to_dict())
 
         if "DAT" in packet.header:                      #sensor data
+            print("\n\n\n\nSENDING TO FRONT \n\n\nEND SENSOR\n\n\n DATA\n\n\n")
             self.update_sensor_data(packet.to_dict())
 
         if "VST" in packet.header:                      #valve data
