@@ -174,7 +174,7 @@ class Handler(Namespace):
 
 
     def ingest(self, packet_str):
-        """ Prints any packets received """
+        """ prints any packets received """
         print("Ingesting:", packet_str)
         packet = Packet.from_string(packet_str)
 
@@ -254,7 +254,61 @@ class Handler(Namespace):
             print("\n\n\n\n\nwe just got a letter\n\nwe just got a letter\nwe just got a letter, wonder who its from?\n")
             print(data)
             # TODO: THIS IS WHERE GS SENDS TO FS. MAP THE GS PACKET TO AN FS-ACCEPTABLE PACKET.
-            packet = Packet(header=data['header'], message=data['message'], timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+            data_header = data['header']
+            data_message = data['message']
+            mapped_message = "a"
+
+            header_map = {
+                "soft_abort": "SAB",
+                "undo_soft_abort": "UAB",
+                "solenoid_actuate": "SAC",
+                "sensor_request": "SRQ",
+                "valve_request": "VRQ",
+                "progress": "SGP"
+            }
+
+            valve_type_map = {
+                "solenoid": "0"
+            }
+
+            valve_location_map = {
+                "ethanol_pressurization": "1",
+                "ethanol_vent": "2",
+                "ethanol_mpv": "3",
+                "nitrous_pressurization": "4",
+                "nitrous_fill": "5",
+                "nitrous_mpv": "6"
+            }
+
+            sensor_type_map = {
+                "thermocouple": "0",
+                "pressure": "1"
+            }
+
+            sensor_location_map = {
+                "PT-1": "1",
+                "PT-2": "2",
+                "PT-3": "3",
+                "PT-4": "4",
+                "PT-5": "5",
+                "PT-P": "P",
+                "PT-7": "7",
+                "PT-8": "8",
+                "Thermo-1": "9"
+            }
+
+            if data_header == "solenoid_actuate":
+                mapped_message = valve_location_map[data_message["valve_location"]] + \
+                    data_message["actuation_type"] + data_message["priority"]
+
+            elif data_header == "sensor_request":
+                mapped_message = sensor_type_map[data_message["sensor_type"]] + sensor_location_map[data_message["sensor_location"]]
+            
+            elif data_header == "valve_request":
+                mapped_message = valve_type_map[data_message["valve_type"]] + valve_location_map[data_message["valve_location"]]
+
+            packet = Packet(header=header_map[data_header], message=mapped_message, timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+            print(packet.to_string())
             self.enqueue(packet)
             # pack = Packet(header=data['header'], message=data['message'], timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
             # self.enqueue(pack)
