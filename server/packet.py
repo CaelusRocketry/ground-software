@@ -34,10 +34,12 @@ class Packet:
         # self.logs.append(log)
         pass
 
+
     def to_string(self):
         packet_str = self.header + "|" + (str) (self.timestamp) + "|" + self.message
         val = sum(ord(c) * i for i, c in enumerate(packet_str)) % 999
         packet_str += "|" + str(val)
+        return packet_str
 
         return packet_str
 
