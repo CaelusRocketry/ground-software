@@ -15,7 +15,7 @@ BYTE_SIZE = 8192
 DELAY = .05
 DELAY_LISTEN = .005
 DELAY_SEND = .2
-DELAY_HEARTBEAT = .2
+DELAY_HEARTBEAT = 2
 
 SEND_ALLOWED = True
 
@@ -203,7 +203,7 @@ class Handler(Namespace):
             
             # pack = Packet(header="heartbeat", message="AT - " + str(self.heartbeat_packet_number), timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
             # self.enqueue(log)
-            print("------------------Sent heartbeat: {}------------------".format(packet.to_string()));
+            # print("------------------Sent heartbeat: {}------------------".format(packet.to_string()))
             time.sleep(DELAY_HEARTBEAT)
 
     ## backend methods

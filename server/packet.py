@@ -213,9 +213,9 @@ class Packet:
             ret["message"]["stage"] = stage_name_inverse_map[self.message[0]]
             ret["message"]["status"] = int(self.message[1:])
 
-            print("\n\n\n\n\n\n\AYO\n\n\nLOOK\n\STAGE DATA\n")
-            print(ret)
-            print("\n\n\n")
+            # print("\n\n\n\n\n\n\AYO\n\n\nLOOK\n\STAGE DATA\n")
+            # print(ret)
+            # print("\n\n\n")
 
         else:
             ret["message"]["header"] = inner_header_map[self.header]
