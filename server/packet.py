@@ -189,7 +189,7 @@ class Packet:
                 }
 
                 ret["message"]["header"] = inner_header_map[self.header]
-                ret["message"]["message"] = "Successfully progressed to " + stage_name_inverse_map[split_msg[0]]
+                ret["message"]["message"] = "Successfully progressed to " + stage_name_inverse_map[split_msg[0][0]]
 
         elif "SPQ" in self.header:
             stage_name_inverse_map = {
