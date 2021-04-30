@@ -36,9 +36,10 @@ class Packet:
 
     def to_string(self):
         packet_str = self.header + "|" + (str) (self.timestamp) + "|" + self.message
-        val = sum(ord(c) * i for i, c in enumerate(packet_str))
-
+        val = sum(ord(c) * i for i, c in enumerate(packet_str)) % 999
         packet_str += "|" + str(val)
+
+        return packet_str
 
 
     @staticmethod
@@ -63,7 +64,23 @@ class Packet:
 
     def to_dict(self):
         header_map = {
-            "HBR": "OK",
+            "HRT": "heartbeat",
+            "SAB": "mode",
+            "UAB": "mode",
+            "AAB": "response",
+            "SAC": "response",
+            "SDT": "response",
+            "DAT": "sensor_data",
+            "VST": "response",
+            "VDT": "valve_data",
+            "SGP": "stage_progress",
+            "SPQ": "response",
+            "SGD": "stage",
+            "INF": "response"
+        }
+
+        inner_header_map = {
+            "HRT": "heartbeat",
             "SAB": "mode",
             "UAB": "mode",
             "AAB": "response",
@@ -72,7 +89,7 @@ class Packet:
             "DAT": "sensor_data",
             "VST": "Valve data request",
             "VDT": "valve_data",
-            "SGP": "stage_progress",
+            "SGP": "Stage progression",
             "SPQ": "Stage progression request",
             "SGD": "stage_data",
             "INF": "info"
@@ -145,9 +162,63 @@ class Packet:
                 
                 ret["message"][valve_type][valve_location] = valve_state
 
-            print("\n\n\n\n\n\n\AYO\n\n\nLOOK\n\VALVE DATA\n")
+            # print("\n\n\n\n\n\n\AYO\n\n\nLOOK\n\VALVE DATA\n")
+            # print(ret)
+            # print("\n\n\n")
+
+        elif "HRT" in self.header:
+            ret["message"]["message"] = "OK"
+
+        elif "SAB" in self.header:
+            ret["message"]["mode"] = "Soft Abort"
+
+        elif "UAB" in self.header:
+            ret["message"]["mode"] = "Normal"
+
+        elif "SGP" in self.header:
+            split_msg = self.message.split("-")
+            
+            if split_msg[1] == "1":
+                stage_name_inverse_map = {
+                    "1": "waiting",
+                    "2": "pressurization",
+                    "3": "autosequence",
+                    "4": "postburn",
+                }
+
+                ret["message"]["header"] = inner_header_map[self.header]
+                ret["message"]["message"] = "Successfully progressed to " + stage_name_inverse_map[split_msg[0]]
+
+        elif "SPQ" in self.header:
+            stage_name_inverse_map = {
+                "1": "waiting",
+                "2": "pressurization",
+                "3": "autosequence",
+                "4": "postburn",
+            }
+
+            ret["message"]["header"] = inner_header_map[self.header]
+            ret["message"]["message"] = "Rocket is ready to progress to " + stage_name_inverse_map[self.message[1]] + ". Waiting on Ground Station confirmation to progress."
+
+        elif "SGD" in self.header:
+            stage_name_inverse_map = {
+                "1": "waiting",
+                "2": "pressurization",
+                "3": "autosequence",
+                "4": "postburn",
+            }
+
+            ret["message"]["stage"] = stage_name_inverse_map[self.message[0]]
+            ret["message"]["status"] = int(self.message[1:])
+
+            print("\n\n\n\n\n\n\AYO\n\n\nLOOK\n\STAGE DATA\n")
             print(ret)
             print("\n\n\n")
+
+        else:
+            ret["message"]["header"] = inner_header_map[self.header]
+            ret["message"]["message"] = self.message
+
 
         return ret
 

@@ -72,11 +72,13 @@ export function createSocketIoCallbacks(store: Store<CaelusState>) {
   // UPDATES BACKEND REDUX STORE COPY UPON RECEIVING DATA
 
   socket.on("general", (log: Log) => {
+    // console.log(log);
     switch (log.header) {
       case "heartbeat":
         store.dispatch(updateHeartbeat(log.timestamp));
         break;
       case "stage":
+        // console.log("STAGE DATAAAAAAAAAAAAAAAAAAAA YAYYYYY");
         store.dispatch(updateStage(log.message));
         break;
       case "mode":
@@ -86,6 +88,7 @@ export function createSocketIoCallbacks(store: Store<CaelusState>) {
         store.dispatch(addResponse(log));
         break;
       default:
+        // console.log(log);
         caelusLogger("telemetry", "Unknown general header", "warn");
         break;
     }
@@ -101,8 +104,8 @@ export function createSocketIoCallbacks(store: Store<CaelusState>) {
   });
 
   socket.on("valve_data", (log: UpdateValveDataAction["data"]) => {
-    console.log("GOT VALVE DATA");
-    console.log(log);
+    // console.log("GOT VALVE DATA");
+    // console.log(log);
     store.dispatch(updateValveData(log));
     sendMessage("update_valves", store.getState().data.valveData);
   });

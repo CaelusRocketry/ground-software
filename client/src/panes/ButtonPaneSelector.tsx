@@ -22,8 +22,8 @@ const ButtonPaneSelector = (
     <b>
       <label>{label}: </label>
     </b>
-    {console.log("OPTIONS")}
-    {console.log(options)}
+    {/* {console.log("OPTIONS")}
+    {console.log(options)} */}
     <select
       ref={ref}
       onChange={onChange}
