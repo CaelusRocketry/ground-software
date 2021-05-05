@@ -62,25 +62,6 @@ function onClickedActuateValve(
   }
 }
 
-function onClickedSoftAbort(type: "soft") {
-  if(disable_auth) {
-    window.alert("You do not have authorization to issue a soft abort.")
-  } else if (window.confirm("Are you sure you want to " + type + " abort?")) {
-    caelusLogger("button-press", "Confirmed abort");
-    softAbort();
-  }
-}
-
-function onClickedUndoSoftAbort() {
-  // TODO: If the current mode isn't Soft Abort, don't allow this (gray out the button, and if they somehow click on it then alert them that its a disallowed action)
-  if(disable_auth) {
-    window.alert("You do not have authorization to undo a soft abort.")
-  } else if (window.confirm("Are you sure you want to undo soft abort?")) {
-    caelusLogger("button-press", "Confirmed undo abort");
-    undoSoftAbort();
-  }
-}
-
 function onClickedUndoAbort() {
     // TODO: If the current mode isn't Soft Abort, don't allow this (gray out the button, and if they somehow click on it then alert them that its a disallowed action)
   if(disable_auth) {
@@ -108,6 +89,15 @@ const ButtonBarPane = () => {
         heartbeatStatus: state.data.general.heartbeat_status,
         mode: state.data.general.mode,
     }));
+    
+    function disableUndo() {
+      if(data.mode === "Normal") {
+        return true;
+      }
+      else {
+        return;
+      }
+    }
 
     const mode = useSelector((state: CaelusState) => state.data.general.mode);
 
@@ -241,6 +231,13 @@ const ButtonBarPane = () => {
             disabled={mode === "Normal" ? false : true}
           >
             Abort
+          </button>
+          <button
+            style={abort_style}
+            onClick={() => onClickedUndoAbort()}
+            disabled={disableUndo()}
+          >
+            Soft Abort
           </button>
         </div>             
       </div>
