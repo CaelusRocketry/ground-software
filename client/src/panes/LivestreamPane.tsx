@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { VALVE_MAP, PADDING } from "../lib/pid";
 import { CaelusState } from "../store/reducers";
 import config from "../config.json";
-import Livestreambase from "../images/LivestreamBase.png";
+import Livestreambase from "../images/livestream/LivestreamBaseNitrous.png";
 
 const LivestreamPane = () => (
   <img
