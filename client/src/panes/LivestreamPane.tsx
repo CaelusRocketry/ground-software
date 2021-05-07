@@ -7,8 +7,9 @@ import { useSelector } from "react-redux";
 import { VALVE_MAP, PADDING } from "../lib/livestreampid";
 import { CaelusState } from "../store/reducers";
 import config from "../config.json";
-import Livestreambase from "../images/livestream/LivestreamBaseNitrous.png";
+import Livestreambase from "../images/livestream/LivestreamBaseEthanol.png";
 import { isReturnStatement } from "typescript";
+import { useState } from "react";
 
 const LivestreamPane = () => {
 
@@ -33,11 +34,14 @@ const LivestreamPane = () => {
     sensorLoc in data.sensorState.sensors[sensorType];
   const valveExists = (valveLoc: string) =>
     valveLoc in data.valveState.valves.solenoid;
-
+  
+  const [diagram, setDiagram] = useState<{ type: keyof typeof PADDING }>({
+    type: "NITROUS",
+  });
 
   return(
   <div style={{ textAlign: "center" }}>
-      {/* <select           
+      <select           
         onChange={(e) => {
           // @ts-expect-error
           setDiagram({ type: e.target.value });
@@ -46,7 +50,7 @@ const LivestreamPane = () => {
         <option value="NITROUS">{config.test_type.Nitrous}</option>
         <option value="ETHANOL">{config.test_type.Ethanol}</option>
         <option value="FULL">{config.test_type.Full}</option>
-      </select> */}
+      </select>
 
       <div
         style={{ position: "relative", textAlign: "center" }}
@@ -58,7 +62,7 @@ const LivestreamPane = () => {
           alt={"livestreambase"}
           style={{ width: "100%" }}
         />
-        {Object.entries(PADDING["NITROUS"]["COORDINATES"]["LABELS"]).map(([loc, label]) => (
+        {Object.entries(PADDING["ETHANOL"]["COORDINATES"]["LABELS"]).map(([loc, label]) => (
           <div
             style={{
               position: "absolute",
@@ -97,7 +101,7 @@ const LivestreamPane = () => {
           </div>
  
         ))}
-        {Object.entries(PADDING["NITROUS"]["COORDINATES"]["SENSOR"]["PRESSURE"]).map(([loc, pressureSensor]) => (
+        {Object.entries(PADDING["ETHANOL"]["COORDINATES"]["SENSOR"]["PRESSURE"]).map(([loc, pressureSensor]) => (
           <div 
             style={{
               position: "absolute",
@@ -116,7 +120,7 @@ const LivestreamPane = () => {
             </p>
           </div>
         ))}
-        {Object.entries(PADDING["NITROUS"]["COORDINATES"]["SENSOR"]["THRUST"]).map(([loc, thrustSensor]) => (
+        {Object.entries(PADDING["ETHANOL"]["COORDINATES"]["SENSOR"]["THRUST"]).map(([loc, thrustSensor]) => (
           <div 
             style={{
               position: "absolute",
@@ -136,7 +140,7 @@ const LivestreamPane = () => {
             </p>
           </div>
         ))}
-        {Object.entries(PADDING["NITROUS"]["COORDINATES"]["VALVES"]).map(([loc, valve]) => (
+        {Object.entries(PADDING["ETHANOL"]["COORDINATES"]["VALVES"]).map(([loc, valve]) => (
           <div 
             style={{
               position: "absolute",

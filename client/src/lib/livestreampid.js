@@ -147,7 +147,8 @@ export const PADDING = {
         }
       },
       "VALVES" : {
-        "main_propellant_valve": {
+        "NCSV-4": {
+          "NAME" : "fill_valve",
           "TEXT" : {
             x1: (410/width) * 100 + '%',
             y1: (722/height) * 100 + '%',
@@ -156,6 +157,7 @@ export const PADDING = {
           }
         },
         "NOSV-1": {
+          "NAME" : "vent_valve",
           "TEXT" : {
             x1: (500/width) * 100 + '%',
             y1: (448/height) * 100 + '%',
@@ -164,6 +166,7 @@ export const PADDING = {
           }
         },
         "NCSV-5": {
+          "NAME" : "main_propellant_valve",
           "TEXT" : {
             x1: (885/width) * 100 + '%',
             y1: (1323/height) * 100 + '%',
@@ -195,8 +198,8 @@ export const PADDING = {
           "TEXT" : {
             x1: (96/width) * 100 + '%',
             y1: (245/height) * 100 + '%',
-            x2: (1015/width) * 100 + '%',
-            y2: (348/height) * 100 + '%'
+            x2: ((width-1015)/width) * 100 + '%',
+            y2: ((height-348)/height) * 100 + '%'
           },
           "TOP" : "",
           "FONTSIZE" : "45px",
@@ -205,8 +208,8 @@ export const PADDING = {
           "TEXT" : {
             x1: (1774/width) * 100 + '%',
             y1: (246/height) * 100 + '%',
-            x2: (2693/width) * 100 + '%',
-            y2: (348/height) * 100 + '%'
+            x2: ((width-2693)/width) * 100 + '%',
+            y2: ((height-348)/height) * 100 + '%'
           },
           "TOP" : "",
           "FONTSIZE" : "45px",
@@ -215,41 +218,41 @@ export const PADDING = {
           "TEXT" : {
             x1: (2292/width) * 100 + '%',
             y1: (434/height) * 100 + '%',
-            x2: (2420/width) * 100 + '%',
-            y2: (482/height) * 100 + '%'
+            x2: ((width-2420)/width) * 100 + '%',
+            y2: ((height-482)/height) * 100 + '%'
           },
           "TOP" : "100px",
           "FONTSIZE" : "20px",
         },
-        "ETHANOLFLIGHT": {
+        "ETHANOL FLIGHT": {
           "TEXT" : {
             x1: (1921/width) * 100 + '%',
             y1: (610/height) * 100 + '%',
-            x2: (2156/width) * 100 + '%',
-            y2: (1184/height) * 100 + '%'
+            x2: ((width-2156)/width) * 100 + '%',
+            y2: ((height-1184)/height) * 100 + '%'
           },
           "TOP" : "110px",
           "FONTSIZE" : "28px",
         },
-        "KBOTTLE": {
+        "K-BOTTLE": {
           "TEXT" : {
             x1: (2414/width) * 100 + '%',
             y1: (753/height) * 100 + '%',
-            x2: (2691/width) * 100 + '%',
-            y2: (1486/height) * 100 + '%'
+            x2: ((width-2691)/width) * 100 + '%',
+            y2: ((height-1486)/height) * 100 + '%'
           },
           "TOP" : "140px",
           "FONTSIZE" : "26px",
         },
       },
-      "SENSORS" : {
+      "SENSOR" : {
         "PRESSURE" : {
           "ISOLATED_SECTION": {
             "TEXT" : {
               x1: (2448/width) * 100 + '%',
               y1: (642/height) * 100 + '%',
-              x2: (2700/width) * 100 + '%',
-              y2: (733/height) * 100 + '%'
+              x2: ((width-2700)/width) * 100 + '%',
+              y2: ((height-733)/height) * 100 + '%'
             },
             "TOP" : "8px",
             "FONTSIZE" : "26px",
@@ -258,8 +261,8 @@ export const PADDING = {
             "TEXT" : {
               x1: (1872/width) * 100 + '%',
               y1: (464/height) * 100 + '%',
-              x2: (2150/width) * 100 + '%',
-              y2: (585/height) * 100 + '%'
+              x2: ((width-2150)/width) * 100 + '%',
+              y2: ((height-585)/height) * 100 + '%'
             },
             "TOP" : "",
             "FONTSIZE" : "26px",
@@ -268,8 +271,8 @@ export const PADDING = {
             "TEXT" : {
               x1: (1900/width) * 100 + '%',
               y1: (1219/height) * 100 + '%',
-              x2: (2200/width) * 100 + '%',
-              y2: (1313/height) * 100 + '%'
+              x2: ((width-2200)/width) * 100 + '%',
+              y2: ((height-1313)/height) * 100 + '%'
             },
             "TOP" : "8px",
             "FONTSIZE" : "26px",
@@ -278,8 +281,8 @@ export const PADDING = {
             "TEXT" : {
               x1: (710/width) * 100 + '%',
               y1: (1300/height) * 100 + '%',
-              x2: (1074/width) * 100 + '%',
-              y2: (1400/height) * 100 + '%'
+              x2: ((width-1074)/width) * 100 + '%',
+              y2: ((height-1400)/height) * 100 + '%'
             },
             "TOP" : "10px",
             "FONTSIZE" : "26px",
@@ -288,8 +291,8 @@ export const PADDING = {
             "TEXT" : {
               x1: (797/width) * 100 + '%',
               y1: (685/height) * 100 + '%',
-              x2: (1161/width) * 100 + '%',
-              y2: (787/height) * 100 + '%'
+              x2: ((width-1161)/width) * 100 + '%',
+              y2: ((height-787)/height) * 100 + '%'
             },
             "TOP" : "10px",
             "FONTSIZE" : "26px",
@@ -300,8 +303,8 @@ export const PADDING = {
             "TEXT" : {
               x1: (285/width) * 100 + '%',
               y1: (707/height) * 100 + '%',
-              x2: (735/width) * 100 + '%',
-              y2: (814/height) * 100 + '%'
+              x2: ((width-735)/width) * 100 + '%',
+              y2: ((height-814)/height) * 100 + '%'
             },
             "TOP" : "",
             "FONTSIZE" : "",
@@ -313,24 +316,24 @@ export const PADDING = {
           "TEXT" : {
             x1: (1802/width) * 100 + '%',
             y1: (1321/height) * 100 + '%',
-            x2: (1922/width) * 100 + '%',
-            y2: (1441/height) * 100 + '%'
+            x2: ((width-1922)/width) * 100 + '%',
+            y2: ((height-1441)/height) * 100 + '%'
           }
         },
         "vent_valve": {
           "TEXT" : {
             x1: (2173/width) * 100 + '%',
             y1: (458/height) * 100 + '%',
-            x2: (2294/width) * 100 + '%',
-            y2: (579/height) * 100 + '%'
+            x2: ((width-2294)/width) * 100 + '%',
+            y2: ((height-579)/height) * 100 + '%'
           }
         },
         "fill_valve": {
           "TEXT" : {
             x1: (2311/width) * 100 + '%',
             y1: (624/height) * 100 + '%',
-            x2: (2432/width) * 100 + '%',
-            y2: (745/height) * 100 + '%'
+            x2: ((width-2432)/width) * 100 + '%',
+            y2: ((height-745)/height) * 100 + '%'
           }
         },
       }

@@ -322,39 +322,5 @@
     "Ethanol": "Ethanol",
     "Full": "Full"
   },
-  "checklist": {
-    "waiting": {
-      "1": ["w-Say hi ← (Priority: !!!!!)", true],
-      "2": ["w-Pressurize the system", true],
-      "3": ["w-Run some code", true],
-      "4": ["w-Check to make sure everything is pressurized", true],
-      "5": ["w-If something broke, abort", true],
-      "6": ["w-If something didn’t break, still abort", true]
-    },
-    "pressurization": {
-      "1": "p-Say hi ← (Priority: !!!!!)",
-      "2": "p-Pressurize the system",
-      "3": "p-Run some code",
-      "4": "p-Check to make sure everything is pressurized",
-      "5": "p-If something broke, abort",
-      "6": "p-If something didn’t break, still abort"
-    },
-    "autosequence": {
-      "1": "a-Say hi ← (Priority: !!!!!)",
-      "2": "a-Pressurize the system",
-      "3": "a-Run some code",
-      "4": "a-Check to make sure everything is pressurized",
-      "5": "a-If something broke, abort",
-      "6": "a-If something didn’t break, still abort"
-    },
-    "postburn": {
-      "1": "post-Say hi ← (Priority: !!!!!)",
-      "2": "post-Pressurize the system",
-      "3": "post-Run some code",
-      "4": "post-Check to make sure everything is pressurized",
-      "5": "post-If something broke, abort",
-      "6": "post-If something didn’t break, still abort"
-    }
-  },
   "Authorized_IPs": ["localhost"]
 }

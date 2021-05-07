@@ -19,14 +19,6 @@ const Button = styled.button`
   cursor: pointer;  
 `;
 
-
-const stageParameters = [
-  config.checklist.waiting,
-  config.checklist.pressurization,
-  config.checklist.autosequence,
-  config.checklist.postburn
-]
-
 var x = 0;
 var y = 0;
 
