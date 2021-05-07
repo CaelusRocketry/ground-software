@@ -37,7 +37,7 @@ const LivestreamPane = () => {
 
   return(
   <div style={{ textAlign: "center" }}>
-      <select           
+      {/* <select           
         onChange={(e) => {
           // @ts-expect-error
           setDiagram({ type: e.target.value });
@@ -46,7 +46,7 @@ const LivestreamPane = () => {
         <option value="NITROUS">{config.test_type.Nitrous}</option>
         <option value="ETHANOL">{config.test_type.Ethanol}</option>
         <option value="FULL">{config.test_type.Full}</option>
-      </select>
+      </select> */}
 
       <div
         style={{ position: "relative", textAlign: "center" }}
@@ -68,17 +68,32 @@ const LivestreamPane = () => {
               top: label["TEXT"]["y1"],
               right: label["TEXT"]["x2"],
               bottom: label["TEXT"]["y2"],
-              borderWidth: "2px",
-              borderColor: "#1835ab",
+              // borderWidth: "2px",
+              display: "table-cell",
+              margin: "auto",
             }}
           >
-            <p style={{fontSize: "100%"}}
-              className={"diagram" + label}
-            >
-              {sensorExists("pressure", loc)
-                ? round(getLast(data.sensorState.sensors.pressure[loc])?.kalman, 1000)
-                : ""}
-            </p>
+            {
+              (loc == "N2OSTORAGE" || loc == "N2OFLIGHT")
+                ? 
+                  <div style={{fontSize: label["FONTSIZE"],color:"white", marginTop:label["TOP"]}}>
+                    <p style={{display: "inline", color: "white"}}>N</p>
+                    <sub style={{display: "inline", color: "white"}} >2</sub>
+                    <p style={{display: "inline", color: "white"}}>O </p> 
+                    <p style={{display: "inline", color: "white"}}>
+                      {(loc == "N2OSTORAGE" || loc == "N2OFLIGHT") ? loc.substring(3) : loc}
+                    </p>
+                  </div>
+
+                : <div>
+                    <p style={{display: "inline", fontSize: label["FONTSIZE"], color: "white", marginTop: label["TOP"]}}
+                      className={"diagram" + label}
+                    >
+                      {(loc == "N2OSTORAGE" || loc == "N2OFLIGHT") ? loc.substring(3) : loc}
+                    </p>
+                  </div>
+            }
+
           </div>
  
         ))}
@@ -90,17 +105,14 @@ const LivestreamPane = () => {
               top: pressureSensor["TEXT"]["y1"],
               right: pressureSensor["TEXT"]["x2"],
               bottom: pressureSensor["TEXT"]["y2"],
-              borderWidth: "2px",
-              borderColor: "#8e0004",
-              fontSize: "10vw",
+              // borderWidth: "2px",
               display: "inline",
             }}
           >
-            <p className={"diagram" + pressureSensor} style={{fontSize: "10px"}}>
-              {valveExists(loc)
-                ? VALVE_MAP[data.valveState.valves.solenoid[loc]]
-                : ""
-              }
+            <p className={"diagram" + pressureSensor} style={{fontSize: pressureSensor["FONTSIZE"], marginTop: pressureSensor["TOP"], color: "white"}}>
+              {sensorExists("pressure", loc)
+                  ? round(getLast(data.sensorState.sensors.pressure[loc])?.kalman, 1000) + " PSI"
+                  : "waiting..."}
             </p>
           </div>
         ))}
@@ -112,17 +124,15 @@ const LivestreamPane = () => {
               top: thrustSensor["TEXT"]["y1"],
               right: thrustSensor["TEXT"]["x2"],
               bottom: thrustSensor["TEXT"]["y2"],
-              borderWidth: "2px",
-              borderColor: "#8e0004",
+              // borderWidth: "2px",
               fontSize: "10vw",
               display: "inline",
             }}
           >
-            <p className={"diagram" + thrustSensor} style={{fontSize: "10px"}}>
-              {valveExists(loc)
-                ? VALVE_MAP[data.valveState.valves.solenoid[loc]]
-                : ""
-              }
+            <p className={"diagram" + thrustSensor} style={{fontSize: "10px", color: "white"}}>
+              {sensorExists("pressure", loc)
+                  ? round(getLast(data.sensorState.sensors.pressure[loc])?.kalman, 1000)
+                  : ""}
             </p>
           </div>
         ))}
@@ -134,18 +144,19 @@ const LivestreamPane = () => {
               top: valve["TEXT"]["y1"],
               right: valve["TEXT"]["x2"],
               bottom: valve["TEXT"]["y2"],
-              borderWidth: "2px",
-              borderColor: "#8e0004",
+              // borderWidth: "2px",
               fontSize: "10vw",
               display: "inline",
+              margin: "9px",
+              borderRadius: "50px",
+              backgroundColor:
+                valveExists(loc)
+                  ? VALVE_MAP[data.valveState.valves.solenoid[loc]] === "CLOSED"
+                      ? "red"
+                      : "green"
+                  : ""
             }}
           >
-            <p className={"diagram" + valve} style={{fontSize: "10px"}}>
-              {valveExists(loc)
-                ? VALVE_MAP[data.valveState.valves.solenoid[loc]]
-                : ""
-              }
-            </p>
           </div>
         ))}
       </div>
