@@ -8,10 +8,10 @@ import { Link } from "react-router-dom";
 
 const stages = config["stages"]["list"];
 const stageNames = {
-  waiting: "Waiting",
-  pressurization: "Pressurization",
-  autosequence: "Autosequence",
-  postburn: "Postburn",
+  Waiting: "Waiting",
+  Pressurization: "Pressurization",
+  Autosequence: "Autosequence",
+  Postburn: "Postburn",
 };
 
 const calculateColor = (currentStageIndex: number, idx: number) => {
@@ -75,8 +75,7 @@ const FooterSequence = () => {
           {stages.map((stage, idx) => (
             <Event
               interval={calculateTitle(currentStageIndex, idx, percentage)}
-              // @ts-expect-error
-              title={stageNames[stage]}
+              title={stage}
               intervalBackground={calculateColor(currentStageIndex, idx)}
               key={idx}
             >
