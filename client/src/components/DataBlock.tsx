@@ -19,8 +19,8 @@ const DataBlock = () => {
   const blockStyle = "rounded-lg m-1 p-4 bg-gray-100";
   const abortStyle = "animate-ping rounded-lg m-1 p-4 bg-pink-300";
   const groupHeaderStyle = "font-bold mb-1";
-  console.log('----------------------VALVE-------------------------------');
-  console.log(data.valveState.valves.solenoid.main_propellant_valve);
+  // console.log('----------------------VALVE-------------------------------');
+  // console.log(data.valveState.valves.solenoid.main_propellant_valve);
 
   const getLast: <T>(arr: T[]) => T | undefined = (arr) =>
     arr.length > 0 ? arr[arr.length - 1] : undefined;
@@ -38,10 +38,10 @@ const DataBlock = () => {
       <Block>
         <div>
           <h4 className={groupHeaderStyle}>Timestamp</h4>
-          Timestamp:{" "}
-          <span className="font-mono font-normal">
+          {"Timestamp: "}
+          {/* <span className="font-mono font-normal">
             {getLast(data.sensorState.timestamps)} s
-          </span>
+          </span> */}
         </div>
         {Object.entries(data.sensorState.sensors).map(([type, locations]) => (
           <div key={type}>
@@ -53,6 +53,7 @@ const DataBlock = () => {
                   <p
                     style={{
                       color:
+                      // TODO: MAKE THIS DEPENDENT ON SENSOR STATUS
                         "green" /*getColor(data.sensorState[sensor][loc])*/,
                     }}
                     key={type + "." + loc}

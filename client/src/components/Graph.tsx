@@ -49,8 +49,8 @@ const Graph = (props: GraphProps) => {
       return { x: [], y: [] };
     }
 
-    let x_values = [];
-    let y_values = [];
+    let x_values: number[] = [];
+    let y_values: number[] = [];
 
     let x = state.data.sensorData.timestamps;
     let y = state.data.sensorData.sensors[metadata.type][metadata.location];

@@ -22,6 +22,8 @@ const ButtonPaneSelector = (
     <b>
       <label>{label}: </label>
     </b>
+    {/* {console.log("OPTIONS")}
+    {console.log(options)} */}
     <select
       ref={ref}
       onChange={onChange}
@@ -31,6 +33,8 @@ const ButtonPaneSelector = (
       <option className="hidden" />
       {Array.from(options).map((option) => (
         <option value={option} key={option}>
+          {console.log(option)}
+          {console.log(optionNames[option])}
           {optionNames[option]}
         </option>
       ))}

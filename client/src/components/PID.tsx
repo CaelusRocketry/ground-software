@@ -40,8 +40,8 @@ const PID = () => {
       </BlockHeader>
       <select           
         onChange={(e) => {
-          // @ts-expect-error
-          setDiagram({ type: e.target.value });
+   
+          setDiagram({ type: e.target.value as keyof typeof PADDING });
         }}
       >
         <option value="NITROUS">{config.test_type.Nitrous}</option>
@@ -63,6 +63,7 @@ const PID = () => {
           <div
             style={{
               position: "absolute",
+<<<<<<< HEAD
               // // @ts-expect-error
               left: sensor["TEXT"]["x1"],
               // // @ts-expect-error
@@ -71,6 +72,12 @@ const PID = () => {
               bottom: sensor["TEXT"]["y2"],
               borderWidth: "2px",
               borderColor: "#1835ab",
+=======
+              
+              left: PADDING[diagram.type].SENSOR[sensor]["x"] * 100 + "%",
+              
+              top: PADDING[diagram.type].SENSOR[sensor]["y"] * 100 + "%",
+>>>>>>> origin/packet-comp
             }}
           >
             <p style={{fontSize: "100%"}}

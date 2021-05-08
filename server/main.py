@@ -9,7 +9,6 @@ import logging
 
 import argparse
 
-
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
@@ -36,9 +35,6 @@ else:
     config = json.loads(open("config.json").read())
 
 
-GS_IP = config["telemetry"]["GS_IP"]
-GS_PORT = config["telemetry"]["GS_PORT"]
-
 app = Flask(__name__, static_folder="templates")
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -46,21 +42,11 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 time.sleep(1)
 
 if __name__ == "__main__":
-    print("listening and sending")
-
+    
     handler = Handler('/')
-    handler.init(GS_IP, GS_PORT, socketio)
+    handler.init(config)
     handler.begin()
+    print("listening and sending")
 
     socketio.on_namespace(handler)
     socketio.run(app, host=config["telemetry"]["SOCKETIO_HOST"], port=int(config["telemetry"]["SOCKETIO_PORT"]))
-
-
-    # while True:
-    #     temp = input("")
-    #     header = temp[:temp.index(" ")]
-    #     message = temp[temp.index(" ") + 1:]
-    #     pack = Packet(header=header)
-    #     log = Log(header=header, message=message)
-    #     pack.add(log)
-    #     enqueue(Packet(header="MESSAGE", logs=[log]))

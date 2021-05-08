@@ -32,10 +32,15 @@ class ValveType(str, Enum):
 
 
 class ValveLocation(str, Enum):
-    PRESSURE_RELIEF = "pressure_relief"
-    PRESSURIZATION = "pressurization"
-    MAIN_PROPELLANT_VALVE = "main_propellant_valve"
-
+    ETHANOL_DRAIN = "ethanol_drain"
+    ETHANOL_PRESSURIZATION = "ethanol_pressurization"
+    ETHANOL_VENT = "ethanol_vent"
+    ETHANOL_MPV = "ethanol_mpv"
+    NITROUS_DRAIN = "nitrous_drain"
+    NITROUS_PRESSURIZATION = "nitrous_pressurization"
+    NITROUS_VENT = "nitrous_vent"
+    NITROUS_MPV = "nitrous_mpv"
+    
 
 class ActuationType(IntEnum):
     PULSE = 4

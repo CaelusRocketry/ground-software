@@ -1,20 +1,24 @@
 from queue import Empty, Queue
 import time
 import heapq
-import socket
+import serial
 import threading
+import serial
 from typing import Any, List, Tuple, Union
-from packet import Packet, Log, LogPriority
+from packet import Packet, LogPriority # PacketPriority
 from flask_socketio import Namespace
+import socket
+
 
 BYTE_SIZE = 8192
 
 DELAY = .05
-DELAY_LISTEN = .05
-DELAY_SEND = .05
-DELAY_HEARTBEAT = 3
+DELAY_LISTEN = .005
+DELAY_SEND = .2
+DELAY_HEARTBEAT = 2
 
 SEND_ALLOWED = True
+
 BLOCK_SIZE = 32
 f = open("black_box.txt", "w+")
 f.close()
@@ -23,11 +27,12 @@ f.close()
 class Handler(Namespace):
     """ Handles all communication """
 
-    def init(self, ip, port, socketio):
+    def init(self, config):
         """ Based on given IP and port, create and connect a socket """
 
         """ A heapqueue of packets to send """
         self.queue_send: List[Tuple[str, str]] = []
+        self.rcvd_data = ""
         
         self.send_thread = threading.Thread(target=self.send, daemon=True)
         self.send_thread.daemon = True
@@ -41,26 +46,48 @@ class Handler(Namespace):
         self.ingest_thread = threading.Thread(target=self.ingest_loop, daemon=True)
         self.ingest_thread.daemon = True
 
-        self.conn = None
+        self.ser = None
         self.running = False
+        self.INITIAL_TIME = -100
+        self.using_xbee = config["telemetry"]["USE_XBEE"]
+        print("Using Xbee:", self.using_xbee)
 
-        self.socketio = socketio
-        self.socketio.on_event(
-            'json',
-            self.send_to_flight_software
-        )
+        if self.using_xbee:
+            baud = config["telemetry"]["XBEE_BAUDRATE"]
+            xbee_port = config["telemetry"]["XBEE_PORT"]
+            self.ser = serial.Serial(xbee_port, baud)
+            self.ser.flushInput()
+            self.ser.flushOutput()
+            print("Finished setting up xbee")
         
-        self.connect(ip, port)
+        else:
+            gs_ip = config["telemetry"]["SOCKET_IP"]
+            gs_port = config["telemetry"]["SOCKET_PORT"]
+            self.connect_socket(gs_ip, gs_port)
+
         self.INITIAL_TIME = time.time()
-        
+
         self.general_copy = None
         self.sensors_copy = None
         self.valves_copy = None
         self.buttons_copy = None
 
+        self.rcvd = ""
+        self.heartbeat_packet_number = 0
+
     ## telemetry methods
 
-    def connect(self, ip, port):
+    def begin(self):
+        """ Starts the send and listen threads """
+        print("Staring threads")
+        self.running = True
+        self.listen_thread.start()
+        self.heartbeat_thread.start()
+        self.send_thread.start()
+        self.ingest_thread.start()
+
+
+    def connect_socket(self, ip, port):
         # Server-side socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -78,46 +105,60 @@ class Handler(Namespace):
         print("Finished connecting")
 
 
-    def begin(self):
-        """ Starts the send and listen threads """
-        self.running = True
-        self.listen_thread.start()
-        self.heartbeat_thread.start()
-        self.send_thread.start()
-        self.ingest_thread.start()
-
-
     def send_to_flight_software(self, json):
-        log = Log(header=json['header'], message=json['message'], timestamp=time.time()-self.INITIAL_TIME)
-        self.enqueue(Packet(logs=[log], timestamp=log.timestamp))
+        pack = Packet(header=json['header'], message=json['message'], timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+        self.enqueue(pack)
 
     def send(self):
-        """ Constantly sends next packet from queue to ground station """
+        """ Constantly sends next packet from queue to flight software """
         while self.running:
             try:
                 if self.queue_send and SEND_ALLOWED:
-                    _, encoded = heapq.heappop(self.queue_send)
-                    self.conn.send(encoded)
-                    print("Sending:", encoded)
+                    _, packet_str = heapq.heappop(self.queue_send)
+                    if self.using_xbee:
+                        subpackets = [packet_str[i:60+i] for i in range(0, len(packet_str), 60)] #split into smaller packets of 60
+                        for subpacket in subpackets:
+                            self.ser.write(subpacket)
+                            time.sleep(DELAY_SEND)
+                    else:
+                        self.conn.send(packet_str)
+                    print("Sending:", packet_str)
                 time.sleep(DELAY_SEND)
+
             except Exception as e:
-                print("ERROR:", e)
+                print("ERROR: ", e)
                 self.running = False
 
 
     def listen(self):
         """ Constantly listens for any from ground station """
         while self.running:
-            data = self.conn.recv(BYTE_SIZE)
+            if self.using_xbee:
+                data = self.ser.read(self.ser.in_waiting).decode()
+            else:
+                data = self.conn.recv(BYTE_SIZE).decode()
+            # print("Received: ", data)
             if data:
-                self.ingest_queue.put(data)
+                self.rcvd += data
+
+            packet_start = self.rcvd.find("^")
+            if packet_start != -1:
+                packet_end = self.rcvd.find("$", packet_start)
+                if packet_end != -1:
+                    incoming_packet = self.rcvd[packet_start+1:packet_end]
+                    self.ingest_queue.put(incoming_packet)
+                    self.rcvd = self.rcvd[packet_end+1:]
+        
+            time.sleep(DELAY_LISTEN)
 
 
     def enqueue(self, packet):
         """ Encrypts and enqueues the given Packet """
-        # TODO: This is implemented wrong. It should enqueue by finding packets that have similar priorities, not changing the priorities of current packets.
-        packet_str = (packet.to_string() + "END").encode("ascii")
-        heapq.heappush(self.queue_send, (packet.priority, packet_str))
+        to_send = packet.to_string()
+
+        if to_send:
+            packet_str = ("^" + to_send + "$").encode("ascii")
+            heapq.heappush(self.queue_send, (1, packet_str))
 
     
     def ingest_loop(self):
@@ -133,54 +174,56 @@ class Handler(Namespace):
 
 
     def ingest(self, packet_str):
-        """ Prints any packets received """
-        packet_str = packet_str.decode()
-        packet_strs = packet_str.split("END")[:-1]
-        packets = [Packet.from_string(p_str) for p_str in packet_strs]
-        for packet in packets:
-            for log in packet.logs:
-                log.timestamp = round(log.timestamp, 1)   #########CHANGE THIS TO BE TIMESTAMP - START TIME IF PYTHON
-                if "heartbeat" in log.header or "stage" in log.header or "response" in log.header or "mode" in log.header:
-                    self.update_general(log.__dict__)
+        """ prints any packets received """
+        print("Ingesting:", packet_str)
+        packet = Packet.from_string(packet_str)
 
-                if "sensor_data" in log.header:
-                    self.update_sensor_data(log.__dict__)
+        # print("Sending to frontend packet of type", packet.header, "-", packet.to_dict())
+        
+        # TODO: Update these w proper headings, as well as in GS
+        if "DAT" in packet.header:                      #sensor data
+            self.update_sensor_data(packet.to_dict())
 
-                if "valve_data" in log.header:
-                    self.update_valve_data(log.__dict__)
-                
-                log.save()
+        elif "VDT" in packet.header:                      #valve data
+            # print("\n\n\n\nSENDING TO FRONT \n\n\nEND VALVE\n\n\n DATA\n\n\n")
+            self.update_valve_data(packet.to_dict())
+
+        else:
+            self.update_general(packet.to_dict())
+        
+        packet.save()
+
 
     def heartbeat(self):
         """ Constantly sends heartbeat message """
         while self.running:
-            log = Log(header="heartbeat", message="AT", timestamp=time.time()-self.INITIAL_TIME)
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
-            print("Sent heartbeat")
+            
+            packet = Packet(header="HRT", message="AT", timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+            self.enqueue(packet)
+            
+            # pack = Packet(header="heartbeat", message="AT - " + str(self.heartbeat_packet_number), timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+            # self.enqueue(log)
+            # print("------------------Sent heartbeat: {}------------------".format(packet.to_string()))
             time.sleep(DELAY_HEARTBEAT)
 
     ## backend methods
 
-    def update_general(self, log):
-        log_send('general', log)
-        self.socketio.emit('general', log, broadcast=True)
+    def update_general(self, pack):
+        self.socketio.emit('general', pack, broadcast=True)
     
     
-    def update_sensor_data(self, log):
-        log_send('sensor', log)
-        self.socketio.emit('sensor_data', log, broadcast=True)
+    def update_sensor_data(self, pack):
+        self.socketio.emit('sensor_data', pack, broadcast=True)
 
     
-    def update_valve_data(self, log):
-        log_send('valve', log)
-        self.socketio.emit('valve_data', log, broadcast=True)
+    def update_valve_data(self, pack):
+        self.socketio.emit('valve_data', pack, broadcast=True)
 
     def update_store_data(self):
         self.socketio.emit('general_copy', self.general_copy)
         self.socketio.emit('sensors_copy', self.sensors_copy)
         self.socketio.emit('valves_copy', self.valves_copy)
         self.socketio.emit('buttons_copy', self.buttons_copy)
-        self.socketio.emit('initial_time', self.INITIAL_TIME)
 
     ## store copy methods
     def update_general_copy(self, general):
@@ -196,7 +239,7 @@ class Handler(Namespace):
         self.buttons_copy = buttons
 
     def on_button_press(self, data):
-        log_send('button', data)
+        # print("Sending to frontend packet of type", data["header"], "-", data)
         if data['header'] == 'update_general':
             self.update_general_copy(data['message'])
         elif data['header'] == 'update_sensors':
@@ -208,11 +251,65 @@ class Handler(Namespace):
         elif data['header'] == 'store_data':
             self.update_store_data()
         else:
+            print("\n\n\n\n\nwe just got a letter\n\nwe just got a letter\nwe just got a letter, wonder who its from?\n")
             print(data)
-            log = Log(header=data['header'], message=data['message'], timestamp=time.time()-self.INITIAL_TIME)
-            self.enqueue(Packet(logs=[log], priority=LogPriority.INFO, timestamp=log.timestamp))
+            # TODO: THIS IS WHERE GS SENDS TO FS. MAP THE GS PACKET TO AN FS-ACCEPTABLE PACKET.
+            data_header = data['header']
+            data_message = data['message']
+            mapped_message = "a"
 
-hidden_log_types = set() # {"general", "sensor", "valve", "button"}
-def log_send(type, log):
-    if type not in hidden_log_types:
-        print(f"Sending [{type}] {log}")
+            header_map = {
+                "soft_abort": "SAB",
+                "undo_soft_abort": "UAB",
+                "solenoid_actuate": "SAC",
+                "sensor_request": "SRQ",
+                "valve_request": "VRQ",
+                "progress": "SGP"
+            }
+
+            valve_type_map = {
+                "solenoid": "0"
+            }
+
+            valve_location_map = {
+                "ethanol_pressurization": "1",
+                "ethanol_vent": "2",
+                "ethanol_mpv": "3",
+                "nitrous_pressurization": "4",
+                "nitrous_fill": "5",
+                "nitrous_mpv": "6"
+            }
+
+            sensor_type_map = {
+                "thermocouple": "0",
+                "pressure": "1"
+            }
+
+            sensor_location_map = {
+                "PT-1": "1",
+                "PT-2": "2",
+                "PT-3": "3",
+                "PT-4": "4",
+                "PT-5": "5",
+                "PT-P": "P",
+                "PT-7": "7",
+                "PT-8": "8",
+                "Thermo-1": "9"
+            }
+
+            if data_header == "solenoid_actuate":
+                mapped_message = valve_location_map[data_message["valve_location"]] + \
+                    data_message["actuation_type"] + data_message["priority"]
+
+            elif data_header == "sensor_request":
+                mapped_message = sensor_type_map[data_message["sensor_type"]] + sensor_location_map[data_message["sensor_location"]]
+            
+            elif data_header == "valve_request":
+                mapped_message = valve_type_map[data_message["valve_type"]] + valve_location_map[data_message["valve_location"]]
+
+            packet = Packet(header=header_map[data_header], message=mapped_message, timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+            print(packet.to_string())
+            self.enqueue(packet)
+            # pack = Packet(header=data['header'], message=data['message'], timestamp=int((time.time()-self.INITIAL_TIME) * 1000))
+            # self.enqueue(pack)
+

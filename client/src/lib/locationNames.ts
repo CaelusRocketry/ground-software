@@ -31,10 +31,23 @@ export const valveTypeNames = {
   solenoid: "Solenoid",
 };
 
+// export const valveLocationNames = {
+//   main_propellant_valve: "Main Propellant Valve",
+//   pressure_relief: "Pressure Relief Valve",
+//   pressurization: "Pressurization Valve",
+// };
+
 export const valveLocationNames = {
-  main_propellant_valve: "Main Propellant Valve",
-  pressure_relief: "Pressure Relief Valve",
-  pressurization: "Pressurization Valve",
+  ethanol_drain: "Ethanol Drain",
+  ethanol_pressurization: "Ethanol Pressurization",
+  ethanol_vent: "Ethanol Vent",
+  ethanol_mpv: "Ethanol MPV",
+  ethanol_fill: "Ethanol Fill",
+  nitrous_drain: "Nitrous Drain",
+  nitrous_pressurization: "Nitrous Pressurization",
+  nitrous_vent: "Nitrous Vent",
+  nitrous_mpv: "Nitrous MPV",
+  nitrous_fill: "Nitrous Fill",
 };
 
 export const actuationTypeNames = {
