@@ -116,9 +116,9 @@ const updateData = (state = createInitialState(), action: DataAction) => {
   try {
     switch (action.type) {
       case "UPDATE_SENSOR_DATA":
-        console.log("INCOMING SENSOR DATA");
-        console.log(action.data.message);
-        console.log(Object.entries(action.data.message));
+        // console.log("INCOMING SENSOR DATA");
+        // console.log(action.data.message);
+        // console.log(Object.entries(action.data.message));
         for (let [type, locations] of Object.entries(action.data.message)) {
           for (let [location, sensor] of Object.entries(locations)) {
             // eslint-disable-next-line
@@ -128,13 +128,13 @@ const updateData = (state = createInitialState(), action: DataAction) => {
             // console.log("Value: " + kalman);
 
             if (consoleLogSensorData && type == "1") {
-              console.log("SENSOR DATA");
-              console.log(
-                type,
-                location,
-                state.sensorData.sensors[type][location]
-              );
-              console.log({ measured, kalman });
+              // console.log("SENSOR DATA");
+              // console.log(
+              //   type,
+              //   location,
+              //   state.sensorData.sensors[type][location]
+              // );
+              // console.log({ measured, kalman });
             }
 
             if (!(type in state.sensorData.sensors)) {
@@ -165,13 +165,13 @@ const updateData = (state = createInitialState(), action: DataAction) => {
         return state;
 
       case "UPDATE_VALVE_DATA":
-        console.log("VALVE DATA REEEE");
-        console.log(action.data.message);
-        console.log(state.valveData.valves);
+        // console.log("VALVE DATA REEEE");
+        // console.log(action.data.message);
+        // console.log(state.valveData.valves);
         for (let [type, locations] of Object.entries(action.data.message)) {
           for (let [location, valve] of Object.entries(locations)) {
-            console.log(type);
-            console.log(location);
+            // console.log(type);
+            // console.log(location);
             state.valveData.valves[type][location] = valve;
           }
         }
