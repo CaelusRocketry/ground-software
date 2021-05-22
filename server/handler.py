@@ -177,6 +177,8 @@ class Handler(Namespace):
         """ prints any packets received """
         print("Ingesting:", packet_str)
         packet = Packet.from_string(packet_str)
+        if packet is None:
+            return
 
         # print("Sending to frontend packet of type", packet.header, "-", packet.to_dict())
         

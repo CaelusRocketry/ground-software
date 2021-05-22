@@ -47,14 +47,18 @@ class Packet:
     @staticmethod
     def from_string(input_string):
         input_list = input_string.split("|")
-        checksum = int(input_list[3])
+        try:
+            checksum = int(input_list[3])
+        except Exception as e:
+            checksum = int(input_list[3], 16)
         og_str = input_list[0] + "|" + input_list[1] + "|" + input_list[2]
         # print(og_str)
         val = sum(ord(c) * i for i, c in enumerate(og_str)) % 999
         # print(val)
 
         if val != checksum:
-            raise Exception("Invalid checksum, packet did not send correctly")
+            print("Invalid checksum, packet did not send correctly")
+            return None
 
         packet = Packet(
             header= input_list[0],
