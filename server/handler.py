@@ -8,12 +8,25 @@ from typing import Any, List, Tuple, Union
 from packet import Packet, Log, LogPriority
 from flask_socketio import Namespace
 import socket
+
 import boto3
 from decimal import Decimal
+import json
+
+# CREATE CONFIG 
+config = json.loads(open("config.json").read())
 
 # CREATE TABLE
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('CallistoSensorData')
+table = dynamodb.Table('CallistoData')
+
+time_of_test = Decimal(str(time.time()))
+table.put_item(
+    Item={
+        'TimeOftest': time_of_test,
+        'Data': {}
+    }
+)
 
 BYTE_SIZE = 8192
 
@@ -70,6 +83,7 @@ class Handler(Namespace):
             self.connect_socket(gs_ip, gs_port)
 
         self.INITIAL_TIME = time.time()
+        self.update_sensor_data_counter = 0
 
         self.general_copy = None
         self.sensors_copy = None
@@ -210,25 +224,32 @@ class Handler(Namespace):
         log_send('general', log)
         self.socketio.emit('general', log, broadcast=True)
     
-    
     def update_sensor_data(self, log):
-        data = {}
-        for sensor_type, sensor_locations in log['message'].items():
-            if sensor_type == 'timestamp':
-                data[sensor_type] = sensor_locations
-                continue
-            data[sensor_type] = {}
-            for location, sensor in sensor_locations.items():
-                data[sensor_type][location] = {}
-                for val_key in sensor:
-                    data[sensor_type][location][val_key] = Decimal(str(sensor[val_key]))
+        if config['database']['use_db']:
+            self.update_sensor_data_counter += 1
+            
+            if self.update_sensor_data_counter == 40:
+                data = {}
+                for sensor_type, sensor_locations in log['message'].items():
+                    if sensor_type == 'timestamp':
+                        data[sensor_type] = sensor_locations
+                        continue
+                    data[sensor_type] = {}
+                    for location, sensor in sensor_locations.items():
+                        data[sensor_type][location] = {}
+                        for val_key in sensor:
+                            data[sensor_type][location][val_key] = Decimal(str(sensor[val_key]))
 
-        table.put_item(
-            Item={
-                'Timestamp': Decimal(str(log['timestamp'])),
-                'Data': data
-            }
-        )
+                current_test_box = table.get_item(Key={'TimeOftest': time_of_test})['Item']['Data']
+                current_test_box[str(log['timestamp'])] = data
+
+                table.put_item(
+                    Item={
+                        'TimeOftest': time_of_test,
+                        'Data': current_test_box
+                    }
+                )
+                self.update_sensor_data_counter = 0
 
         log_send('sensor', log)
         self.socketio.emit('sensor_data', log, broadcast=True)
