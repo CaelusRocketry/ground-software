@@ -18,12 +18,12 @@ const ButtonPaneSelector = (
   }: Props,
   ref: React.ForwardedRef<HTMLSelectElement>
 ) => (
-  <div className="float-left">
+  <div className="" style={{display: "inline"}}>
     <b>
       <label>{label}: </label>
     </b>
-    {console.log("OPTIONS")}
-    {console.log(options)}
+    {/* {console.log("OPTIONS")}
+    {console.log(options)} */}
     <select
       ref={ref}
       onChange={onChange}

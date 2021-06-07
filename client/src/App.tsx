@@ -3,11 +3,19 @@ import React from "react";
 import StatisticsView from "./views/StatisticsView";
 import ActionsView from "./views/ActionsView";
 import CountdownView from "./views/CountdownView";
+import ControlView from "./views/ControlView";
 
 import "./App.css";
-import Logo from "./images/logo.png";
+import config from "./config.json";
 
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+
+import getColor from "./lib/getColor";
+import { useSelector } from "react-redux";
+import { CaelusState } from "./store/reducers";
+import StageView from "./views/StageView";
+import StatusView from "./views/StatusView";
+import Livestream from "./views/Livestream";
 
 function NavbarItem({ children }: { children: React.ReactNode }) {
   return (
@@ -25,45 +33,99 @@ function NavbarItem({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Navbar() {
-  return (
-    <div
-      style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
-    >
-      <NavbarItem>
-        <b style={{ fontSize: "1.5rem" }}>Ground Software</b>
-      </NavbarItem>
-      <NavbarItem>
-        <Link to="/">Dashboard</Link>
-      </NavbarItem>
-      <NavbarItem>
-        <Link to="/actions">Actions</Link>
-      </NavbarItem>
-      <NavbarItem>
-        <Link to="/countdown">Countdown</Link>
-      </NavbarItem>
-    </div>
-  );
-}
-
 const App = () => {
+
+  const data = useSelector((state: CaelusState) => ({
+    heartbeatStatus: state.data.general.heartbeat_status,
+    mode: state.data.general.mode,
+  }));
+
   return (
-    <div className="App font-sans bg-light-1 text-dark-1">
+    <div className="App font-sans bg-light-1 text-dark-1" style={{}}>
       <BrowserRouter>
-        <Navbar />
+        <div
+        style={{ display: "flex", flexDirection: "row", alignItems: "center"}}
+        >
+          <NavbarItem>
+            <b style={{ fontSize: "1.5rem" }}>Ground Software</b>
+          </NavbarItem>
+
+          <select style={{fontSize: "1rem"}}>
+            <option>{config.test_type.Nitrous}</option>
+            <option>{config.test_type.Ethanol}</option>
+            <option>{config.test_type.Full}</option>
+          </select>
+
+          <NavbarItem>
+            <Link to="/statistics">Statistics</Link>
+          </NavbarItem>
+
+          <NavbarItem>
+            <Link to="/actions">Actions</Link>
+          </NavbarItem>
+          |
+          <NavbarItem>
+            <Link to="/stage">Stage</Link>
+          </NavbarItem>
+
+          <NavbarItem>
+            <Link to="/control">Control</Link>
+          </NavbarItem>
+
+          <NavbarItem>
+            <Link to="/status">Status</Link>
+          </NavbarItem>
+
+          <NavbarItem>
+            <Link to="/countdown">Countdown</Link>
+          </NavbarItem>
+
+          <NavbarItem>
+            <Link to="/livestream">Livestream</Link>
+          </NavbarItem>
+
+          <NavbarItem>
+            <p style={{ color: getColor(data.heartbeatStatus), }}>
+                <span className="font-bold">{"Heartbeat"}</span>
+            </p>
+          </NavbarItem>
+          
+          <NavbarItem>
+            <p style={{ color: getColor(data.mode) }}>
+                <span className="font-bold">{"Mode: "}</span>
+                <span className="font-bold">{data.mode}</span> 
+            </p>
+          </NavbarItem>
+        </div>
+
         <Switch>
           <Route path="/actions" exact>
-            <ActionsView />
+            <ActionsView /> 
+          </Route>
+          <Route path="/statistics" exact>
+            <StatisticsView /> 
           </Route>
           <Route path="/countdown" exact>
             <CountdownView />
           </Route>
-          <Route path="/" exact>
-            <StatisticsView />
+          <Route path="/control" exact>
+            <ControlView />
+          </Route>
+          <Route path="/stage" exact>
+            <StageView />
+          </Route>
+          <Route path="/control" exact>
+            <ControlView />
+          </Route>
+          <Route path="/status" exact>
+            <StatusView />
+          </Route>
+          <Route path="/livestream" exact>
+            <Livestream />
           </Route>
         </Switch>
       </BrowserRouter>
-      <img src={Logo} id="logo" alt="Logo" />
+
     </div>
   );
 };

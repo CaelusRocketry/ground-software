@@ -1,0 +1,93 @@
+{
+    "NITROUS" : {
+        "waiting" : [
+            "wait",
+            "make friends",
+            "smile!",
+            "join proggg",
+            "hate on prop!!"
+        ],
+        "pressurization": [
+            "hello",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "autosequence": [
+            "hello",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "postburn": [
+            "hello",
+            "",
+            "",
+            "",
+            ""
+        ]
+    },
+    "ETHANOL" : {
+        "waiting" : [
+            "wait",
+            "make friends",
+            "smile!",
+            "join proggg",
+            "hate on prop!!"
+        ],
+        "pressurization": [
+            "hello",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "autosequence": [
+            "hello",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "postburn": [
+            "hello",
+            "",
+            "",
+            "",
+            ""
+        ]
+    },
+    "FULL" : {
+        "waiting" : [
+            "wait",
+            "make friends",
+            "smile!",
+            "join proggg",
+            "hate on prop!!"
+        ],
+        "pressurization": [
+            "hello",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "autosequence": [
+            "hello",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "postburn": [
+            "hello",
+            "",
+            "",
+            "",
+            ""
+        ]
+    }
+
+}

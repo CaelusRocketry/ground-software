@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 import BlockHeader from "./BlockHeader";
 import { VALVE_MAP, PADDING } from "../lib/pid";
 import { CaelusState } from "../store/reducers";
+import config from "../config.json";
 
 const PID = () => {
   const data = useSelector((state: CaelusState) => ({
@@ -34,18 +35,18 @@ const PID = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <BlockHeader colors={["#0c1f6d", "black", "#8e0004", "black"]}>
+      <BlockHeader colors={["#1835ab", "black", "#8e0004", "black"]}>
         Sensors and Valves Diagram
       </BlockHeader>
-      <select
+      <select           
         onChange={(e) => {
    
           setDiagram({ type: e.target.value as keyof typeof PADDING });
         }}
       >
-        <option value="NITROUS">Nitrous</option>
-        <option value="ETHANOL">Ethanol</option>
-        <option value="FULL">Full</option>
+        {/* <option value="NITROUS">{config.test_type.Nitrous}</option>
+        <option value="ETHANOL">{config.test_type.Ethanol}</option>
+        <option value="FULL">{config.test_type.Full}</option> */}
       </select>
 
       <div
@@ -58,36 +59,51 @@ const PID = () => {
           alt={PADDING[diagram.type]["IMAGE"]["ALT"]}
           style={{ width: "100%" }}
         />
-        {Object.keys(PADDING[diagram.type]["SENSOR"]).map((sensor) => (
-          <p
+        {Object.entries(PADDING[diagram.type]["COORDINATES"]["SENSOR"]).map(([loc, sensor]) => (
+          <div
             style={{
               position: "absolute",
-              
-              left: PADDING[diagram.type].SENSOR[sensor]["x"] * 100 + "%",
-              
-              top: PADDING[diagram.type].SENSOR[sensor]["y"] * 100 + "%",
+              // // @ts-expect-error
+              left: sensor["TEXT"]["x1"],
+              // // @ts-expect-error
+              top: sensor["TEXT"]["y1"],
+              right: sensor["TEXT"]["x2"],
+              bottom: sensor["TEXT"]["y2"],
+              borderWidth: "2px",
+              borderColor: "#1835ab",
             }}
-            className={"diagram" + sensor}
           >
-            {sensorExists("pressure", sensor)
-              ? round(getLast(data.sensorState.sensors.pressure[sensor])?.kalman, 1000)
-              : ""}
-          </p>
+            <p style={{fontSize: "100%"}}
+              className={"diagram" + sensor}
+            >
+              {sensorExists("pressure", loc)
+                ? round(getLast(data.sensorState.sensors.pressure[loc])?.kalman, 1000)
+                : ""}
+            </p>
+          </div>
+ 
         ))}
-        {Object.entries(PADDING[diagram.type].VALVE).map(([loc, valve]) => (
-          <p
+        {Object.entries(PADDING[diagram.type]["COORDINATES"]["VALVE"]).map(([loc, valve]) => (
+          <div 
             style={{
               position: "absolute",
-              left: valve.x * 100 + "%",
-              top: valve.y * 100 + "%",
+              left: valve["TEXT"]["x1"],
+              top: valve["TEXT"]["y1"],
+              right: valve["TEXT"]["x2"],
+              bottom: valve["TEXT"]["y2"],
+              borderWidth: "2px",
+              borderColor: "#8e0004",
+              fontSize: "10vw",
+              display: "inline",
             }}
-            className={"diagram" + valve}
           >
-            {valveExists(loc)
-              ? VALVE_MAP[data.valveState.valves.solenoid[loc]]
-              : ""
-            }
-          </p>
+            <p className={"diagram" + valve} style={{fontSize: "10px"}}>
+              {valveExists(loc)
+                ? VALVE_MAP[data.valveState.valves.solenoid[loc]]
+                : ""
+              }
+            </p>
+          </div>
         ))}
       </div>
       <br />
