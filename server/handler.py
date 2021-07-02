@@ -137,7 +137,7 @@ class Handler(Namespace):
                 data = self.ser.read(self.ser.in_waiting).decode()
             else:
                 data = self.conn.recv(BYTE_SIZE).decode()
-            # print("Received: ", data)
+            print("Received: ", data)
             if data:
                 self.rcvd += data
 

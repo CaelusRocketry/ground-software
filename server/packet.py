@@ -3,6 +3,9 @@ import json
 from enum import IntEnum
 from typing import List
 
+f = open("config.json", "r").read()
+config = json.loads(f)
+
 class LogPriority(IntEnum):
     """ LogPriority Enum indicates the priority or status of the Packet """
 
@@ -97,7 +100,6 @@ class Packet:
             "INF": "info"
         }
 
-
         ret = {"header": header_map[self.header], "timestamp": self.timestamp, "message": {"timestamp": self.timestamp}}
 
         if "DAT" in self.header:
@@ -122,6 +124,11 @@ class Packet:
                 sensor_type = sensor_type_inverse_map[sensor_str[0]]
                 sensor_location = sensor_location_inverse_map[sensor_str[1]]
                 value = int(sensor_str[2:], 16)
+
+                if sensor_type == "pressure":
+                    m = config["sensors"]["list"]["pressure"][sensor_location]["slope"]
+                    b = config["sensors"]["list"]["pressure"][sensor_location]["bias"]
+                    value = m * value + b
 
                 if sensor_type not in ret["message"]:
                     ret["message"][sensor_type] = {}
