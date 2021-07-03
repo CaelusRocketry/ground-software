@@ -50,7 +50,7 @@ class Packet:
     @staticmethod
     def from_string(input_string):
         input_list = input_string.split("|")
-        checksum = int(input_list[3])
+        checksum = int(input_list[3], 16)
         og_str = input_list[0] + "|" + input_list[1] + "|" + input_list[2]
         # print(og_str)
         val = sum(ord(c) * i for i, c in enumerate(og_str)) % 999
