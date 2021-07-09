@@ -126,8 +126,8 @@ class Packet:
                 value = int(sensor_str[2:], 16)
 
                 if sensor_type == "pressure":
-                    m = config["sensors"]["list"]["pressure"][sensor_location]["slope"]
-                    b = config["sensors"]["list"]["pressure"][sensor_location]["bias"]
+                    m = float(config["sensors"]["list"]["pressure"][sensor_location]["slope"])
+                    b = float(config["sensors"]["list"]["pressure"][sensor_location]["bias"])
                     value = m * value + b
 
                 if sensor_type not in ret["message"]:

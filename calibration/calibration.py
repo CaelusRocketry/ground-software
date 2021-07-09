@@ -15,8 +15,8 @@ for i in pt_list:
     x_and_y_values[i][1] = 0
 
 for i in pt_list:
-    voltage2 = int(input("PT-" + i + " second analog read value (on GS): "))
     psi2 = int(input("PT-" + i + " Second PSI: "))
+    voltage2 = int(input("PT-" + i + " second analog read value (on GS): "))
     x_and_y_values[i][2] = voltage2
     x_and_y_values[i][3] = psi2
     
