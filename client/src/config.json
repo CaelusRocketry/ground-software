@@ -5,7 +5,7 @@
     "DELAY": 0.1,
     "SOCKETIO_HOST": "127.0.0.1",
     "SOCKETIO_PORT": 5000,
-    "XBEE_PORT": "/dev/ttyUSB0",
+    "XBEE_PORT": "COM3",
     "XBEE_BAUDRATE": 9600,
     "USE_XBEE": false
   },
@@ -159,6 +159,98 @@
             }
           },
           "pin": 17
+        }
+      },
+      "load": {
+        "LC-1": {
+          "kalman_args": {
+            "process_variance": 0.01,
+            "measurement_variance": 0.02,
+            "kalman_value": 1000
+          },
+          "boundaries": {
+            "waiting": {
+              "safe": [-20, 50],
+              "warn": [-30, 75],
+              "critical": [-50, 100]
+            },
+            "pressurization": {
+              "safe": [-20, 50],
+              "warn": [-30, 75],
+              "critical": [-50, 100]
+            },
+            "autosequence": {
+              "safe": [100, 800],
+              "warn": [50, 900],
+              "critical": [0, 1000]
+            },
+            "postburn": {
+              "safe": [0, 1000],
+              "warn": [0, 1001],
+              "critical": [0, 1002]
+            }
+          },
+          "lc-pins": [26, 25]
+        },
+        "LC-2": {
+          "kalman_args": {
+            "process_variance": 0.01,
+            "measurement_variance": 0.02,
+            "kalman_value": 1000
+          },
+          "boundaries": {
+            "waiting": {
+              "safe": [-20, 50],
+              "warn": [-30, 75],
+              "critical": [-50, 100]
+            },
+            "pressurization": {
+              "safe": [-20, 50],
+              "warn": [-30, 75],
+              "critical": [-50, 100]
+            },
+            "autosequence": {
+              "safe": [100, 800],
+              "warn": [50, 900],
+              "critical": [0, 1000]
+            },
+            "postburn": {
+              "safe": [0, 1000],
+              "warn": [0, 1001],
+              "critical": [0, 1002]
+            }
+          },
+          "lc-pins": [28, 27]
+        },
+        "LC-3": {
+          "kalman_args": {
+            "process_variance": 0.01,
+            "measurement_variance": 0.02,
+            "kalman_value": 1000
+          },
+          "boundaries": {
+            "waiting": {
+              "safe": [-20, 50],
+              "warn": [-30, 75],
+              "critical": [-50, 100]
+            },
+            "pressurization": {
+              "safe": [-20, 50],
+              "warn": [-30, 75],
+              "critical": [-50, 100]
+            },
+            "autosequence": {
+              "safe": [100, 800],
+              "warn": [50, 900],
+              "critical": [0, 1000]
+            },
+            "postburn": {
+              "safe": [0, 1000],
+              "warn": [0, 1001],
+              "critical": [0, 1002]
+            }
+          },
+          "lc-pins": [30, 29]
         }
       }
     },
