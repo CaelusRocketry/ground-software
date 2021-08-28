@@ -105,7 +105,7 @@ class Packet:
         if "DAT" in self.header:
             # type, location, value in hex
 
-            sensor_type_inverse_map = {"0": "thermocouple", "1": "pressure"}
+            sensor_type_inverse_map = {"0": "thermocouple", "1": "pressure", "2": "load"}
             sensor_location_inverse_map = {
                 "1": "PT-1", 
                 "2": "PT-2", 
@@ -115,7 +115,10 @@ class Packet:
                 "P": "PT-P", 
                 "7": "PT-7", 
                 "8": "PT-8", 
-                "9": "Thermo-1"
+                "9": "Thermo-1",
+                "A": "LC-1",
+                "B": "LC-2",
+                "C": "LC-3"
             } 
             
             sensors = self.message.split(",")

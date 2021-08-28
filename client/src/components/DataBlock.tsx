@@ -28,7 +28,7 @@ const DataBlock = () => {
   const units = {
     thermocouple: "C",
     pressure: "PSI",
-    load: "lbs",
+    load: "lb",
     timestamp: "s",
   };
 

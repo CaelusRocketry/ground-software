@@ -19,7 +19,7 @@ const properties = {
   },
   load: {
     xaxis: "Time (s)",
-    yaxis: "Force (N)",
+    yaxis: "Force (lb)",
     title: "Load vs. Time",
   },
 };
