@@ -323,5 +323,10 @@
     "data_cutoff": 30,
     "message_cutoff": 10
   },
+  "test_type": {
+    "Nitrous": "Nitrous",
+    "Ethanol": "Ethanol",
+    "Full": "Full"
+  },
   "Authorized_IPs": ["localhost"]
 }

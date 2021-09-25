@@ -8,6 +8,7 @@ import "./App.css";
 import Logo from "./images/logo.png";
 
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import LiveStreamView from "./views/LiveStreamView";
 
 function NavbarItem({ children }: { children: React.ReactNode }) {
   return (
@@ -42,6 +43,9 @@ function Navbar() {
       <NavbarItem>
         <Link to="/countdown">Countdown</Link>
       </NavbarItem>
+      <NavbarItem>
+        <Link to="/livestream">Livestream</Link>
+      </NavbarItem>
     </div>
   );
 }
@@ -60,6 +64,9 @@ const App = () => {
           </Route>
           <Route path="/" exact>
             <StatisticsView />
+          </Route>
+          <Route>
+            <LiveStreamView />
           </Route>
         </Switch>
       </BrowserRouter>
