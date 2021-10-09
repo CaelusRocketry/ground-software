@@ -247,7 +247,7 @@ export const PADDING = {
       },
       "SENSOR" : {
         "PRESSURE" : {
-          "ISOLATED_SECTION": {
+          "PT-1": {
             "TEXT" : {
               x1: (2448/width) * 100 + '%',
               y1: (642/height) * 100 + '%',
@@ -257,7 +257,7 @@ export const PADDING = {
             "TOP" : "8px",
             "FONTSIZE" : "26px",
           },
-          "TOP_PLATE": {
+          "PT-2": {
             "TEXT" : {
               x1: (1872/width) * 100 + '%',
               y1: (464/height) * 100 + '%',
@@ -267,7 +267,7 @@ export const PADDING = {
             "TOP" : "",
             "FONTSIZE" : "26px",
           },
-          "BOTTOM_PLATE": {
+          "PT-3": {
             "TEXT" : {
               x1: (1900/width) * 100 + '%',
               y1: (1219/height) * 100 + '%',
@@ -277,7 +277,7 @@ export const PADDING = {
             "TOP" : "8px",
             "FONTSIZE" : "26px",
           },
-          "DOWNSTREAM": {
+          "PT-4": {
             "TEXT" : {
               x1: (710/width) * 100 + '%',
               y1: (1300/height) * 100 + '%',
@@ -287,7 +287,7 @@ export const PADDING = {
             "TOP" : "10px",
             "FONTSIZE" : "26px",
           },
-          "INJECTOR": {
+          "LC-1": {
             "TEXT" : {
               x1: (797/width) * 100 + '%',
               y1: (685/height) * 100 + '%',

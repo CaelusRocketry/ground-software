@@ -15,6 +15,9 @@ const PID = () => {
     arr.length > 0 ? arr[arr.length - 1] : undefined;
     
   const round = (num: number | undefined, precision: number): number | undefined => {
+    if(num == 0) {
+      return 0;
+    }
     let rounded = num ? Math.round(num * precision) / precision : undefined;
     return rounded;
   };

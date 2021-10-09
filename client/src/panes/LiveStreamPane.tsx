@@ -20,6 +20,9 @@ const LivestreamPane = () => {
     arr.length > 0 ? arr[arr.length - 1] : undefined;
     
   const round = (num: number | undefined, precision: number): number | undefined => {
+    if(num == 0) {
+      return 0;
+    }
     let rounded = num ? Math.round(num * precision) / precision : undefined;
     return rounded;
   };
@@ -113,7 +116,7 @@ const LivestreamPane = () => {
           >
             <p className={"diagram" + pressureSensor} style={{fontSize: pressureSensor["FONTSIZE"], marginTop: pressureSensor["TOP"], color: "white"}}>
               {sensorExists("pressure", loc)
-                  ? round(getLast(data.sensorState.sensors.pressure[loc])?.kalman, 1000) + " PSI"
+                  ? round(getLast(data.sensorState.sensors.pressure[loc])?.measured, 1000) + " PSI"
                   : "waiting..."}
             </p>
           </div>
