@@ -181,17 +181,17 @@ class Handler(Namespace):
         # print("Sending to frontend packet of type", packet.header, "-", packet.to_dict())
         
         # TODO: Update these w proper headings, as well as in GS
-        if "DAT" in packet.header:                      #sensor data
-            self.update_sensor_data(packet.to_dict())
+        if packet.header != "":
+            if "DAT" in packet.header:                      #sensor data
+                self.update_sensor_data(packet.to_dict())
 
-        elif "VDT" in packet.header:                      #valve data
-            # print("\n\n\n\nSENDING TO FRONT \n\n\nEND VALVE\n\n\n DATA\n\n\n")
-            self.update_valve_data(packet.to_dict())
-
-        else:
-            self.update_general(packet.to_dict())
-        
-        packet.save()
+            elif "VDT" in packet.header:                      #valve data
+                # print("\n\n\n\nSENDING TO FRONT \n\n\nEND VALVE\n\n\n DATA\n\n\n")
+                self.update_valve_data(packet.to_dict())
+            else:
+                self.update_general(packet.to_dict())
+            
+            packet.save()
 
 
     def heartbeat(self):

@@ -57,13 +57,18 @@ class Packet:
         # print(val)
 
         if val != checksum:
-            raise Exception("Invalid checksum, packet did not send correctly")
+            packet = Packet(
+                header="",
+                message="",
+                timestamp=0
+            )
 
-        packet = Packet(
-            header= input_list[0],
-            message= input_list[2],
-            timestamp= int(input_list[1], 16) / 1000.0
-        )
+        else:
+            packet = Packet(
+                header= input_list[0],
+                message= input_list[2],
+                timestamp= int(input_list[1], 16) / 1000.0
+            )
 
         return packet
 
