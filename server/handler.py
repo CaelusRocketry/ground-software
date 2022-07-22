@@ -8,6 +8,7 @@ from typing import Any, List, Tuple, Union
 from packet import Packet, LogPriority # PacketPriority
 from flask_socketio import Namespace
 import socket
+import os
 
 
 BYTE_SIZE = 8192
@@ -20,8 +21,7 @@ DELAY_HEARTBEAT = 2
 SEND_ALLOWED = True
 
 BLOCK_SIZE = 32
-f = open("black_box.txt", "w+")
-f.close()
+f = open("black_box.txt", "w")
 
 
 class Handler(Namespace):
@@ -137,7 +137,7 @@ class Handler(Namespace):
                 data = self.ser.read(self.ser.in_waiting).decode()
             else:
                 data = self.conn.recv(BYTE_SIZE).decode()
-            print("Received: ", data)
+            # print("Received: ", data)
             if data:
                 self.rcvd += data
 
@@ -175,6 +175,7 @@ class Handler(Namespace):
 
     def ingest(self, packet_str):
         """ prints any packets received """
+        global f
         print("Ingesting:", packet_str)
         packet = Packet.from_string(packet_str)
 
@@ -191,7 +192,9 @@ class Handler(Namespace):
             else:
                 self.update_general(packet.to_dict())
             
-            packet.save()
+            f.write(packet_str + "\n")
+            f.flush()
+            os.fsync(f.fileno())
 
 
     def heartbeat(self):
@@ -291,10 +294,16 @@ class Handler(Namespace):
                 "PT-3": "3",
                 "PT-4": "4",
                 "PT-5": "5",
-                "PT-P": "P",
+                "PT-6": "6",
                 "PT-7": "7",
                 "PT-8": "8",
-                "Thermo-1": "9"
+                "Thermo-1": "9",
+                "Thermo-2": "A",
+                "Thermo-3": "B",
+                "Thermo-4": "C",
+                "LC-1": "D",
+                "LC-2": "E",
+                "LC-3": "F"
             }
 
             if data_header == "solenoid_actuate":

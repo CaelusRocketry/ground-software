@@ -117,13 +117,16 @@ class Packet:
                 "3": "PT-3", 
                 "4": "PT-4", 
                 "5": "PT-5", 
-                "P": "PT-P", 
+                "P": "PT-6", 
                 "7": "PT-7", 
                 "8": "PT-8", 
                 "9": "Thermo-1",
-                "A": "LC-1",
-                "B": "LC-2",
-                "C": "LC-3"
+                "A": "Thermo-2",
+                "B": "Thermo-3",
+                "C": "Thermo-4",
+                "D": "LC-1",
+                "E": "LC-2",
+                "F": "LC-3",
             } 
             
             sensors = self.message.split(",")
@@ -248,4 +251,4 @@ class Packet:
 
 
     def __cmp__(self, other):
-        return other.timestamp - self.timestamp
+        return other.timestamp - self.timestamp    

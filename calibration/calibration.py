@@ -38,5 +38,5 @@ for i in x_and_y_values:
     m_and_b_values[i][1] = b
 
 for i in m_and_b_values:
-    print("PT-" + i + " m: " + str(m_and_b_values[i][0]))
     print("PT-" + i + " b: " + str(m_and_b_values[i][1]))
+    print("PT-" + i + " m: " + str(m_and_b_values[i][0]))

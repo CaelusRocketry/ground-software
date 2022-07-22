@@ -97,8 +97,8 @@ export function createSocketIoCallbacks(store: Store<CaelusState>) {
   });
 
   socket.on("sensor_data", (log: UpdateSensorDataAction["data"]) => {
-    // console.log("GOT SENSOR DATA");
-    // console.log(log);
+    console.log("GOT SENSOR DATA");
+    console.log(log);
     store.dispatch(updateSensorData(log));
     sendMessage("update_sensors", store.getState().data.sensorData);
   });

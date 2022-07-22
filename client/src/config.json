@@ -70,7 +70,7 @@
           },
           "pin": 14
         },
-        "PT-P": {
+        "PT-6": {
           "kalman_args": {
             "process_variance": 0.01,
             "measurement_variance": 0.02,

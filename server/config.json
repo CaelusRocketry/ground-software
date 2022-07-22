@@ -5,7 +5,7 @@
     "DELAY": 0.1,
     "SOCKETIO_HOST": "127.0.0.1",
     "SOCKETIO_PORT": 5000,
-    "XBEE_PORT": "COM6",
+    "XBEE_PORT": "COM3",
     "XBEE_BAUDRATE": 9600,
     "USE_XBEE": true
   },
@@ -65,8 +65,8 @@
             }
           },
           "pin": 23,
-          "bias": 0,
-          "slope": 1
+          "bias": -157.02054794520546,
+          "slope": 1.1986301369863013
         },
         "PT-2": {
           "kalman_args": {
@@ -94,7 +94,7 @@
           },
           "pin": 19,
           "bias": 0,
-          "slope": 1
+          "slope": 0
         },
         "PT-3": {
           "kalman_args": {
@@ -121,8 +121,8 @@
             }
           },
           "pin": 20,
-          "bias": 0,
-          "slope": 1
+          "bias": -170.12987012987014,
+          "slope": 1.2987012987012987
         },
         "PT-4": {
           "kalman_args": {
@@ -149,8 +149,8 @@
             }
           },
           "pin": 18,
-          "bias": 0,
-          "slope": 1
+          "bias":  -157.4040219378428,
+          "slope": 1.2797074954296161
         },
         "PT-5": {
           "kalman_args": {
@@ -181,10 +181,10 @@
             }
           },
           "pin": 14,
-          "bias": 0,
-          "slope": 1
+          "bias": -115.02074688796681,
+          "slope": 1.161825726141079
         },
-        "PT-P": {
+        "PT-6": {
           "kalman_args": {
             "process_variance": 0.01,
             "measurement_variance": 0.02,
@@ -214,7 +214,7 @@
           },
           "pin": 15,
           "bias": 0,
-          "slope": 1
+          "slope": 0
         },
         "PT-7": {
           "kalman_args": {
@@ -246,7 +246,7 @@
           },
           "pin": 16,
           "bias": 0,
-          "slope": 1
+          "slope": 0
         },
         "PT-8": {
           "kalman_args": {
@@ -278,7 +278,7 @@
           },
           "pin": 17,
           "bias": 0,
-          "slope": 1
+          "slope": 0
         }
       }
     },
