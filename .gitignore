@@ -115,5 +115,6 @@ incoming.txt
 node_modules/
 
 server/blackbox.txt
+server/black_box.txt
 server/config.json
 client/config.json
