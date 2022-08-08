@@ -32,7 +32,7 @@ npm install
 
 ## Run
 
-Under __client\src__, run:
+Under __client/src__, run:
 
 ```
 npm start
