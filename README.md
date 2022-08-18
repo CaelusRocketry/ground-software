@@ -32,7 +32,7 @@ npm install
 
 ## Run
 
-Under __client/src__, run:
+Under __client__, run (might be __client/src__ in Windows 11):
 
 ```
 npm start
