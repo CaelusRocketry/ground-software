@@ -17,6 +17,18 @@ Under __server__, install the necessary Python packages with the following comma
 pip3 install -r requirements.txt
 ``` 
 
+#### Connecting to XBee
+Edit the `XBEE_PORT` variable in `server/config.json` to connect the server to the port the XBee is attached to.
+
+##### Windows
+`XBEE_PORT` should be of the form `COM<number>`, for example `COM3`.
+
+##### Linux
+`XBEE_PORT` should be of the form `/dev/ttyUSB<number>`, for example `/dev/ttyUSB0`.
+Additionally, run `sudo adduser $USER dialout` and logout and login again to gain access to the USB device.
+If this doesn't work, try running `sudo chmod 666 /dev/ttyUSB<number`.
+
+
 ### Client
 
 First, download Node.js if you haven't already, and add this variable to the your system's path:
